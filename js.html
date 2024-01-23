@@ -1,0 +1,826 @@
+JAVASCRIPT ENGINE
+
+JS is single threaded language that uses callback key. JS is also called a interpreted language
+
+ECMAScript engine/ JS engine is a program that executes source code to computer language. 
+Like V8 (written in C++, used in chrome, node js), Spider monkey (used in firefox), Chakra (used in IE, Edge)
+** ECMAScript is a programming language, which defines how Javascript code standard should be.
+Brendon Eich first created JS & JS engine
+
+
+HOW JS ENGINE WORKS
+when a code is passed to the engine, it's parsed to a data structure AST (Abstruct Syntax Tree). AST is used to create machine codes
+
+
+INTERPRETER
+reads & translates code line by line.
+COMPILER
+reads & understands entire code, optimises if required & then translates into machine language.
+
+** Interpreter is initially faster than Compiler, but doesn't do optimization. Like, for a chunk of code/ when loops exist in code, it makes the process slower. Compiler does a better job here, as it understands the entire code first and optimizes it. So, to make the engines faster, JIT COMPILER (Just in Time) is introduced, using both Interpreter & Compiler
+
+** HOW V8 ENGINE WORKS
+Code is parsed -> passed to AST (Abstruct Syntax Tree) -> Interpreter (called Ignition in V8) -> bytecode
+-> Profiler/ Monitor watches code as it runs, makes notes on how the code can be optimized 
+-> If optimization/ modification is needed, JIT compiler (called Turbo Fan in V8) is used and replaces bytecode with optimized machine code
+
+JS IS NOT ENTIRELY AN INTERPRETED LANGUAGE
+Normally, High-level language, like JS, converted into bytecode, then to machine code. Computers doesn't understand bytecode. Then a JVM (Java Virtual Machine) or JS engine is needed to execute bytecode to executable code. So, in JS, Interpreter & Compiler both are used and it's not an interpreted language. The first JavaScript engines were using Interpreters, but all modern engines use JIT (just-in-time) compilation for improved performance.
+
+
+BABEL
+a Javascript compiler that takes your modern JS code and returns browser compatible JS (older JS code).
+TYPESCRIPT
+a superset of Javascript that compiles down to Javascript.
+BABEL & TYPESCRIPT does same thing as compiler. Takes one language & converts into a different one
+
+
+WRITE OPTIMIZED JAVASCRIPT CODE/ BEST PRACTICES
+We need to write code in a way that helps the Compiler (JIT) make optimization. We don't need to work against it & make it slow. Careful with the followings
+eval(), arguments, for in loop, with, delete
+
+
+** INLINE CACHING
+in case of repetating calls to the same method, V8 caches the information from previous lookups. That's how it optimizes
+** HIDDEN CLASSES
+used to optimize property access time. V8 attaches a hidden class to every object. 
+
+
+WEB ASSEMBLY/ Wasm
+Provides a way to run codes written in multiple languages on the web at near-native speed Standard Bynary Executable Format. 
+
+
+** CALL STACK & MEMORY HEAP
+The main work of JS is to read code & translate it to machine language. So,
+1. we need a place to store & write information in memory like, variables, objects, data (Memory Heap - allocate, use & release memory) and
+2. a place to actually run & keep track of what's happening line by line (Call Stack).
+EXAMPLE
+const number = 610 // allocate memory for 'number' variable and point in memory heap to value 610
+const person = { // allocate memory for an object and it's values
+    firstName: 'David',
+    lastName: 'Lang'
+}
+
+How does Call Stack work !
+For a simple sum() function, when it's called, it's allocated to memory. First, the sum() function is added to the top of Call Stack. After finish running it's removed from the stack. Operates as First in Last out.
+To check, how ti functions, goto Chrome developers option -> Sources -> Snippets -> New Snippet -> write function codes -> add 'debugger;' to see how call stack is functioning -> an 'anonymous' function is added to stack (called Global Execution Context)
+
+simple variables are stored in Stack & complex data structures (objects, arrays) are stored in memory heap.
+
+
+** STACK OVERFLOW
+when functions are nested inside each other & called over and over again, the stack keeps adding functions, without popping them off and gets larger. That's Stack Overflow. (Error appears, max call stack size exceeded)
+
+
+** GARBAGE COLLECTION
+JS is a garbage-collected language. Meaning, if JS allocates memory, automatically when we finish calling the object and if we don't need the object anymore/ no reference for it in our program, JS will clean it, keeps the memory free. So that we don't use up all the memory. 
+
+Garbage Collection in JS uses Mark and Sweep algorithm, when reference to a variable is removed, it's deleted
+
+
+** MEMORY LEAKS
+create an infinite loop, that would fill up our memory & browser will crash. as nothing is popped off the stack. 
+Common Memory Leaks
+1. Using too many GLOBAL VARIABLES, all our memory will get used up
+2. Keep adding EVENT LISTENERS, when using too many and not removed
+3. OBJECTS IN SETINTERVAL, they will never be garbage-collected, unless removed itself
+Remember, memory is limited. JS runs and stores memory in CALL STACK & MEMORY HEAP. Do not have STACK OVERFLOW & MEMORY LEAK 
+
+
+** SINGLE THREADED PROGRAMMING LANGUAGE (SYNCHRONOUS)
+Means one set of instruction is completed at a time. To check if a language is Single Threaded, if it has one Call Stack (and one Memory Heap). We push & pop functions/ statements one by one. 
+So, JS is SYNCHRONOUS, only one thing at a time. (Like, using one hand at a time while eating. Use hand to pick up food, chew it, finish it, then repeat)
+
+ISSUE WITH SINGLE THREADED/ SYNCHRONOUS CODE
+a statement has to wait for the earlier statement to finish executed. If one statement is going to take a lot of time, things are going to be really slow for the program. JS RUNTIME helps us with that
+
+
+** JS RUNTIME/ WEB API
+the Web browser works in the background, when the synchronous JS code is running. It does this by using WEB API (Web API comes with browser, amde with low level languages like C++).
+
+WEB API is used to send HTTP Request (fetch), listen to DOM event, delay executions (SetTimeout), used for Caching, Database Storage in browser (indexedDB) etc. (To check simply goto console and type 'window')
+
+WEB APIs are ASYNCHRONOUS - means, we can instruct the APIs to do something in the background and return data once done. Meanwhile, we can continue working on JS Call Stack & execute functions
+
+WEB API runs only when the stack is empty & the entire file is completed running
+
+HOW IT WORKS
+EXAMPLE 1
+console.log(1) // sent to Call Stack
+setTimeout(() => {console.log(2)}, 1000) // sent to Web API, after 1 second it pushes the callback/ console.log(2), which goes into CALLBACK LOOP. EVENT LOOP checks for if the CALL STACK is empty
+console.log(3) // sent to Call Stack
+
+OP -> 1 3 ... 2
+
+WEB API, CALLBACK QUEUE, EVENT LOOP
+
+EXAMPLE 2
+function archiveNirvana() {
+    console.log('Here we are')
+}
+function c() {
+    setTimeout(archiveNirvana, 1000)
+}
+function b() {
+    c();
+}
+function a() {
+    b();
+}
+a()
+
+OP -> ... 'Here we are'
+
+CALL STACK, WEB APIs, CALLBACK QUEUE - Check the process here
+http://latentflip.com/loupe/?code=ZnVuY3Rpb24gcHJpbnRIZWxsbygpIHsNCiAgICBjb25zb2xlLmxvZygnSGVsbG8gZnJvbSBiYXonKTsNCn0NCg0KZnVuY3Rpb24gYmF6KCkgew0KICAgIHNldFRpbWVvdXQocHJpbnRIZWxsbywgMzAwMCk7DQp9DQoNCmZ1bmN0aW9uIGJhcigpIHsNCiAgICBiYXooKTsNCn0NCg0KZnVuY3Rpb24gZm9vKCkgew0KICAgIGJhcigpOw0KfQ0KDQpmb28oKTs%3D!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D
+
+
+JAVASCRIPT ENGINE vs RUNTIME
+JS ENGINE's only task is to read code, translate into machine code & run it
+JS RUNTIME's a place/ environment where code executes. Like, DOM is a part of outside world. ECMAScript has no specifications on how JS should interact with the outside world. These rules comes from JS RUNTIME
+
+
+NODE JS
+is a JAVASCRIPT RUNTIME, not a language/ framework (made with C++). To run JS outside browser. Uses Google V8 engine to understands JS. Uses LIBUV library to use as Event Loop. 
+
+
+EXECUTION CONTEXT
+when JavaScript engine scans a script file, it makes an environment called Execution Context that handles the entire transformation and execution of code
+2 types of Execution Context - Global & Function
+
+Global() -> when a script first starts to run, JS engine automatically creates the Global Execution Context at the beginning of the Stack. At the beginning, a Global object (/ the window object in browser environment) & 'this' keyword is created at the stack
+
+
+** LEXICAL ENVIRONMENT(/ SCOPE/ ANALYSIS/ CLOSURE) - Available data + variables where the function was defined
+It is a Data Structure/ an ability that stores variables & functions, defined in current scope and all of it's outer scope. It is created when a function is called & destroyed when function returns.
+
+It is used to resolve variable names. When the JavaScript interpreter encounters a variable name, it looks for the variable in Lexical Environment of Current Scope, if not found, looks for it in the Outer Scope and so on till it reaches the Global Scope. ** If still not found, interpreter throws a 'ReferenceError' exception.
+
+FUNCTION LEXICAL ENVIRONMENT
+when functions are called inside each others. One function is connected to another function and like that
+
+
+** HOISTING
+JS Interpreter's action of moving all variables and function declarations to the top of current scope. Functions are hoisted first, then variables. Functions are fully hoisted whereas, variables are partially. Variables are set as undefined first.
+
+EXAMPLE
+console.log('line 1')
+var teddy = 'bear'
+console.log(teddy)
+
+OP >>
+line 1
+bear
+undefined // console log doesn't return anything, so, undefined
+
+AGAIN
+console.log('line 1')
+console.log(teddy)
+var teddy = 'bear'
+
+OP >>
+line 1
+undefined // 'teddy' is not defined earlier. so, JavaScript works as, 'teddy' is a variable. var teddy = undefined
+undefined // console log doesn't return anything, so, undefined
+
+** same thing doesn't apply for functions. You can declare it later but still call earlier and it would work just fine.
+** only works with var/ function. not let/ const. it throws a 'ReferenceError' exception.
+
+// Function Declaration - always start with function keyword | gets hoisted | cannot be called immediately after creating it
+function sing() {
+    console.log('ohh la la')
+}
+
+// Function Expression - does not start with function keyword | does not get hoisted | can be called immediately after creating it (IIFE)
+var sing2 = function() {
+    console.log('uhh la la');
+}
+
+* sing2 will be hoisted as variable if called earlier (console.log(sing2))
+but would throw error as function (console.log(sing2()))
+
+EXAMPLE
+var favouriteFood = "grapes";
+var foodThoughts = function () {
+  console.log(`Original favourite food: ${favouriteFood}`);
+
+  var favouriteFood = "Sushi";
+
+  console.log(`New Favorite Food: ${favouriteFood}`);
+};
+foodThoughts();
+
+OP >>
+Original favourite food undefined (as local scope hoisting happens here, favouriteFood is called in next line)
+New Favorite Food Sushi
+
+* Hoisting is bad practice. Try using const/ let, instead of var
+
+
+FUNCTION INVOCATION
+calling/ invoking a function means same. like executing/ running.
+'Calling' meansusing function name followed by parenthesis `()`. When called, we are asking the program to execute the code inside that function.
+'Invoking' a function is same as calling. It means causing the function to execute and perform it's task. The term 'Invoke' is more formal. in Summary both are same
+
+function marry(person1, person2) {
+    console.log(arguments)              // 'arguments' object for function
+    console.log(Array.from(arguments))  // convert into array
+}
+marry('Tim', 'Tina')        >>      OP       >>     
+{ 0: 'Tim', 1: 'Tina' } //  object
+[ 0: 'Tim', 1: 'Tina' ] //  array
+
+myFunction() // calling a function, just an example
+marry(11, 2) // invoking a function, just an example
+
+
+Again,
+Using REST PARAMETERS, allows JS to accept indefinite number of arguments as array. This is modern JS
+// `...` is Spread Operator
+function marry2(...args) {
+    console.log(args)
+}
+
+
+VARIABLE ENVIRONMENT
+variables inside each functions are kept in Variable Environment
+
+
+SCOPE CHAIN
+Global & Local Scope - Variables defined globally/ locally (inside functions), can be accessed accordingly
+
+UNDEFIENED vs NOT DEFINED
+Undefined means we have the variable, but it's not assigned anything right now
+ReferenceError/ Not Defined means, does not exist or not defined in current scope
+
+[[SCOPES]]
+EXAMPLE
+simply goto console >> type a function a() {} >> type window >> you can access [[Scopes]] for function a >> it says, { type: "global",... }
+
+
+LEAKAGE OF GLOBAL VARIABLE
+When no data type (var/ const/ let) is used while declaraing a variable, whether inside a function, it goes into global environment
+
+STRICT
+'use strict' -> add this at top of the script, the leakage won't happen. Also, used to avoid many common mistakes in Javascript
+
+
+FUNCTION SCOPE vs BLOCK SCOPE
+FS - when a variable is declared inside function, is only accessible within that function
+BS - when a variable is declared inside if/ switch statement/ inside for/ while loops are inside Block Scope. Almost inside any `curly braces`
+Most programming languages does not support Block Support, JS does.
+EXAMPLE
+if (5 > 4) {
+    var secret = '12345';       // this is Block Scoping
+}
+console.log(secret)     >> OP >>        12345
+
+Now, let/ const is introduced in ES6. They allow us to use Block Scoping properly. If secret is used like, let/ const secret = '12345'... it would not be accessed outside
+
+
+VAR || LET || CONST
+var - function-scoped variables, that can be hoisted
+let - block scoped variables, that can be reassigned, cannot be hoisted
+const - block scoped variables, that are constant & cannot be reassigned, cannot be hoisted
+
+
+GLOBAL VARIABLES - avoid using them
+1. To avoid complexity, not all variables can be called in Global Scope. Because our memory is limited and it would overflow or make things slower. 
+2. In large applications, we might have multiple script tags and same name variables might cause problem
+
+** IIFE (Immediately Invoked Function Expression)
+
+(function() {
+    ...codes/ define Global Variables
+})();
+
+// this is a function expression. Creating an anonymous function and immediately invoking/ calling it. SO using IIFE solves the global variable problem. All the Global Variables can be called inside IIFE
+
+EXAMPLE
+var Calculator = (function() {
+    function add(x, y) {
+        return x + y;
+    }
+
+    function subtract(x, y) {
+        return x - y;
+    }
+
+    return {
+        add: add,
+        subtract: subtract
+    };
+})();
+
+Calculator.add(5, 3)    >>  OP  >>  8
+
+NOW, while using jQuery, they created an IIFE by using $ keyword. The $/ jquery is added to the window object. write window.$/ window.jQuery in console after including jquery to script
+Basic jquery syntax is $().();
+
+** The $ in jquery can also be changed
+(function (OMG) { // changing the jQUery parameter
+    // $('h1').hide();
+    OMG('h1').hide();
+})(jQuery); // passing jQuery parameter & JS looks for it in local scope rather than global
+
+
+** this KEYWORD
+this is a object that the function is a property of. Like, a simple function is a property of window object. Remember to use DRY (Dont Repeat Yourself) method, that's why 'this' is used. With 'this' keyword -
+1. methods can access their object
+2. execute same code for multiple objects
+
+EXAMPLE
+const obj = {
+    name: 'Billy',
+    job: function() {
+        return this.name + ' can sing'
+    },
+    sing() {
+        return 'lalala ' + this.name
+    },
+    singAgain() {
+        return this.sing(). + '!'
+    }
+}
+obj.job()           >> OP   >> Billy can sing
+obj.singAgain()     >> OP   >> lalala Billy!
+
+EXAMPLE - 
+function person() {
+    console.log('Person is ' + this.name)
+}
+const name = 'Sunny';
+const obj1 = {
+    name: 'Casey',
+    person: person
+}
+const obj2 = {
+    name: 'Jacob',
+    person: person
+}
+person()        >> OP   >> Person is Sunny
+obj1.person()   >> OP   >> Person is Casey
+obj2.person()   >> OP   >> Person is Jacob
+
+
+Note,
+'this' keyword is not Lexically Scoped. Doesn't matter where it is written. Matters how the function was called. which is a problem. To solve it, ES6 introduced Arrow Function, which are Lexically bound. 
+Before ES6 you could use bind() to solve this/ store 'this' in a variable and use it inside nested function
+
+
+** CALL(), APPLY(), BIND()
+These functions are used to manipulate 'this' keyword. call() & apply() are simply use dto calling a function. Like, someFunction() OR someFunction.call() OR someFunction.apply() does the same thing, for now.
+
+EXAMPLE
+const wizard = {
+    name: 'Merlin',
+    health: 50,
+    heal() {
+        return this.health = 100;
+    }
+}
+const archer = {
+    name: 'Robin',
+    health: 30
+}
+wizard.heal()   >> OP >>    100
+
+// Now, 'Robin' has less health. It would be good if he could borrow the healing factor from 'Merlin'. But we also want to use DRY method, also do not want to overflow the stack. So, 
+
+wizard.heal.call(archer)
+
+call() can also have arguments, like
+heal(num1, num2) {
+    return this.health += num1 + num2;
+}
+wizard.heal.call(archer, 50, 30)                            >> CALL()
+OR
+wizard.heal.apply(archer, [50, 30])                         >> APPLY()
+OR
+const healArcher = wizard.heal.bind(archer, 100, 30)        >> BIND()
+healArcher()
+
+Bind() allows us to store for later use. Call() and Apply() execute the current function immediately. Also we can do Function Currying (partially giving a function parameter) with bind()
+
+CURRYING EXAMPLE
+function multiply(a, b) {
+    return a * b;
+}
+let multiplyByTwo = multiply.bind(this, 2) // 'this' is window object
+let multiplyByTen = multiply.bind(this, 10)
+
+console.log(multiplyByTwo)          >> OP >>    f   // 'f' means [Function] 
+console.log(multiplyByTwo(4))       >> OP >>    8
+console.log(multiplyByTen(4))       >> OP >>    40
+
+
+MORE EXAMPLE TO BETTER UNDERSTAND
+1.
+var a = {
+    name: 'a',
+    say() {
+        console.log('hello')
+    }
+}
+console.log(a)      >> OP >> {name: 'a', say: ƒ}    // 'f' means [Function] 
+a.say()             >> OP >> hello
+
+2.
+var b = {
+    name: 'b',
+    say() {
+        console.log(this)
+    }
+}
+b.say()             >> OP >> {name: 'b', say: f}
+
+3.
+var c = {
+    name: 'c',
+    say() {
+        return function() {console.log(this)}
+    }
+}
+c.say()             >> OP >> f () {console.log(this)} // we are returning a function
+c.say()()           >> OP >> returns window object, which we don't want, we want the scope for c function, hence arraow function has arrived, for lexical scoping...this is Globally Scoped
+
+4.
+var d = {
+    name: 'd',
+    say() {
+        return () => console.log(this)
+    }
+}
+d.say()()           >> OP >> {name: 'd', say: ƒ}
+
+
+CONTEXT vs SCOPE
+Scope has to do with the the visibility of variables. It is achieved through the use of functions.
+Context is related to objects. It refers to the object to which a function belongs. When you use the 'this' keyword, it refers to the object to which function belongs
+
+** JAVASCRIPT TYPES
+- only 7 types
+number, boolean, string, undefined // special value in JS, null, Symbol('some text') // ES6, (PRIMITIVE)
+Objects (NON-PRIMITIVE)
+
+'undefined' vs 'null' >> undefined is absense of a definition. Used as default value when JS initialize a variable. Null is absense of value, there is no value.
+
+Find data type using 'typeof'
+** typeof null         >> OP >> 'object' // typeof null should be 'null', but it shows object, which is a bug in JavaScript
+Symbol() are used for object properties
+
+typeof {}               >> OP >> 'object'
+typeof []               >> OP >> 'object'       // type of an array is also an object
+typeof function() {}    >> OP >> 'function'     // 'function' is not a data type. It's an object as we can add property to function, like objects
+
+** Primitive types are which data only represents a single value. Only store single value in memory.
+In Non-Primitive type, like object, memory doesn't contain the actual value directly. Like an object, it has a reference/ pointer which has the values 
+
+Standard Built-In Objects
+these are not global objects. They come with the language. Like, NaN, Error, Symbol, Math, Date, Boolean, Number, String etc.
+
+
+ARRAY
+var array = [1, 2, 3]; 
+// if we call a simple array like this. In JS, it works like
+var array = {
+    0: 1,
+    1: 2,
+    2: 3
+}
+typeof []       >> OP >> 'object'
+
+Array.isArray([1,2,3])      >> OP >> true // Array is an object | dot notation | isArray is a property of Array object
+Array.isArray({})      >> OP >> false
+
+
+PASS BY REFERENCE vs PASS BY VALUE
+Primitive types are pass by value & Objects are pass by reference
+Pass by Value - copy the value & create the value somewhere else in memory
+
+EXAMPLE
+var a = 5;
+var b = a; b++;
+console.log(a); console.log(b);             >> OP >> 5 6
+
+
+NOW, try the same for Objects
+let obj1 = {name: 'Leo', password: '123'};
+let obj2 = obj1;        // goes both ways, let obj1 = obj2;
+obj2.password = 'easypeasy';
+
+console.log(obj1); console.log(obj2);       >> OP >> {name: 'Leo', password: 'easypeasy'} {name: 'Leo', password: 'easypeasy'}
+
+Note that both passwords are changed, which differs from the code we wrote. This happens due to Pass by Reference.
+Objects are stored in memory are passed by reference. Both objects, obj1 & obj2 are both pointing to memory, that contains the object values. Now while changing 'password', change 'password' in the object in memory, so both gets updated
+
+AGAIN
+let arr1 = [1,2,3,4,5]
+let arr2 = arr1
+arr2.push(6)
+console.log(arr1); console.log(arr2);       >> OP >> [1,2,3,4,5,6] [1,2,3,4,5,6]
+
+This is good for saving memory. Now if you dont want to passs by reference, use it like,
+let arr2 = [].concat(arr1) // take an empty array & concat it  with arr1. concat means whatever arr1 has it pushes to arr2
+
+for Objects, 
+1.
+let obj2 = Object.assign({}, obj1)
+2. Spread Operator
+let obj3 = {...obj1}
+
+** But, it doesn't work while object inside a object.
+EXAMPLE
+let obj1 = {
+    a: 'a',
+    b: 'b',
+    c: {
+        hello: 'world' // this is an object inside object
+    }
+}
+let obj2 = {...obj1}
+
+obj1.c.hello = 'test'
+console.log(obj1)           >> OP >> ...hello: 'test'
+console.log(obj2)           >> OP >> ...hello: 'test'
+
+// each objects are passed by reference. Although we cloned the initial object, it cloned the first level only. Its called SHALLOW CLONE/ COPY - (In Shallow Copy, adding/ changing directly will only effect the copy. However, adding/ changing a deeply nested property will affect both original and copy)
+
+
+** DEEP COPY - Opposite of SHALLOW COPY
+let obj3 = JSON.parse(JSON.stringify(obj1)) // This is Deep Clone
+
+obj1.c.hello = 'test'
+
+console.log(obj1)           >> OP >> ...hello: 'test'
+console.log(obj2)           >> OP >> ...hello: 'test'
+console.log(obj3)           >> OP >> ...hello: 'world'
+
+** WARNING in DEEP CLONING
+This might have some performance implication. If the initial object (which you are copying) is a large/ deep one, it might take a lot time to clone everything.
+
+COMPARE OBJECT
+let obj1 = {a: 1, b: 2}
+let obj2 = {a: 1, b: 2}
+let eq = obj1 == obj2
+console.log(eq)     >> OP >> false !! // but it should be true
+
+The Fast & Limited way is to 'stringify' it. But we must have simple JSON style object & the ORDER of the properties in those objects must be same
+JSON.stringify(obj1) === JSON.stringify(obj2)
+
+// this would not work in this method
+x = {a: 1, b: 2};
+y = {b: 2, a: 1};
+
+There are some deep level comparison here
+https://stackoverflow.com/questions/1068834/object-comparison-in-javascript
+
+
+** STRUCTURED CLONING
+Due to some complications in Deep Copying (Recursive Data Structure, Built-in types like Map, Set, Date, RegExp etc will throw error in JSON.stringify, also discards functions), most browser have a new built-in function for deep copying
+const myDeepCopyObject = structuredClone(myOriginalObject);
+
+
+** TYPE COERCION
+Type Coercion is the automatic conversion of values from one data type to another. All languages have Type Coercion. Only happens when '==' is used/ boolean is used ( if(1) {console.log(5)} // and it returns 5, because 1 is coerced to true )
+1 == '1'        // returns true
+when '===' is used, type coercion does not happen. Always stick to '==='
+
+EXAMPLE
+integer 1 double equals to/ type coreced to, 
+Integer one, 
+Boolean true, 
+String 1,
+array [1] // these are somehow confusing and tricky. So, avoid using '=='
+
+AGAIN
+-0 === +0 // returns true, technically these 2 operands are different, then came Object.is()
+
+Object.is(-0, +0) // returns false
+
+Object.is() vs '==='
++0, -0      >> false >> true
+0, -0       >> false >> true
+NaN, NaN    >> true >> false
+
+
+** DYNAMIC vs STATIC TYPING
+in a Statically Typed Language, we have to declare what type of variable we are going to write explicitly. Here Type Checking is done during Compile-time. 
+in C++
+int a;
+a = 100;
+
+for the same thing in JS, we go like, var a = 100
+Dynamic Typed Language, they are little more smart, where we are not bound to this constraint. Here Type Checking is done during Run-time. TypeScript helps JavaScript to behave like a Static Typed Language.
+
+Both have Pros & Cons - ST adds extra layer of complexity but usually prevents bugs and keeps errors from happening. DT is more flexible
+
+
+** STRONG & WEAK TYPING
+DYNAMIC & WEAKLY TYPED      - Perl, PHP, JavaScript
+DYNAMIC & STRONGLY TYPED    - Erlang, GROOVY, Python, RUBY
+
+STATIC & WEAKLY TYPED       - C, C++
+STATIC & STRONGLY TYPED     - Java, C#, Scala, Haskell
+
+EXAMPLE 
+JavaScript, why it's a Dynamic Weakly Typed language
+var a = "hello";
+a + 17          >> OP >> "hello17" // this is Type Coercion, converts the entire thing into string
+
+BUT, in a Dynamic Strongly Typed Language, it doesn't work like that
+
+
+** STATIC TYPING/ TYPESCRIPT
+in JS community, there are many options for Static Typing, Like Flow (developed by Facebook), Typescript (developed by Microsoft), ELM, ReasonML
+
+FLOW -
+Static type checkeer, which adds types to JavaScript by writing some codes, then putting it through BABEL Compiler, which spits out JS. It starts like 
+// @flow
+Flow comes prebuilt with React (create-react-app). 
+
+TYPESCRIPT -
+unlike Flow, it has it's own compiler. TypeScript is a superset of JavaScript that compiles to plain JavaScript. Angular is built with TS. TS is widely used among these options.
+When to use TS - Project grows larger, app should be self-documenting, avoid bugs when new devs touch the codes
+
+
+REASON ML -
+Entire different language. has own compiler. Spits JS
+
+ELM -
+Entire different language. has own compiler. Spits JS. Same as Reason ML
+
+
+** CLOSURES & PROTOTYPES
+These are the 2 main pillars of JavaScript. As they are powerful and unique. 
+
+
+FUNCTIONS AGAIN - are OBJECTS
+When we invoke a function, we get 2 parameters automatically 'this' & 'arguments'
+// Invoke
+function one() { return 1; } one()      >> OP >> 1
+
+// method/ function inside object - Invoke
+const obj = {
+    two() {
+        return 2;
+    }
+}
+obj.two()                               >> OP >> 2
+
+// using call/ apply
+one.call()
+
+//function constructor - built-in JS Object
+const four = new Function('return 4'); four()   >> OP >> 4
+Also, you can pass parameter
+const four = new Function('num', 'return num'); four(44)    >> OP >> 44
+
+A Function is a Object. Inside it there are some codes and we can invoke it by using - () & it gets executed. 
+It has an optional 'name' property, as there can be anonymous functions.
+It has methods like, call(), apply(), bind() etc.
+Functions are a special type of Objects in JS. Hence we can pass them around like objects, which has data. Like we pass objects contaiining data.
+
+
+FIRST CLASS CITIZEN - FUNCTIONS
+Why ? because we can pass functions around like data, watch these
+1. Functions can be assigned to variables/ object properties
+var stuff = function() {...}
+2. Pass functions as arguments into another function
+function a(fn) { // passing a function/ fn as a parameter to another function
+    fn()
+}
+a(function() {
+    console.log('Hello there !')
+})
+OP >> Hello there !
+3. return functions as values from other functions
+function b() {
+    return c() {console.log('Inside c !')}
+}
+b()     >> OP >> [Function: c]
+b()()   >> OP >> Inside c !
+Also, var d = b()
+d()     >> OP >> Inside c !
+
+Just watch out for these,
+for (let i = 0; i < 5; i++) {
+    // everytime the loop runs, the function is initialized, which is not a good practise. Rather initialize it before the loop & invoke the function inside as per requirement
+    function a() {...}
+    a()
+}
+
+Again, when a parameter is not passed through a function, it throws ReferenceError. With ES6, we can give a default value to parameter. Like, function (param = 6) {...}
+
+
+HIGHER ORDER FUNCTIONS
+HOF is a function that accept other functions as parameter/ returns another function
+
+EXAMPLE
+Just creating a basic login functionality.
+
+const giveAccessTo = (user) =>
+    'Access granted to ' + user
+
+function letUserLogin(user) {
+    let array = [];
+    for (let i = 0; i < 10000000000; i++) {
+        array.push(i);
+    }
+    // These previous lines are added to delay the engine. Suppose, this is where the authentication happens.
+    return giveAccessTo(user);
+}
+
+letUserLogin('Adam') // Now, when we run the function, after some delay/ the authentication process, access is granted to Adam.
+
+Now, for ADMIN privileges, we could create another function, letAdminLogin(admin) BUT, to follow DRY method, we will use Higher Order Functions here.
+const giveAccessTo = (name) => {
+    console.log('Access granted to ' + name)
+}
+  
+function authenticate(verify) {
+    let array = [];
+    for (let i = 0; i < 100000000; i++) {
+      array.push(i)
+    }
+    return giveAccessTo(person.name)
+}
+  
+function sing(person) {
+    console.log('lalalalalalall my name is ' + person.name)
+}
+  
+function letPerson(person, fn) { // using HOF here
+    if (person.level === 'admin') {
+      return fn(500000)
+    } else if (person.level === 'user') {
+      return fn(500)
+    }
+    // return giveAccessTo(person.name)
+}
+  
+// letPerson({level: 'user', name: 'Tim'}, authenticate)
+letPerson({level: 'user', name: 'Tim'}, sing)
+
+EXAMPLE
+const multiplyBy = function(num1) {
+    return function(num2) {
+        return num1 * num2;
+    }
+}
+// we can even make it a one liner, using arrow function
+multiplyByArrow = (num1) => (num2) => num1 * num2
+
+const multiplyByTwo = multiplyBy(2);
+const multiplyByFive = multiplyBy(5);
+multiplyByTwo(5)            >> OP >> 10
+multiplyByTwo(8)            >> OP >> 16
+multiplyByArrow(4)(6)       >> OP >> 24
+
+
+** CLOSURE
+(Function + Lexical scope)
+Closure is a feature that allows inner functions to access the outer scope of a function. It makes it possible for a function to have "private" variables.
+
+EXAMPLE
+function a() {
+  let grandpa = 'grandpa'
+  return function b() {
+    let father = 'father'
+    return function c() {
+      let son = 'son'
+      return `${grandpa} > ${father} > ${son}`
+    }
+  }
+}
+// a() & b() are higher order functions. As they are returning another functions. c() is just a normal function
+
+a()         >> OP >> [Function b]
+b()         >> OP >> ReferenceError...
+a()()       >> OP >> [Function c]
+a()()()     >> OP >> 'grandpa > father > son'
+NOW, it is expected but, how did c() remember what a() and b() has, it should be removed from the stack and garbage collected. This is where 'Closure' comes.
+
+It only works when referenced in child functions. Like, there were references for 'grandpa', 'father' in c(). SO these were kept in Closure but, if there was, let random = 2342342343, was also inside b(), it would be Garbage Collected as there is no reference of 'random' further/ in c()
+
+EXAMPLE,
+function boo(string) {
+    return function(name) {
+        return function(name2) {
+            console.log(`${string} ${name} ${name2}`)
+        }
+    }
+}
+OR
+const boo = (string) => (name) => (name2) => console.log(`${string} ${name} ${name2}`)
+
+boo('hi')('Tim')('Becca')       >> OP >> hi Tim Becca
+
+
+
+
+
+
+
+
+
