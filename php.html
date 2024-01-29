@@ -1,0 +1,248 @@
+OBJECT ORIENTED PROGRAMMING
+
+CLASS & OBJECT
+concept/ coding style, which has advantages like, less code reusability, DRY method.
+Everything is a object (mobile, laptop, bottle)
+Class is categorisation of real-life objects basis of attribute/ property (variables) & behaviour/ methods (functions). Like, categorising of birds of flying & non-flying bird. 
+
+Class is a template/ blueprint of object and Object is instance (example) of a class
+EXAMPLE
+class Class1 {
+    function fun1() {   // methods
+        echo "inside fun1";
+    }
+}
+
+// now to access the fun1(), we cant directly call/ instantiate it. It would say 'undefined'. To access functions inside a class, we have to create an object of the class.
+
+$object1 = new Class1();
+$object1->fun1();       >> OP >> inside fun1
+
+
+PUBLIC & THIS
+Again, to define properties/ variables
+
+class Class1 {
+    // do not write directly $x = 1; it would throw an error. Use 'PUBLIC', access modifier
+    // $x = 1;
+    public $x = 1;
+    function fun1() {   // methods
+        echo "inside fun1";
+    }
+
+    // to access $x inside fun1(), do not directly go for it (check below). Use 'THIS' keyword instead. else it would throw error
+    function fun2() {
+        // echo $x;
+        echo $this->x;
+    }
+}
+
+
+CONSTRUCTOR & DESTRUCTOR
+when object is called, at very first function Construct is called by default. Similarly, when the object's lifecycle is about to end, destructor function is called by default
+EXAMPLE
+class Class1 {
+    function __construct() {
+        echo "start";
+    }
+    function __destruct() {
+        echo "end";
+    }
+}
+$obj1 = new Class1();   >> OP >> startend
+
+INITIALIZE VARIABLE INSIDE CONSTRUCTOR
+function __construct() {
+    // $x = 10;
+    $this->x = 10;
+}
+function fun1() {
+    return $this->x;
+}
+
+TO MAKE THE VARIABLE DYNAMIC
+function __construct($y) {
+    $this->x = $y;
+}
+// whenever an object is created for this class, we have to pass the value
+$obj1 = new Class1(20);
+echo $obj1->fun1();
+
+
+INHERITANCE (EXTENDS)
+access property from one class to another class. 
+EXAMPLE
+class class1 {
+    function __construct() {
+        echo "construct1";
+    }
+    function fun1() {
+        echo "fun1";
+    }
+}
+class class2 extends class1 {
+
+}
+
+$obj = new class2();    >> OP >> construct1
+$obj->fun1();           >> OP >> construct1fun1
+
+NOW, if a constructor is added in class2, child class construct has higher priority. Same thing for functions if they (child & parent class) both have same name
+class class2 extends class1 {
+    function __construct() {
+        echo "construct2";
+    }
+}
+$obj = new class2();    >> OP >> construct2
+
+NOW, to use both constructors, use
+class class2 extends class1 {
+    function __construct() {
+        parent::__construct();
+        echo "construct2";
+    }
+}
+$obj = new class2();    >> OP >> construct1construct2
+
+class class2 extends class1 {
+    function __construct() {
+        echo "construct2";
+        parent::__construct();
+    }
+}
+$obj = new class2();    >> OP >> construct2construct1
+
+
+ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
+normally we can update the value outside the class, which is not a good thing.
+
+EXAMPLE
+class Class1 {
+    public $var1 = 1;
+}
+$obj1 = new Class1();
+echo $obj1->var1;       >> OP >> 1
+$obj1->var1 = 2;
+echo $obj1->var1;       >> OP >> 2
+
+Encapsulation comes here. To define/ modify the access level (Access Modifier). Like a property/ method can/ can not be access outside class. All access levels are public by default.
+
+// So, making $var1 to protected solves it. 
+protected $var1 = 1;
+
+// But we cannot access it outside the class (echo $obj1->var1; // will show error saying, cannot access protected property). NOW we will use, Getters & Setters. So, To access var1 outside the class
+// inside the class
+public function getVar1() {
+    return $this->var1;
+}
+// outside the class
+echo $obj1->getVar1();   >> OP >> 1
+
+Types of Access Modifiers
+1. public       >> properties/ methods can be accessed inside/ outside of class. This is default
+2. protected    >> properties/ methods can be accessed inside of the class & its inherited/ child classes
+3. private      >> properties/ methods can be accessed ONLY inside of the class
+
+REMEMBER, you cannot directly access 'protected' properties/ methods from inherited/ child class (in Class2, you cannot put directly return $this->var1). You can access it by using Getters & Setters.
+EXAMPLE
+class Class1 {
+	protected $var1 = 22; // if this is made private, it wont work
+
+    public function getVar1() {
+    	return $this->var1;
+    }
+
+    protected function function1() {
+    	return "Hello from class 1";
+    }
+}
+
+class Class2 extends Class1 {
+	public function getVar1FromClass1() {
+    	return $this->var1;
+    }
+}
+
+$obj2 = new Class2();
+echo $obj2->getVar1();              >> OP >> 22
+echo $obj2->getVar1FromClass1();    >> OP >> 22
+echo $obj2->function1();            >> OP >> Error: Call to protected method // cannot directly access a 'protected' method.
+
+REMEMBER, in case of same method name in parent & child class, parent class must have less access than child class. LIKE, if sameFunc() is public in parent class & protected in child class, it wont work. Opposite of it would work/ same access would work.
+
+
+ABSTRACTION (Abstract class)
+Abstract means incomplete. Abstract class contains atleast one Abstract/ incomplete function.
+1. Why Incomplete ? because, abstract function is declared but not called/ instantiated. Must be declared. We can also make regular functions inside Abstract class
+2. Objects can not be created from an Abstract class
+3. Inherited/ child class must contain abstract function
+
+// creating 'abstract' class
+abstract class Class1 {
+    function test() {
+        echo 'test';
+    }
+}
+$obj = new Class1(); // this would throw error, as obj cant be created
+
+// creating abstract function
+abstract class Class1 {
+    // this would throw error, cannot contain body, as abs. function cannot be called/ implemented
+    abstract function test() {
+        echo 'test';
+    }
+
+    // this is the correct process
+    abstract function test();
+}
+// correct one liner
+abstract class Class1 {
+    abstract function test();
+}
+
+// inheritance/ extending
+class Class2 extends Class1 {
+    // this will result in error, as child class must contain abstract function. Unless, the same test() is called again here
+
+    function test() {
+        echo 'test';
+    }
+}
+
+WHY USE ABSTRACT CLASS
+when we need to define a common structure among different classes. 
+Suppose, all banks needs idProof(), inside a abstract class bank, we can call abstract function idProof(), now for different classes like, hdfc, sbi extends bank... wont work untill idProof() is used in child class
+
+
+INTERFACE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -512,7 +512,7 @@ obj2.password = 'easypeasy';
 console.log(obj1); console.log(obj2);       >> OP >> {name: 'Leo', password: 'easypeasy'} {name: 'Leo', password: 'easypeasy'}
 
 Note that both passwords are changed, which differs from the code we wrote. This happens due to Pass by Reference.
-Objects are stored in memory are passed by reference. Both objects, obj1 & obj2 are both pointing to memory, that contains the object values. Now while changing 'password', change 'password' in the object in memory, so both gets updated
+Objects stored in memory are passed by reference. Both objects, obj1 & obj2 are both pointing to memory, that contains the object values. Now while changing 'password', change 'password' in the object in memory, so both gets updated
 
 AGAIN
 let arr1 = [1,2,3,4,5]
@@ -815,6 +815,59 @@ OR
 const boo = (string) => (name) => (name2) => console.log(`${string} ${name} ${name2}`)
 
 boo('hi')('Tim')('Becca')       >> OP >> hi Tim Becca
+
+
+CLOSURES ARE MEMORY EFFICIENT (if written properly)
+there is a heavy duty function, where a lot of work is happening/ a big array of 10,000 contents is being created. Now, if the function is called multiple times, the big array is going to be created each times too. We can solve this with Closure
+
+function heavyDuty(index) {
+    const bigArray = new Array(10000).fill('content')
+    console.log('Every time array is created, this logs')
+
+    return bigArray[index]
+    // change the last line to use Closure
+    return function(index) {
+        return bigArray[index]
+    }
+}
+
+CLOSURES & ENCAPSULATION
+Closures enable the creation of private variables. By defining variables within a function, you can control their accessibility and protect them from external interference.
+
+** EXAMPLE
+const array = [1,2,3,4];
+for (var i = 0; i < array.length; i++) {
+    setTimeout(() => {
+        console.log('Im at index '+i)
+    }, 2000)
+}
+OP >> Im at index 4 // it shows 4 times
+BUT, if used 'let' instead of 'var', it would show, Im at index 0, Im at index 1...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
