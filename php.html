@@ -172,8 +172,8 @@ REMEMBER, in case of same method name in parent & child class, parent class must
 
 
 ABSTRACTION (Abstract class)
-Abstract means incomplete. Abstract class contains atleast one Abstract/ incomplete function.
-1. Why Incomplete ? because, abstract function is declared but not called/ instantiated. Must be declared. We can also make regular functions inside Abstract class
+Abstract means incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
+1. Why Incomplete ? because, abstract function is declared but not called/ instantiated. Must be declared.
 2. Objects can not be created from an Abstract class
 3. Inherited/ child class must contain abstract function
 
@@ -214,26 +214,150 @@ when we need to define a common structure among different classes.
 Suppose, all banks needs idProof(), inside a abstract class bank, we can call abstract function idProof(), now for different classes like, hdfc, sbi extends bank... wont work untill idProof() is used in child class
 
 
-INTERFACE
+INTERFACE (implements)
+PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
+EXAMPLE
+class Class3 extends Class1, Class2 {...} // this would throw error
+
+Alternate is Interface. So,
+1. Supports multiple inheritance
+2. Interface can only contain 'Abstract' methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
+3. We cant define 'properties'/ 'variables' || Abstract classes can have
+4. No 'Construct' inside interface
+5. All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
+6. Interface uses 'implements', Inheritance uses 'extends'
+7. Objects cannot be made for interface
+
+interface Class1 {...}
+interface Class2 {...}
+class Class3 implements Class1, Class2 {...}
+
+NOW,
+interface class1 {
+    // will throw err, as its not an abstract function
+    public function function1() {
+        ...
+    }
+
+    // calling abstract function, which has no body, which must also be called in child class
+    public function function2();
+}
+class class3 implements class1 {
+    public function function2() {
+        return "here in func1";
+    }
+}
+
+$obj1 = new class1(); // this would throw, as interface class canot have object
+$obj3 = new class3();
+$obj3->function2();     >> OP >> here in func1
 
 
+STATIC MEMBERS
+1. To access static properties/ methods,do not create 'object'. Call it's class
+2. Concept of 'this' keyword does not work here, as 'this' represents current object and there is no concept of object creation. use 'self' instead
+3. 'constructor' wont be called here, as there is concept of creating 'object'
+
+class class1 {
+    public static $num = 10;
+    public $num2 = 20;
+
+    public static function func1() {
+        echo "inside function1";
+    }
+
+    public static function func1() {
+        echo self::num; // only to access static property
+        echo self::num2; // would throw
+    }
+}
+$obj = new class1();
+echo $obj->num; // cannot be accessed as it's a 'static' variable
+
+// to access static variable, call its class
+echo class1::$num;          >> OP >> 10
+echo class1::func1();       >> OP >> inside function1
 
 
+TRAIT
+Problem with 'Inheritance' is when extended to multiple classes, the inherited/ child class has access to all the properties/ methods of parent class and classes before them. 'Trait' solves this.
+EXAMPLE
+class class1{...}
+class class2 extends class1{...}
+class class3 extends class2{...}
+class class4 extends class3{...} // class 4 can access the properties/ methods of class1, class2 & class3. But it does not need the properties/ methods of class1 and class2. 'Trait' solves this.
+
+trait class1{...}       // initializing 'trait', exactly like 'class' keyword, just replace it
+class class2 {
+    use class1;         // using 'trait'
+    ...
+}
+// whenever trait is needed go with, 'use trait1, trait2'
+// if sameNameFunction() is used in both trait & class, function inside class has more preference. Instantiating the function will result content in class
+// if both traits have sameNameFunction(), instantiating the function will throw. to fix it,
+trait t1 {
+    function func1() {...}
+}
+trait t2 {
+    function func1() {...}
+}
+class class1 {
+    use t1, t2 {
+        t1::func1 insteadof t2; // when you need only 'func1' from t1
+        t2::func1 as func2; // if you need 'func1' from t2 too. Use alias 'as' like 'sql'
+    }
+}
+$obj = new class1();
+$obj->func1(); // this would work
 
 
+POLYMORPHISM
+same operation may behave differently in different class. 
+2 process - Through Abstract class & Interface
 
+EXAMPLE through Abstract Class
+abstract class Class1 {
+	abstract function absFunc1();
+}
 
+class Class2 extends Class1 {
+	public function absFunc1() {
+    	echo "fun 2";
+    }
+}
+class Class3 extends Class1 {
+	public function absFunc1() {
+    	echo "fun 3";
+    }
+}
 
+$obj1 = new Class2();
+$obj1->absFunc1();      >> OP >> fun 2
+$obj2 = new Class3();
+$obj2->absFunc1();      >> OP >> fun 3
 
+// NOW, both Class2 & Class3 has same function, absFunc1(), but they retuns/ behaves differently in different classes. This is 'Polymorphism'
 
+EXAMPLE through Interface
+interface Class1 {
+	function absFunc1();
+}
 
+class Class2 implements Class1 {
+	public function absFunc1() {
+    	echo "fun 2";
+    }
+}
+class Class3 implements Class1 {
+	public function absFunc1() {
+    	echo "fun 3";
+    }
+}
 
-
-
-
-
-
-
+$obj1 = new Class2();
+$obj1->absFunc1();      >> OP >> fun 2
+$obj2 = new Class3();
+$obj2->absFunc1();      >> OP >> fun 3
 
 
 
