@@ -1,9 +1,9 @@
 OBJECT ORIENTED PROGRAMMING
 
 CLASS & OBJECT
-concept/ coding style, which has advantages like, less code reusability, DRY method.
+Object oriented programming is a concept/ coding style, which has advantages like, less code reusability, DRY method.
 Everything is a object (mobile, laptop, bottle)
-Class is categorisation of real-life objects basis of attribute/ property (variables) & behaviour/ methods (functions). Like, categorising of birds of flying & non-flying bird. 
+Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising of birds of flying & non-flying bird. 
 
 Class is a template/ blueprint of object and Object is instance (example) of a class
 EXAMPLE
@@ -214,6 +214,12 @@ when we need to define a common structure among different classes.
 Suppose, all banks needs idProof(), inside a abstract class bank, we can call abstract function idProof(), now for different classes like, hdfc, sbi extends bank... wont work untill idProof() is used in child class
 
 
+ENCAPSULATION vs ABSTRACTION
+process of containing information || process of obtaining information
+use access specifier || use interface & abstract class
+way of protecting data || way of hiding unnecessary information
+
+
 INTERFACE (implements)
 PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
 EXAMPLE
@@ -254,9 +260,9 @@ $obj3->function2();     >> OP >> here in func1
 
 
 STATIC MEMBERS
-1. To access static properties/ methods,do not create 'object'. Call it's class
+1. To access static properties/ methods, do not create 'object'. Call it's class
 2. Concept of 'this' keyword does not work here, as 'this' represents current object and there is no concept of object creation. use 'self' instead
-3. 'constructor' wont be called here, as there is concept of creating 'object'
+3. 'constructor' wont be called here, as there is no concept of creating 'object'
 
 class class1 {
     public static $num = 10;
@@ -314,6 +320,7 @@ $obj->func1(); // this would work
 POLYMORPHISM
 same operation may behave differently in different class. 
 2 process - Through Abstract class & Interface
+2 types - Compile time (Method overloading) & Run time (Method overriding)
 
 EXAMPLE through Abstract Class
 abstract class Class1 {
@@ -359,14 +366,44 @@ $obj1->absFunc1();      >> OP >> fun 2
 $obj2 = new Class3();
 $obj2->absFunc1();      >> OP >> fun 3
 
+METHOD/ FUNCTION OVERLOADING
+When same function name is defined twice/ multiple times using different parameters. (Not supported by PHP)
+class Test {
+    function plus($num1, $num2) {...}
+    function plus($num1, $num2, $num3) {...}
+}
+METHOD/ FUNCTION OVERRIDING
+When you extend a class & rewrite a same function that already exists in parent class
 
 
+NAMESPACE
+prevent conflict among classes with same name
+
+1. when we have multiple SameNameClass and we need to include them in a same php file
+2. instantiate 'namespace namespaceName' at very top of file
+3. to create instance/ object, $obj = new namespaceName\SameNameClass
 
 
+REQUIRE vs INCLUDE
+when error occurs, generates fatal error (E_COMPILE_ERROR) || generates warning (E_WARNING)
+will stop execution of script || wont stop
 
 
+FINAL
+'Final' keyword prevents subclass from overriding a method and prevents a class from being inherited
 
 
+NEW in PHP 7
+https://www.php.net/manual/en/migration70.new-features.php
+Scalar type declarations // function Func(int $num1) {...}
+Return type declarations // function Func(int $num1) : int {...}
+Null Coalescing operator (??)
+Spaceship operator (<=>) // returns -1,0,1 when two variables are less than, equal to, greater than
+Constant arrays using define()
+Anonymous class
+unicode excape // echo "\u{1F602}"; // outputs 😂
 
-
-
+NEW in PHP 8
+https://www.php.net/releases/8.0/en.php
+Constructor property promotion // Less code to define & initialize properties
+Union types // function Func()
