@@ -69,8 +69,8 @@ $obj1 = new Class1(20);
 echo $obj1->fun1();
 
 
-INHERITANCE (EXTENDS)
-access property from one class to another class. 
+** INHERITANCE (EXTENDS)
+access properties & methods (public & protected) from one class to another class. 
 EXAMPLE
 class class1 {
     function __construct() {
@@ -113,7 +113,8 @@ class class2 extends class1 {
 $obj = new class2();    >> OP >> construct2construct1
 
 
-ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
+** ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
+Encapsulation means bundling related data into a structured unit/ into a capsule format
 normally we can update the value outside the class, which is not a good thing.
 
 EXAMPLE
@@ -171,14 +172,15 @@ echo $obj2->function1();            >> OP >> Error: Call to protected method // 
 REMEMBER, in case of same method name in parent & child class, parent class must have less access than child class. LIKE, if sameFunc() is public in parent class & protected in child class, it wont work. Opposite of it would work/ same access would work.
 
 
-ABSTRACTION (Abstract class)
+** ABSTRACTION (Abstract class)
 Abstract means incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
-1. Why Incomplete ? because, abstract function is declared but not called/ instantiated. Must be declared.
+1. Why Incomplete ? because, abstract function must be declared but not called/ instantiated
 2. Objects can not be created from an Abstract class
 3. Inherited/ child class must contain abstract function
 
 // creating 'abstract' class
 abstract class Class1 {
+    // this would throw error, cannot contain body, as abs. function cannot be called/ implemented
     function test() {
         echo 'test';
     }
@@ -187,12 +189,6 @@ $obj = new Class1(); // this would throw error, as obj cant be created
 
 // creating abstract function
 abstract class Class1 {
-    // this would throw error, cannot contain body, as abs. function cannot be called/ implemented
-    abstract function test() {
-        echo 'test';
-    }
-
-    // this is the correct process
     abstract function test();
 }
 // correct one liner
