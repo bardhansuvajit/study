@@ -369,7 +369,7 @@ Before ES6 you could use bind() to solve this/ store 'this' in a variable and us
 
 
 ** CALL(), APPLY(), BIND()
-These functions are used to manipulate 'this' keyword. call() & apply() are simply use dto calling a function. Like, someFunction() OR someFunction.call() OR someFunction.apply() does the same thing, for now.
+These functions are used to manipulate 'this' keyword. call() & apply() are simply used to call a function. Like, someFunction() OR someFunction.call() OR someFunction.apply() does the same thing, for now.
 
 EXAMPLE
 const wizard = {
@@ -779,7 +779,7 @@ multiplyByArrow(4)(6)       >> OP >> 24
 
 
 ** CLOSURE
-(Function + Lexical scope)
+(Function + Lexical scope) - Closure is a combination of a function & lexical environment from which it was declared
 Closure is a feature that allows inner functions to access the outer scope of a function. It makes it possible for a function to have "private" variables.
 
 EXAMPLE
@@ -843,9 +843,199 @@ for (var i = 0; i < array.length; i++) {
 }
 OP >> Im at index 4 // it shows 4 times
 BUT, if used 'let' instead of 'var', it would show, Im at index 0, Im at index 1...
+ALSO, we could use 'var' & 'closures' here, by calling & instantly invoking a function
+
+// calling
+function() {
+...codes
+}
+
+// invoking it
+(function(closureI) {
+    setTimeout(() => {
+        console.log('Im at index '+closureI)
+    }, 2000)
+})(i)
+
+
+** PROTOTYPES (PROTOTYPAL INHERITANCE)
+Inheritance - An object getting access to properties & methods of another object
+Prototypes are the mechanism by which JavaScript objects inherit features from one another.
+EXAMPLE
+const arr = [];
+arr.__proto__ // proto is prototype chain here
+
+// this is used to go up to the prototype chain. like arr > Array[] > Object{}. now we are accessing Array[] by using __proto__. If it's used again, we would go another level up & access Object{}
+
+arr.__proto__.__proto__ 
+
+// here we can access many properties of object{}. This is how we can access any properties/ methods that an object has. Like toString(). So, arr.toString() > OP > "" // converts the empty array to string
+
+EXAMPLE
+let dragon = {
+    name: 'Tanya',
+    fire: true,
+    fight() {
+        return 5
+    },
+    sing() {
+        return `I am ${this.name}, the breather of fire`;
+    }
+}
+
+let lizard = {
+    name: 'Kiki',
+    fight() {
+        return 1
+    }
+}
+
+NOW, if we borrow methods from dragon object, we could do that with bind()
+const singingLizard = dragon.sing.bind(lizard)
+console.log(singingLizard) > OP > I am Kiki, the breather of fire
+
+NOW, if the sing() method rely on fire property, the bind() code wont work (undefined). Like,
+sing() {
+    if(this.fire) {
+        return `I am ${this.name}, the breather of fire`;
+    }
+}
+
+This is where Prototypal Inheritance comes in. Where lizard can inherit methods & properties of dragon.
+lizard.__proto__ = dragon // going up the prototype chain
+lizard.sing()       // I am Kiki, the breather of fire
+lizard.fire         // true
+lizard.fight()      // 1, this is not replaced
+dragon.isPrototypeOf(lizard)    // true
+
+// Going through properties
+lizard.__proto__ = dragon
+for (let prop in lizard) { // loop throught the properties of lizard
+    console.log('All properties lizard has>>')
+    console.log(prop)               >> name fight fire sing
+
+    if (lizard.hasOwnProperty(prop)) {
+        console.log(prop)           >> name fight
+    }
+}
+
+** REMEMBER, while using lizard.hasOwnProperty(), if JS engine doesnt find the property (hasOwnProperty) on that object (lizard), it goes up the prototype chain. HERE, hasOwnProperty() is not part of lizard object, so it goes up the prototype chain to dragon, upto the base object & finds hasOwnProperty() & uses it
+
+Prototype chain & Scope chain are different
+
+when not found in Prototype chain for properties/ methods
+lizard.ahaha() > OP > says TypeError: ahaha not a function
+lizard.ahaha   > OP > undefined
+
+// when its passed the base object, obj.__proto__.__proto__ > OP > null
+this is null pointer. nothing is there, when passed the base object
+
+// a function is also a object (special type of object. Callable Object) in JS. So, a.hasOwnProperty('name') > OP > true
+whereas, a.hasOwnProperty('call') returns false, same as bind & apply returns false
+
+NOW, for a function,
+** multiplyBy5() this custom function is linked to 'Base Function' using __proto__ pointer/ keyword. 
+** __proto__ goes up the prototype chain to base function & points to the prototype of it. (__proto__ and prototype are different)
+multiplyBy5().__proto__ >> Base Function.__proto__ >> Base object.__proto__ >> null (Null pointer here)
+
+let human = {
+    mortal: true
+}
+let socrates = Object.create(human) // socrates is created using object.create, the prototype chain. instead of using __proto__
+socrates.age = 65
+console.log(socrates.age)       >> 65
+console.log(socrates.mortal)    >> true
+console.log(human.isPrototypeOf(socrates))      >> true
+
+Only Functions have the prototype property
+
+// EXAMPLE 1
+add lastYear() to Date constructor, when a new date is passed, it should show (year - 1) in YYYY format
+new Date('1900-10-10')
+
+Date.prototype      // this shows the properties the Date object has access to
+Date.prototype.lastYear = function() {          // adding lastYear to the properties. Using arrow function wont work here. 'this' will be lexically scoped in arrow function
+    return this.getFullYear() - 1
+}
+new Date('1900-10-10').lastYear()       >> OP >> 1899
+new Date().lastYear()                   >> OP >> 2023
+
+// EXAMPLE 2
+array mapping
+const arr = [4, 9, 25, 36, 64];
+console.log(arr.map(Math.sqrt))         >> OP >> 2, 3, 5, 6, 8
+console.log(arr.map(myFunc))            >> OP >> 40, 90, 250, 360, 640
+
+function myFunc(num) {
+    return num * 10
+}
+
+// EXAMPLE 3
+Modify .map() to print 'extra' at end of each item
+
+Array.prototype.map = function() {
+    let arr = [];
+    for (let i = 0; i < this.length; i++) {
+        arr.push(this[i] + 'extra')
+    }
+    return arr
+}
+console.log([1,2,3].map())              >> OP >> 1extra, 2extra, 3extra
+WELL, this is quite dangerous. As were updating the map() function's functionality and the entire script where map is used might be broken too.
 
 
 
+** OBJECT ORIENTED PROGRAMMING
+this keyword, new keyword, Prototype, ES6 classes, Java, Inheritance, Object_create(), Private vs Public, 4 principles of OOP
+2 types mainly - class based & prototype based 
+OOP is mainly modelling real world objects & relationships
+
+FACTORY FUNCTION
+Suppose, there is const elf = {...}, with some properties & methods like, name, weapon, attack() etc. Now, when we need another elf, we will use const elf2 = {...}, const elf3 = {...} etc. We need encapsulation here. So, instead, we can do is
+
+function createElf(name, weapon) {
+    return {
+        name,         // in ES6, if the property & values are same, like name: name, weapon: weapon, we can use it like...
+        weapon,
+        attack() {
+            return 'attack with '+ weapon
+        }
+    }
+}
+const peter = createElf('Peter', 'stones')
+peter.attack()          >> OP >> attack with stones
+
+NOW, attack() functionality is same & will be stored in memory everytime a new elf is created, to solve that...
+1. remove attack() from createElf()
+2. const elfFunction = {
+    attack() {
+        return 'attack with '+ this.weapon
+    }
+}
+3. peter.attack = elfFunction.attack
+
+NOW, to clean this up, we could use Object.create()
+function createElf(name, weapon) {
+    let newElf = Object.create(elfFunction)
+    newElf.name = name;
+    newElf.weapon = weapon;
+    return newElf;
+}
+
+console.log(peter.attack())         >> OP >> sttack with stones
+
+** CONSTRUCTOR FUNCTION
+function Elf(name, weapon) {
+    this.name = name
+    this.weapon = weapon
+}
+// we are not returning anything here. we are constructing en elf using 'this' 
+// to use constructor functions, we use 'new' keyword. 'new' returns the object for us automatically
+// any function which is invoked with 'new' keyword, is called 'Constructor Function'
+// Date() is a constructor function. As a rule, not mandetory though, constructor functions should start with 'Caps'
+
+const sam = Elf('Sam', 'sticks')
+sam.name            >> OP >> Sam
 
 
 
