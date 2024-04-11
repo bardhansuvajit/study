@@ -1029,16 +1029,22 @@ function Elf(name, weapon) {
     this.name = name
     this.weapon = weapon
 }
-// we are not returning anything here. we are constructing en elf using 'this' 
-// to use constructor functions, we use 'new' keyword. 'new' returns the object for us automatically
+// we are not returning anything here. we are constructing/ creating en elf using 'this' 
+// to use constructor functions, we use 'new' keyword. 'new' returns the object for us automatically. Like, new Date()
 // any function which is invoked with 'new' keyword, is called 'Constructor Function'
 // Date() is a constructor function. As a rule, not mandetory though, constructor functions should start with 'Caps'
 
-const sam = Elf('Sam', 'sticks')
+const sam = new Elf('Sam', 'sticks')
 sam.name            >> OP >> Sam
 
+FUNCTION CONSTRUCTOR
+const Sum = new Function('a', 'b', 'return a + b');
+console.log(Sum(2, 6));     >> OP >> 8
 
-
+const Elf1 = new Function('name', 'weapon', 'this.name = name; this.weapon = weapon;')
+const sarah = new Elf1('Sarah', 'fireworks')
+console.log(sarah)          >> OP >> {name: 'Sarah', weapon: 'fireworks'}
+// the 'new' keyword points 'this' to the object (Sum/ Elf1 etc.) 'this' now becomes Sum/ Elf1
 
 
 

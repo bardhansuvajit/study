@@ -1,6 +1,6 @@
 OBJECT ORIENTED PROGRAMMING
 
-CLASS & OBJECT
+** CLASS & OBJECT
 Object oriented programming is a concept/ coding style, which has advantages like, less code reusability, DRY method.
 Everything is a object (mobile, laptop, bottle)
 Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising of birds of flying & non-flying bird. 
@@ -19,7 +19,7 @@ $object1 = new Class1();
 $object1->fun1();       >> OP >> inside fun1
 
 
-PUBLIC & THIS
+** PUBLIC & THIS
 Again, to define properties/ variables
 
 class Class1 {
@@ -38,7 +38,7 @@ class Class1 {
 }
 
 
-CONSTRUCTOR & DESTRUCTOR
+** CONSTRUCTOR & DESTRUCTOR
 when object is called, at very first function Construct is called by default. Similarly, when the object's lifecycle is about to end, destructor function is called by default
 EXAMPLE
 class Class1 {
@@ -51,7 +51,9 @@ class Class1 {
 }
 $obj1 = new Class1();   >> OP >> startend
 
-INITIALIZE VARIABLE INSIDE CONSTRUCTOR
+
+
+** INITIALIZE VARIABLE INSIDE CONSTRUCTOR
 function __construct() {
     // $x = 10;
     $this->x = 10;
@@ -60,13 +62,14 @@ function fun1() {
     return $this->x;
 }
 
-TO MAKE THE VARIABLE DYNAMIC
+** TO MAKE THE VARIABLE DYNAMIC
 function __construct($y) {
     $this->x = $y;
 }
 // whenever an object is created for this class, we have to pass the value
 $obj1 = new Class1(20);
 echo $obj1->fun1();
+
 
 
 ** INHERITANCE (EXTENDS)
@@ -95,7 +98,7 @@ class class2 extends class1 {
 }
 $obj = new class2();    >> OP >> construct2
 
-NOW, to use both constructors, use
+*NOW, to use both constructors, use
 class class2 extends class1 {
     function __construct() {
         parent::__construct();
@@ -114,8 +117,8 @@ $obj = new class2();    >> OP >> construct2construct1
 
 
 ** ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
-Encapsulation means bundling related data into a structured unit/ into a capsule format
-normally we can update the value outside the class, which is not a good thing.
+Encapsulation means bundling similar data into a structured unit/ into a capsule format
+normally we can update the value outside the class, which is not a good thing. Like the below example
 
 EXAMPLE
 class Class1 {
@@ -126,7 +129,7 @@ echo $obj1->var1;       >> OP >> 1
 $obj1->var1 = 2;
 echo $obj1->var1;       >> OP >> 2
 
-Encapsulation comes here. To define/ modify the access level (Access Modifier). Like a property/ method can/ can not be access outside class. All access levels are public by default.
+Encapsulation comes here. To define/ modify the access level (Access Modifier). Like a property/ method can/ can not be accessed outside class. All access levels are public by default.
 
 // So, making $var1 to protected solves it. 
 protected $var1 = 1;
@@ -140,11 +143,11 @@ public function getVar1() {
 echo $obj1->getVar1();   >> OP >> 1
 
 Types of Access Modifiers
-1. public       >> properties/ methods can be accessed inside/ outside of class. This is default
-2. protected    >> properties/ methods can be accessed inside of the class & its inherited/ child classes
-3. private      >> properties/ methods can be accessed ONLY inside of the class
+1. public       >> properties/ methods can be accessed inside/ outside of class scope. This is default
+2. protected    >> properties/ methods can be accessed inside of the class scope & its inherited/ child classes
+3. private      >> properties/ methods can be accessed ONLY inside of the class scope
 
-REMEMBER, you cannot directly access 'protected' properties/ methods from inherited/ child class (in Class2, you cannot put directly return $this->var1). You can access it by using Getters & Setters.
+* REMEMBER, you cannot directly access 'protected' properties/ methods from inherited/ child class (in Class2, you cannot put directly return $this->var1). You can access it by using Getters & Setters.
 EXAMPLE
 class Class1 {
 	protected $var1 = 22; // if this is made private, it wont work
@@ -169,11 +172,14 @@ echo $obj2->getVar1();              >> OP >> 22
 echo $obj2->getVar1FromClass1();    >> OP >> 22
 echo $obj2->function1();            >> OP >> Error: Call to protected method // cannot directly access a 'protected' method.
 
-REMEMBER, in case of same method name in parent & child class, parent class must have less access than child class. LIKE, if sameFunc() is public in parent class & protected in child class, it wont work. Opposite of it would work/ same access would work.
+REMEMBER, in case of same method name in parent & child class, parent class must have less access than child class. LIKE, if someFunc() is public in parent class & protected in child class, it wont work. Opposite of it would work/ same access would work.
+If, both are public someFunc() {...}, called from child class object, it would work and child class will have priority
+If, someFunc() is public in parent class, protected in child class, it wont work
+If, someFunc() is removed/ made protected in parent class, protected in child class, it works
 
 
 ** ABSTRACTION (Abstract class)
-Abstract means incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
+Abstract means partial/ incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
 1. Why Incomplete ? because, abstract function must be declared but not called/ instantiated
 2. Objects can not be created from an Abstract class
 3. Inherited/ child class must contain abstract function
@@ -185,13 +191,9 @@ abstract class Class1 {
         echo 'test';
     }
 }
-$obj = new Class1(); // this would throw error, as obj cant be created
+$obj = new Class1(); // this would throw error, as object cannot be created
 
 // creating abstract function
-abstract class Class1 {
-    abstract function test();
-}
-// correct one liner
 abstract class Class1 {
     abstract function test();
 }
@@ -204,6 +206,20 @@ class Class2 extends Class1 {
         echo 'test';
     }
 }
+
+FINAL EXAMPLE
+abstract class AbstractClass {
+    abstract protected function func1($string);
+}
+
+class New1 extends AbstractClass {
+    public function func1($string) {
+        return 'here: '.$string;
+    }
+}
+
+$classNew = new New1();
+echo $classNew->func1('test name');
 
 WHY USE ABSTRACT CLASS
 when we need to define a common structure among different classes. 
