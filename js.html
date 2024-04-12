@@ -1046,6 +1046,166 @@ const sarah = new Elf1('Sarah', 'fireworks')
 console.log(sarah)          >> OP >> {name: 'Sarah', weapon: 'fireworks'}
 // the 'new' keyword points 'this' to the object (Sum/ Elf1 etc.) 'this' now becomes Sum/ Elf1
 
+// AGAIN
+
+function Elf(name, weapon) {
+    console.log(this)               >> OP >> Elf {}
+    this.name = name
+    this.weapon = weapon
+    console.log(this)               >> OP >> Elf {name: 'Peter', weapon: 'stones'}
+}
+Elf.prototype.attack = function() {
+    return 'attack with '+this.weapon
+}
+const peter = new Elf('Peter', 'stones')
+console.log(peter.attack())         >> OP >> attack with stones
+const jack = new Elf('Jack', 'sticks')
+console.log(jack.attack())          >> OP >> attack with sticks
+
+
+* type of 'this'
+// new binding this
+function Person(name, age) {
+    this.name = name; this.age = age;
+}
+const person1 = new Person('Sam', 55)
+person1             >> OP >> Person { name: 'Sam', age: 55 }
+
+// implicit binding
+const person2 = {
+    name: 'Karen',
+    age: 55,
+    hi() {
+        console.log('hi ' + this.name)
+    }
+}
+
+// ecplicit binding (explicitely binding 'this' keyword with window object)
+const person3 = {
+    name: 'Xavier',
+    hi: function() {
+        console.log('hi ' + this.setTimeout)
+    }.bind(window)      
+}
+person3.hi()        >> OP >> setTimeout() {[native code]}
+
+// arrow function
+const person4 = {
+    name: 'Josh',
+    hi: function() {
+        var inner() = () => {
+            console.log('hi ' + this.name)
+        }
+        return inner()
+    }
+}
+person4.hi()        >> OP >> hi Josh
+
+
+** ES6 class
+class is a blueprint of what we want to create
+class Elf {
+    constructor(name, weapon) {
+        this.name = name
+        this.weapon = weapon
+    }
+
+    attack() {
+        return 'attack with '+this.weapon
+    }
+}
+
+// instance/ object
+const peter = new Elf('Peter', 'stones')    // 'peter' is an instance of 'Elf'
+console.log(peter instanceof Elf)           // true
+// class is actually 'prototypal inheritance' in disguise. (also called Pseudo classical inheritance)
+
+class vs Object.create()
+new X is Object.create(X.prototype) with additionally running the constructor function. (And giving the constructor the chance to return the actual object that should be the result of the expression instead of this.)
+
+
+** INHERITANCE
+1. problem before 'extends'
+after class Elf...
+const fiona = new Elf('Fiona', 'ninja stars')
+console.log(fiona)              >> OP >> { name : 'Fiona', weapon : 'ninja stars' }
+const ogre = {...fiona} // using spread operator to clone fiona
+console.log(ogre)               >> OP >> { name : 'Fiona', weapon : 'ninja stars' }
+
+console.log(fiona === ogre)     >> OP >> false
+// these objects are not referencing the same place in memory
+console.log(fiona.__proto__)    >> OP >> Elf {} // base object is pointed here
+console.log(ogre.__proto__)     >> OP >> {} // the prototypal chain is lost here
+agre.attck()                    >> OP >> doesnt work as well
+
+2. after using 'extends', updatign the code a little
+class Character {
+    constructor(name, weapon) {
+        this.name = name
+        this.weapon = weapon
+    }
+    attack() {
+        return 'attack with '+ this.weapon
+    }
+}
+class Elf extends Character {
+
+}
+const fiona = new Elf('Fiona', 'ninja stars')
+console.log(fiona)              >> OP >> { name : 'Fiona', weapon : 'ninja stars' }
+
+// NOW, if we want to use a method inside 'Elf' class
+class Elf extends Character {
+    super()
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
