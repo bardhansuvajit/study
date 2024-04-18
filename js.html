@@ -318,7 +318,7 @@ NOW, while using jQuery, they created an IIFE by using $ keyword. The $/ jquery 
 Basic jquery syntax is $().();
 
 ** The $ in jquery can also be changed
-(function (OMG) { // changing the jQUery parameter
+(function (OMG) { // changing the jQuery parameter
     // $('h1').hide();
     OMG('h1').hide();
 })(jQuery); // passing jQuery parameter & JS looks for it in local scope rather than global
@@ -861,6 +861,9 @@ function() {
 ** PROTOTYPES (PROTOTYPAL INHERITANCE)
 Inheritance - An object getting access to properties & methods of another object
 Prototypes are the mechanism by which JavaScript objects inherit features from one another.
+
+Every object in JavaScript has a built-in property, which is called its prototype. The prototype is itself an object, so the prototype will have its own prototype, making what's called a prototype chain. The chain ends when we reach a prototype that has null for its own prototype.
+
 EXAMPLE
 const arr = [];
 arr.__proto__ // proto is prototype chain here
@@ -985,7 +988,9 @@ WELL, this is quite dangerous. As were updating the map() function's functionali
 
 
 
-** OBJECT ORIENTED PROGRAMMING
+** OOP - OBJECT ORIENTED PROGRAMMING (this, new keyword, Prototype, ES6 class, Inheritance, Object.create(), Private vs public, 4 principles of OOP)
+WHY ? Clear codes, Easy to extend & maintain, memory efficient & to follow DRY method
+
 this keyword, new keyword, Prototype, ES6 classes, Java, Inheritance, Object_create(), Private vs Public, 4 principles of OOP
 2 types mainly - class based & prototype based 
 OOP is mainly modelling real world objects & relationships
@@ -1148,17 +1153,368 @@ class Character {
         return 'attack with '+ this.weapon
     }
 }
-class Elf extends Character {
+class Elf extends Character {       // this means, set __proto__ of Elf to Character, so Elf now has a prototype chain upto Character
 
 }
 const fiona = new Elf('Fiona', 'ninja stars')
-console.log(fiona)              >> OP >> { name : 'Fiona', weapon : 'ninja stars' }
+console.log(fiona)              >> OP >> Elf { name : 'Fiona', weapon : 'ninja stars' }
 
-// NOW, if we want to use a method inside 'Elf' class
+// ** NOW, if we want to use a method inside 'Elf' class
 class Elf extends Character {
-    super()
-    
+    constructor(name, weapon, type) {
+        super(name, weapon)
+        this.type = type
+    }
 }
+const dolby = new Elf('Dolby', 'cloth', 'house')
+console.log(dolby)              >> OP >> Elf { name : 'Dolby', weapon : 'cloth', type : 'house' }
+console.log(dolby.attack())     >> OP >> attack with cloth
+
+// AGAIN
+
+class Ogre extends Cahracter {
+    constructor(name, weapon, color) {
+        super(name, weapon)
+        this.color = color
+    }
+
+    makeFort() {
+        return 'Strongest fort is made'
+    }
+}
+const shrek = new Ogre('Shrek', 'club', 'green')
+shrek                                       >> OP >> Ogre { name : 'Shrek', weapon : 'club', color : 'green' }
+shrek.makeFort()                            >> OP >> Strongest fort is made
+
+// in JS, everything is an object. like this 'Ogre', which is defined as a class, but is an object
+So, as an object, 'Ogre' has some built-in properties and makeFort() is a custom one.
+Its like, Ogre.prototype.makeFort()
+
+Ogre.isPrototypeOf(shrek)                   >> OP >> false
+Ogre.prototype.isPrototypeOf(shrek)         >> OP >> true       // Ogre.prototype contains all the properties & methods
+Character.prototype.isPrototypeOf(Ogre.prototype)   >> OP >> true
+
+dolby instanceof Elf                        >> OP >> true
+dolby instanceof Ogre                       >> OP >> false
+dolby instanceof Cahracter                  >> OP >> true
+
+
+** PRIVATE & PUBLIC FIELDS
+before private fields were introduced in JS, '_' was used like '_attack()' to identify a properties/ methods as private, which didnt do anything rather than just identify
+
+later, in ES2022, using '#' before properties/ methods made them 'private'
+class Employee {
+    #name = "Test"; // private field
+    setName(name) {
+        this.#name = name;
+    }
+}
+const emp = new Employee();
+emp.#name = 'New'; // error
+emp.setName('New'); // ok
+
+class Employee {
+    #name = "Test";
+    constructor(name) {
+        this.#setName(name) // ok
+    }
+    #setName(name) { // Private method
+        this.#name = name;
+    }
+}
+const emp = new Employee('New'); // ok
+emp.#setName('New'); // error
+
+
+** OOP in React
+class Toggle extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {isToggleOn: true}
+    }
+
+    handleCLick() {
+        ...
+    }
+
+    render() {
+        ...
+    }
+}
+
+
+** 4 PILLARS OF OOP
+ENCAPSULATION
+Before OOP, in procedural programming, we used functions, data update etc and in OOP, we started using class, objects
+in ENCAPSULATION we wrap related codes like in a box. And the boxes interact with each others
+
+ABSTRACTION
+incomplete/ hiding the complexity from users. Also the private keywords are useful in here
+
+INHERITANCE
+by using this, we avoid rewriting same code and save memory space
+
+POLYMORPHISM
+means many forms. its like, the ability to call the same methods for different objects but each objects responds in different way
+
+* METHOD OVERRIDING
+when a child class inherits some method from the parent class but redefines it on its own context
+EX
+class Test1 {
+    describe() {
+        ...
+    }
+}
+class Test2 extends Test1 {
+    describe() {
+        ...
+    }
+}
+test1.describe()
+test2.describe()
+OP >> different results each time
+
+
+* METHOD OVERLOADING
+when two methods bears the same name but differs in type or the no. of arguments that are passed into the methods
+JS doesnt support method overloading, but can be faked
+EX
+class Polygon {
+    area(sideA, sideB) {
+        console.log(sideA*sideB)
+    }
+    area(side) {
+        console.log(side * side)
+    }
+}
+
+const polygon = new Polygon()
+polygon.area(5, 7)          >> OP >> 25 // wrong
+polygon.area(6)             >> OP >> 36
+
+EX
+const test = new Test()
+const test2 = new Test2()
+test.attack('param')        >> OP >> working param
+test2.attack()              >> OP >> working without param
+
+
+ANOTHER EX
+class Queen extends Character {
+    attack() {
+        console.log(super.attack())
+        return `More texts`
+    }
+}
+queen.attack()              >> OP >> Character class texts. More texts
+
+
+FUNCTIONAL PROGRAMMING - (Curry, Partial application, Pure functions, Referential transparency, Compose, Pipe)
+Packaging our codes to seperate chunks and each chunk concerns about the one thing that it's good at. Uses mainly data & functions
+
+WHY ? Clear codes, Easy to extend & maintain, memory efficient & to follow DRY method (Same as OOP)
+
+** PURE FUNCTIONS
+Pillar of Functional Programming
+2 things to follow - 
+always must return same output given the same input & cannot modify anything outside itself/ no side effects
+
+EXAMPLE
+This following code has side effect
+const array = [1,2,3]
+
+function mutateArray(arr) {
+    arr.pop()               // not returning anything. just a basic method
+}
+
+function populateArray(arr) {
+    arr.forEach(item => {
+        arr.push(11)
+    })
+}
+
+mutateArray(array)
+populateArray(array)
+console.log(array)      >> OP >> 1,2,11,11
+
+NOW, watch this code has no side effects
+const array = [1,2,3]
+
+function mutateArray(arr) {
+    const newArray = [].concat(arr)
+    // not using, newArray = arr like this, instead of pointing both arrays to the same location, we have a new location pointing to the memory
+
+    newArray.pop()
+    return newArray
+}
+
+function populateArray(arr) {
+    return arr.map(item => item * 2)
+}
+
+const array2 = mutateArray(array)
+const array3 = populateArray(array)
+console.log(array, array2, array3)
+OP >> [1,2,3] [1,2] [2,4,6]
+
+
+Pure functions also must maintain, Input same as output, which most the functions mostly does. like,
+function a(num1, num2) {return num1 + num2}
+function b(num) {return num * 2}
+a(4, 3)         >> OP >> 7      // this is always 7, no matter how many times we run it
+b(a(4, 3))      >> OP >> 14     // always same
+NOW, if
+b(7)            >> OP >> 14     // we are replacing a(4, 3) with 7 directly, meaning no matter the input, output is always same, this is called Referential Transparency
+
+These functions doesnt also have any side effects.
+
+Not every functions can be pure. But there are some things to maintain in Functional programming
+a single function should do a Single task
+should have 'return' statement
+should be Pure
+no Shared state with other functions
+Immutable state, donot modify global state
+Composable, 
+Predictable
+
+
+IDEMPOTENT
+ability to make multiple identical requests, and only have the changes applied once
+Like, while deleting a user from database, if done with a single request/ multiple request with userId, the user will be deleted only once
+
+
+IMPERATIVE vs DECLARATIVE
+Imperative code tells the machine what to do & how to do it (like how computers work)
+Declarative code tells the machine what to do & what should happen (like how humans work)
+jQuery is imperative. React is declarative
+
+EX - Imperative
+for (let i = 0; i < 10; i++) {
+    console.log(i)
+}
+EX - Declarative
+[1,2,3,4,5,6,7,8,9,10].forEach(item => console.log(item))
+
+
+IMMUTABILITY
+means, not changing/ mutating data & state. Instead making copy of the state as required & return them
+EX
+const obj = {name: 'Andrei'}
+function clone(obj) {
+    return {...obj}     // this is pure
+}
+function updateName(obj) {
+    const obj2 = clone(obj)
+    obj2.name = 'Nana'
+    return obj2
+}
+const updatedObj = updateName(obj)
+console.log(obj, updatedObj)    >> OP >> { name : 'Andrei' } { name : 'Nana' }
+
+
+HOF - HIGHER ORDER FUNCTIONS & CLOSURES, review again
+in JS, functions are first class citizen, means we can have HOF & closures
+HOF means one/ more functions as arguments OR returns a function as result as callback
+
+EX 1
+const hof = () => () => 5
+hof()       >> OP >> FUNCTION
+hof()()     >> OP >> 5 // function returning a function
+
+EX 2
+const hof = (fn) => fn(5)
+hof(function a(x) {return x})   >> OP >> 5 // parameter of hof is taking a function
+
+Closure
+to access variable outside function scope
+here in FP, it should be like, the main variable should not be touched/ the value cant be modified
+const closure = function() {
+    let count = 55;
+    return function getCounter() {
+        return count++;
+    }
+}
+
+const getCounter = closure()
+getCounter()
+getCounter()    >> OP >> 57
+
+
+** CURRYING
+breaking down a function that takes multiple arguments, into series of functions that takes one argument each
+EX
+const multiply = (a, b) => a * b
+multiply(3, 4)              >> OP >> 12
+
+now, using currying into this function
+const curriedMultiply = (a) => (b) => a * b
+curriedMultiply(3)(4)       >> OP >> 12
+
+WHY ? multiple utility functions can be created from this, we can run different parts of a function
+EX
+const curriedMultiplyBy5 = curriedMultiply(5)
+curriedMultiplyBy5(4)       >> OP >> 20
+curriedMultiplyBy5(5)       >> OP >> 25
+curriedMultiplyBy5(6)       >> OP >> 30
+
+
+** PARTIAL APPLICATION
+partially apply a function, a process of producing a function with smaller no of parameters
+EX
+const multiply = (a, b, c) => a * b * c
+
+// converting into curried
+const curriedMultiply = (a) => (b) => (c) => a * b * c
+curriedMultiply(5)(4)(10)               >> OP >> 200
+
+// converting into partial
+const multiply = (a, b, c) => a * b * c
+const partialMultiply = multiply.bind(null, 5)
+partialMultiply(4, 10)                  >> OP >> 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
