@@ -101,7 +101,7 @@ $obj = new class2();    >> OP >> construct2
 *NOW, to use both constructors, use
 class class2 extends class1 {
     function __construct() {
-        parent::__construct();
+        parent::__construct(); // in JS, this is like, super(argements)
         echo "construct2";
     }
 }
@@ -114,12 +114,12 @@ class class2 extends class1 {
     }
 }
 $obj = new class2();    >> OP >> construct2construct1
-
+:: is scope resolution operator. if parent class has anotherMethod(), we can call it in child class using, parent::anotherMethod()
 
 ** ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
 Encapsulation means bundling similar data into a structured unit/ into a capsule format
-normally we can update the value outside the class, which is not a good thing. Like the below example
 
+normally we can update the value outside the class, which is not a good thing. Like the following
 EXAMPLE
 class Class1 {
     public $var1 = 1;
@@ -144,7 +144,7 @@ echo $obj1->getVar1();   >> OP >> 1
 
 Types of Access Modifiers
 1. public       >> properties/ methods can be accessed inside/ outside of class scope. This is default
-2. protected    >> properties/ methods can be accessed inside of the class scope & its inherited/ child classes
+2. protected    >> properties/ methods can be accessed inside of the class scope & its inherited classes
 3. private      >> properties/ methods can be accessed ONLY inside of the class scope
 
 * REMEMBER, you cannot directly access 'protected' properties/ methods from inherited/ child class (in Class2, you cannot put directly return $this->var1). You can access it by using Getters & Setters.
@@ -234,10 +234,9 @@ way of protecting data || way of hiding unnecessary information
 
 INTERFACE (implements)
 PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
-EXAMPLE
 class Class3 extends Class1, Class2 {...} // this would throw error
 
-Alternate is Interface. So,
+Alternate is Interface. Which,
 1. Supports multiple inheritance
 2. Interface can only contain 'Abstract' methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
 3. We cant define 'properties'/ 'variables' || Abstract classes can have

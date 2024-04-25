@@ -1162,7 +1162,7 @@ console.log(fiona)              >> OP >> Elf { name : 'Fiona', weapon : 'ninja s
 // ** NOW, if we want to use a method inside 'Elf' class
 class Elf extends Character {
     constructor(name, weapon, type) {
-        super(name, weapon)
+        super(name, weapon) // in PHP, this is like, parent::__construct()
         this.type = type
     }
 }
