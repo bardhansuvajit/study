@@ -415,7 +415,27 @@ Constant arrays using define()
 Anonymous class
 unicode excape // echo "\u{1F602}"; // outputs 😂
 
+
 NEW in PHP 8
 https://www.php.net/releases/8.0/en.php
+https://stitcher.io/blog/new-in-php-8
+
+JIT compiler // to compile PHP code to machine code. can be manually enabled/ disabled
 Constructor property promotion // Less code to define & initialize properties
-Union types // function Func()
+Union types // allow a parameter, return type, property to accept multiple types of values. function foo(int|string $value): void {..}
+
+Named arguments // this allows passing arguments to methods by writing parameter names, rather than relying on the order of params, 
+function greet($name, $age) {
+    echo "Hello $name, you are $age years old!";
+}
+greet(age: 30, name: 'John');
+
+match expression // alternative to switch statement
+$result = match ($value) {
+    1 => 'One',
+    2 => 'Two',
+    default => 'Other',
+};
+
+Nullsafe operator // ?-> // allows to handle nullable values without needing multiple null checks
+$value = $obj?->getProperty()?->getValue();

@@ -1472,35 +1472,71 @@ const multiply = (a, b, c) => a * b * c
 const partialMultiply = multiply.bind(null, 5)
 partialMultiply(4, 10)                  >> OP >> 200
 
+// Currying vs Partial Application
+breaks down function with multiple arguments into series of unary functions || creats new function with fewer arguments
 
 
+** MEMOIZATION CACHING
+caching is a way of storing values for later use (ised in DYNAMIC PROGRAMMING)
+(EX - when u goto school and need a pencil, u take it from the small bagpack u carry, along pencils and others. u dont goto home again to bring it)
+
+Memoization is a form of caching, used in Dynamic programming, that involves caching the return value of a function based on its parameters. If the params donot changed, they are memoized
+WHY ? when performing an operation, if its needed to run for multiple time, we could optimize it so that it would be faster each time.
+
+** EXAMPLE
+suppose, this is a regular long operation
+function addTo80(n) {
+    console.log('more longer process');
+    return n + 80;
+}
+addTo80(5)
+addTo80(5)
+addTo80(5)
+addTo80(5)
+OP >> more longer process...more longer process...more longer process...more longer process...80 (something like this)
+
+NOW, UPDATING THE FUNCTION
+let cache = {}; // poluting global scope though
+
+function memoizedAddTo80(n) {
+    if (n in cache) {
+        return cache[n];
+    } else {
+        cache[n] = n + 80
+        return cache[n];
+    }
+}
+
+memoizedAddTo80(5)  >> 85
+** after running it first time, cache variable changes like
+cache = {
+    5: 85
+}
+which is happening in else part
+again, for next time, memoizedAddTo80(5), it goes to the if statement & simply does a property access
+now its super fast with a Hash Table (Hash Tables are a data structure that allow you to create a list of paired values & retrieve a certain value by using the key)
+
+// to avoid that Global scope problem. we will use closure
+function memoizedAddTo80() {
+    let cache = {}
+
+    return function(n) {
+        if (n in cache) {
+            return cache[n];
+        } else {
+            cache[n] = n + 80
+            return cache[n];
+        }
+    }
+}
+// now to use it
+const memoized = memoizedAddTo80()
+memoized(5)     >> OP >> 85
+memoized(5)     >> OP >> 85
+memoized(6)     >> OP >> 86
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+** COMPOSE & PIPE
 
 
 
