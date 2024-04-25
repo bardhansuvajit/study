@@ -1311,6 +1311,7 @@ queen.attack()              >> OP >> Character class texts. More texts
 
 FUNCTIONAL PROGRAMMING - (Curry, Partial application, Pure functions, Referential transparency, Compose, Pipe)
 Packaging our codes to seperate chunks and each chunk concerns about the one thing that it's good at. Uses mainly data & functions
+Idea of seperating data & functions
 
 WHY ? Clear codes, Easy to extend & maintain, memory efficient & to follow DRY method (Same as OOP)
 
@@ -1536,28 +1537,45 @@ memoized(5)     >> OP >> 85
 memoized(6)     >> OP >> 86
 
 
-** COMPOSE & PIPE
+** COMPOSE (FUNCTION COMPOSITION) & PIPE
+Function composition - powerful technique that allows to combine multiple functions into a single one
+Suppose, we need a function to multiply 3 & -50, also need the absolute format (positive), these are 2 operations. we need to compose them together
+JS library, Ramda, has inbuilt function 'compose'. But here we will build this
+
+EXAMPLE
+const compose = (f, g) => (data) => f(g(data)) // compose is right ot left
+const multiplyBy3 = (num) => num * 3
+const makePositive = (num) => Math.abs(num)
+const multiplyBy3AndAbsolute = compose(multiplyBy3, makePositive)
+
+multiplyBy3AndAbsolute(-50)     >> OP >> 150
+
+PIPE (Left to right)
+const compose = (f, g) => (data) => g(f(data)) // Oppositeof compose
+
+Generic function example    - fn1(fn2(fn3(50)))
+with compose we could do    - compose(fn1, fn2, fn3)(50)
+with pipe we could do       - pipe(fn3, fn2, fn1)(50)
+
+ARITY - no of args a function takes. that's it.
+Remember to use fewer no of args in functions to make them more flexible
 
 
+** EXERCISE CART
+1. Add items to cart        2. Add 3% tax       3. Buy item, cart > purchase        4. Empty cart
 
+cont user = {
+    name: 'Kim',
+    active: true,
+    cart: [],
+    purchases: []
+}
 
+purchaseItem(user, {name: 'laptop', price: 3999})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function purchaseItem(user, item) {
+    return Object.assign({}, user, {purchases: item})
+}
 
 
 
