@@ -1309,7 +1309,7 @@ class Queen extends Character {
 queen.attack()              >> OP >> Character class texts. More texts
 
 
-FUNCTIONAL PROGRAMMING - (Curry, Partial application, Pure functions, Referential transparency, Compose, Pipe)
+FUNCTIONAL PROGRAMMING - (Currying, Partial application, Pure functions, Referential transparency, Compose, Pipe)
 Packaging our codes to seperate chunks and each chunk concerns about the one thing that it's good at. Uses mainly data & functions
 Idea of seperating data & functions
 
@@ -1538,7 +1538,7 @@ memoized(6)     >> OP >> 86
 
 
 ** COMPOSE (FUNCTION COMPOSITION) & PIPE
-Function composition - powerful technique that allows to combine multiple functions into a single one
+Function composition - combine multiple functions into a single one
 Suppose, we need a function to multiply 3 & -50, also need the absolute format (positive), these are 2 operations. we need to compose them together
 JS library, Ramda, has inbuilt function 'compose'. But here we will build this
 
@@ -1571,55 +1571,115 @@ cont user = {
     purchases: []
 }
 
-purchaseItem(user, {name: 'laptop', price: 3999})
+const compose = (f, g) => (...args) => f(g(...args));
+purchaseItem(
+    emprtCart,
+    buyItem,
+    applyTaxToCart,
+    addItemToCart
+)(user, {name: 'laptop', price: 200})
 
-function purchaseItem(user, item) {
-    return Object.assign({}, user, {purchases: item})
+function purchaseItem(...fns) {
+    return fns.reduce(compose)
 }
 
+function addItemToCart(user, item) {
+
+}
+
+...TO BE CONTINUED
 
 
+** COMPOSITION vs INHERITANCE
+combine multiple functions to single || pass characteristics from parent to child
+used in FP || OOP
+
+* PROBLEM (Tight Coupling Problem, Fragile Base CLass Problem, Hierarchy problem)
+In Inheritance, a class has some properties & methods, when extended the child classes are going to have those properties & methods too. 
+
+Now the problem is, we are binding data (this class has some specifed properties & methods). We can always add more methods/ update existing classes of the parent class but the child class will inherit them too, this is called TIGHT COUPLING PROBLEM. So keeping the code DRY also creates a problem. So changing the code in one place can have a ripling effect into the other extending classes. This is FRAGILE BASE CLASS PROBLEM
+
+Also, we are using a simple setup here. Base/ Parent class, the extending child classes. So the HIERARCHY PROBLEM appears when somehow we try to update the hierarchy due to client requiremt or other reason (a junior class might level up & goes up the hierarchy)
+
+Also, in case of deep hierarchies, childClass4 will have many unwanted properties/ methods from childClass1/2/3. Due to this Tightly Coupled concept, they inherit multiple classes
 
 
+Use Composition instead. Suppose, we need to make a sandwich, instead of inheriting all properties from a super-sandwich class, we can assemble it from ingredients.
+const bread = {
+    type: 'whole wheat',
+    toasted: true
+};
+const cheese = {
+    type: 'cheddar',
+    sliced: true
+};
+const meat = {
+    type: 'turkey',
+    grilled: false
+};
+  
+// Sandwich object composed of ingredients
+const sandwich = {
+    bread: bread,
+    cheese: cheese,
+    meat: meat,
+    eat: function() {
+        console.log("Nom nom nom!");
+    }
+};
+
+// Now, you can make a sandwich and eat it!
+sandwich.eat();
+>> OP >> Nom nom nom!
+
+Composition allows to build complex objects from simpler parts, making code more modular and easier to understand. It's like LEGO bricks — we can create various structures by snapping different pieces together.
+
+Same thing using class & inheritance
+
+class Food {
+    constructor(name) {
+        this.name = name
+    }
+    eat() {
+        console.log(`Eating ${this.name}`)
+    }
+}
+class Sandwich extends Food {
+    constructor(name, filling) {
+        super(name)
+        this.filling = filling
+    }
+
+    eat() {
+        console.log(`Eating ${this.name} with ${this.filling}`)
+    }
+}
+
+// creating instance
+const simpleSandwich = new Sandwich('Simple sandwich', 'ham and cheese')
+simpleSandwich.eat()
+>> OP >> Eating Simple sandwich with ham and cheese
+
+** Now, the DIFFERENCE
+1. Inheritance: With inheritance, the Sandwich class inherits the behavior (methods) and properties of the superclass (Food). This means that Sandwich is a type of Food.
+2. Composition: In composition, we build the Sandwich object by combining smaller objects (ingredients). The Sandwich object contains these smaller objects but does not inherit their behavior. Each ingredient is its own standalone entity.
+
+** So, why Composition over Inheritance
+Composition allows to build smaller & more focused components
+Code becomes easier to understand as components have clear responsibility
+we could create library of reusable components that can be used accross different parts of application
+inheritance can lead to 'Fragile base class' problem, where changes to a super class, can affect subclasses
+composition promotes encapsulation, as each component hides their implementation details and expose only necessary interface
+
+Overall, while inheritance has its uses, composition is often preferred in JavaScript and other dynamic languages for its flexibility, modularity, and ease of maintenance. It encourages a more component-based approach to design, which can lead to more robust and scalable applications.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+** FP vs OOP
+Many operations on fixed data || few operations on common data
+stateless (we dont modify states) || statefull
+pure functions, no side effects || there are side effects, methods manipulate their internal states
+declarative, what we want || imperative, how we want it
+good for processing large data for applications || less operations but 
 
 
 
