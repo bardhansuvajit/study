@@ -1679,17 +1679,98 @@ Many operations on fixed data || few operations on common data
 stateless (we dont modify states) || statefull
 pure functions, no side effects || there are side effects, methods manipulate their internal states
 declarative, what we want || imperative, how we want it
-good for processing large data for applications || less operations but 
+good for processing large data for applications || less operations but many things/ characters
+data & behaviour are distinctly different things & should be kept seperately for clarity || bring together data & behaviors in objects/ class
 
 
+** ASYNCHRONOUS JAVASCRIPT (Web APIs, Async/ await, Callbacks, Microtask queue/ Job queue, Task queue/ Callback queue, Promises, Event loop)
+Asynchronous programming is a concept that allows code to run in the background without breaking execution of other code.
+Now, JS is Single-threaded language/ runs Synchronous code (Means one set of instruction is completed at a time). 
+
+* JS Runtime/ Web API
+the Web browser works in the background, when the synchronous JS code is running. It does this by using WEB API (Web API comes with browser, amde with low level languages like C++).
+
+WEB API is used to send HTTP Request (fetch), listen to DOM event, delay executions (SetTimeout), used for Caching, Database Storage in browser (indexedDB) etc. (To check simply goto console and type 'window')
+
+WEB APIs are ASYNCHRONOUS - means, we can instruct the APIs to do something in the background and return data once done. Meanwhile, we can continue working on JS Call Stack & execute functions
+
+WEB API runs only when the stack is empty & the entire file is completed running
 
 
+Example
+setTimeout(()=>{console.log('1', 'is the loneliest number')}, 0)
+setTimeout(()=>{console.log('2', 'can be as bad as one')}, 10)
+Promise.resolve('hi').then((data)=> console.log('2', data))
+console.log('3','is a crowd')
+
+OP
+3 is a crowd
+2 hi
+1 is the loneliest number
+2 can be as bad as one
+
+setTimeout() is an asynchronous function. Part of Web API
+Other parts of Web API are DOM, ajax/fetch(), setTimeout()
+
+In every browser, JS has Runtime it's environment. Which are
+Call stack | Web API | Callback Queue | Event Loop
+
+Generally JS engine puts everything on CALL STACK
+Once it sees something 'asynchronous'/ part of web API/ timeout 
+> sends it to WEB API, which does something in the background
+> when done, it adds the result (the function we need to invoke) into CALLBACK QUEUE
+> EVENT LOOP checks if the callstack is empty & entire JS file is read once & if its empty, it pushes it into 'Call Stack'
+> the EVENT LOOP simply monitors the call stack & the callback queue
 
 
+** How does JS work ?
+** Difference between synchronous and asynchronous
+** JS is single threaded language that can be non-blocking
+discussion on these questions
+
+* What is a program
+does 2 simple things 
+> allocate memory (for variables or having files on computer)
+> parse and execute scripts (means read and run commands)
+
+for JS, in chrome, v8 engine runs JS code & changes code into machine. Now, the engine consists of 2 parts (memory heap & call stack)
+Remember, creating global variables creates 'Memory leak'. As memory is limited
+Call stack - reads & executes code
+
+Other languages can have multiple call stack, those are called 'Multi threaded'. But JS is keeping it simple as a single threaded language. Only one thing to worry about. Multi threaded langauges face a common problem, Deadlock (a condition in which two or more threads are blocked (hung) forever because they are waiting for each other)
+
+Also in JS, Stack overflow & Memory Leak happens. 
+creating a stack overflow by recursion (means when a function calls itself)
+function foo() {
+    foo()
+}
+foo()
+
+Again, in JS, when a bigger task is being executed the others tasks are blocked. JS can be non-blocking. which means that the language does not wait for a previous instruction to finish executing before it moves to the next one
+in JS, we can simply convert synchronous code to asynchronous code
+console.log('1')
+console.log('2', 'bigger task')
+console.log('3')
+
+OP > 1 2 3
+
+TO
+
+console.log('1')
+setTimeout(() => {
+    console.log('2')
+}, 10)
+console.log('3')
+
+OP > 1 3 2
+
+Another good example is, calling & texting, calling is synchronous. you have to wait till the other person picks up. you are not doing anything in the meantime. While in texting, after sending the desired text, you can do you anything you want and when the other person is reads it, they will respond you. you can do anything in the meantime
 
 
-
-
+** PROMISES
+Promise is an object that represents completion or failure of asynchronous operation and it's returning value.
+has 3 states - fulfilled, rejected, pending
+new feature in ES6
 
 
 
