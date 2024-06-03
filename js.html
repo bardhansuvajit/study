@@ -1767,10 +1767,244 @@ OP > 1 3 2
 Another good example is, calling & texting, calling is synchronous. you have to wait till the other person picks up. you are not doing anything in the meantime. While in texting, after sending the desired text, you can do you anything you want and when the other person is reads it, they will respond you. you can do anything in the meantime
 
 
+** ARROW FUNCTION
+
+// 1 Named function with multiple parameters
+function sum(a, b) {
+    return a + b
+}
+
+// Conversion
+let sum2 = (a, b) => {
+    return a + b
+}
+
+// one liner
+let sum2 = (a, b) => a + b
+
+
+// 2 Named function with one parameter
+function isPositive(number) {
+    return number >= 0
+}
+
+// Conversion
+let isPositive2 = number => number >= 0
+
+
+// 3 Named function with no parameter
+function randomNumber() {
+    return Math.random
+}
+
+// Conversion
+let randomNumber2 = () => Math.random
+
+* for these examples, the arrow function trick doesn't shine much until using with anonymous functions and 'this' keyword
+
+// 4 Anonymous function, function with no name
+document.addEventListner('click', function() {
+    console.log('Clicked')
+})
+
+// Conversion
+document.addEventListner('click', () => {
+    console.log('Clicked')
+})
+
+// One liner
+document.addEventListner('click', () => console.log('Clicked'))
+
+
+// 5 Arrow function inside class, using 'this'
+class Person {
+    constructor(name) {
+        this.name = name
+    }
+    personWithFunction() {
+        setTimeout(function() {
+            console.log('Function> '+this.name)
+        }, 100)
+    }
+    personWithArrow() {
+        setTimeout(() => {
+            console.log('Arrow> '+this.name)
+        }, 100)
+    }
+}
+let person = new Person('Suvajit')
+person.personWithFunction()
+person.personWithArrow()
+
+OP >>
+Function>
+Arrow> Suvajit
+
+note, 'this.name' doesn't work inside 'regular function' here
+In normal functions, 'this' variable is created which references the objects that call them. Like the window, document, button etc
+
+
+
 ** PROMISES
 Promise is an object that represents completion or failure of asynchronous operation and it's returning value.
-has 3 states - fulfilled, rejected, pending
-new feature in ES6
+> has 3 states - resolved, rejected, pending
+> it's new feature in ES6
+
+Just like a promise in real life. When we promise to do something, then the results are either completed (resolved) or failed (rejected). if resolved > 'then', if failed get errors in 'catch'
+
+EXAMPLE
+let promiseOne = new Promise()
+>
+let promiseOne = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        console.log(`some asynchronous task`)
+        resolve()
+    }, 1000)
+})
+promiseOne.then(() => {
+    console.log(`after resolved`)
+})
+OP >>
+some asynchronous task
+after resolved
+
+
+let p = new Promise( (resolve, reject) => {
+    let a =  1 + 1;
+
+    if(a == 2) {
+        resolve('Success');
+    } else {
+        resolve('Failure');
+    }
+} )
+
+// if the code is resolved, 'then' block works. 'catch' block is used to catch errors/ failed state
+
+p.then((message) => {
+    console.log('This is inside then > ' + message)
+}).catch((message) => {
+    console.log('This is inside catch > ' + message)
+})
+
+OP >> This is inside then > Success
+
+Promises are great while doing asynchronous work (like downloading an image from a diff server). we can catch resolved/ rejected states
+We can use multiple 'then's as required
+
+HOW IT WORKS
+We create a promise > We tell it what we want, when it succeeds and what we want, when it fails >
+Then we process the request, use 'then' when it succeeds and 'catch' when it fails
+
+MULTIPLE PROMISES
+const promise1 = new Promise((resolve, reject) => {
+    resolve('promise 1 resolved')
+})
+const promise2...
+const promise3...
+
+Promise.all([
+    promise1,
+    promise2,
+    promise3
+]).then((messages) => {
+    console.log(messages)
+}).catch((errors) => {
+    console.log(errors)
+})
+
+OP > array of promises >
+[
+    "promise 1 resolved",
+    "promise 2 resolved",
+    "promise 3 resolved"
+]
+
+Promise.race([
+    ... same as Promise.all() but unlike returning an array it returns the first promise, then the second...
+])
+
+
+** ASYNC & AWAIT
+syntactic sugar wrapped around promises, make it easier to work with
+
+EXAMPLE
+function makeRequest(location) {
+    return new Promise((resolve, reject) => {
+        console.log(`Making request to ${location}`)
+
+        if (location == "Google") {
+            resolve(`Google says Hi`)
+        } else {
+            reject(`We only talk to Google`)
+        }
+    })
+}
+
+function processRequest(response) {
+    return new Promise((resolve, reject) => {
+        console.log(`Processing Response`)
+        resolve(`Extra information + ${response}`)
+    })
+}
+
+makeRequest('Google').then(response => {
+    console.log(`Response received`)
+    return processRequest(response)
+}).then(processedResponse => {
+    console.log(processedResponse)
+}).catch(err => {
+    console.log(err)
+})
+
+OP >>
+Making request to Google
+Response received
+Processing Response
+Extra information + Google says Hi
+
+
+** Updating same code using async & await
+AWAIT means the next code should wait till this one finishes. Use try-catch block to catch errors
+async function doWork() {
+    try {
+        const response = await makeRequest('Google')
+        console.log(`Response received`)
+        const processedResponse = await processRequest(response)
+        console.log(processedResponse)
+    } catch(err) {
+        console.log(err)
+    }
+}
+doWork()
+
+OP >>
+Making request to Google
+Response received
+Processing Response
+Extra information + Google says Hi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
