@@ -183,6 +183,9 @@ Abstract means partial/ incomplete. Abstract class contains atleast one Abstract
 1. Why Incomplete ? because, abstract function must be declared but not called/ instantiated
 2. Objects can not be created from an Abstract class
 3. Inherited/ child class must contain abstract function
+4. declared using the `abstract` keyword
+5. Any class that extends an abstract class must either implement all of its abstract methods or itself be declared abstract
+6. Abstract classes can also contain non-abstract (concrete) methods but must contain at leats one abstract method
 
 // creating 'abstract' class
 abstract class Class1 {
@@ -227,18 +230,18 @@ Suppose, all banks needs idProof(), inside a abstract class bank, we can call ab
 
 
 ENCAPSULATION vs ABSTRACTION
+way of protecting data || way of hiding unnecessary information
 process of containing information || process of obtaining information
 use access specifier || use interface & abstract class
-way of protecting data || way of hiding unnecessary information
 
 
-INTERFACE (implements)
+** INTERFACE (keyword - interface, implements)
 PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
 class Class3 extends Class1, Class2 {...} // this would throw error
 
 Alternate is Interface. Which,
 1. Supports multiple inheritance
-2. Interface can only contain 'Abstract' methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
+2. Interface can only contain abstract methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
 3. We cant define 'properties'/ 'variables' || Abstract classes can have
 4. No 'Construct' inside interface
 5. All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
@@ -286,6 +289,7 @@ class class1 {
     public static function func1() {
         echo self::num; // only to access static property
         echo self::num2; // would throw
+        echo $this->num2;
     }
 }
 $obj = new class1();
@@ -296,7 +300,7 @@ echo class1::$num;          >> OP >> 10
 echo class1::func1();       >> OP >> inside function1
 
 
-TRAIT
+TRAIT (keyword - trait, use)
 Problem with 'Inheritance' is when extended to multiple classes, the inherited/ child class has access to all the properties/ methods of parent class and classes before them. 'Trait' solves this.
 EXAMPLE
 class class1{...}
