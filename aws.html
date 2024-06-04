@@ -5,6 +5,41 @@ Create new account/ login > aws.amazon.in > goto Console
 
 2 Domain registration + DNS management
 Route 53
+1 `Register domain` from AWS 
+OR
+2 Transfer other domain to AWS
+2.1 Go to `Hosted zones` > Create
+domain name, public hosted zone > SAVE
+
+Records might be created (total 4 records needed as per multiple videos - 2 records have to create and 2 will be created automatically)
+
+2.2 Get IP from EC2 > instances > IPV4 IP
+
+2.3 Create record > Simple routing > Define simple record
+OR
+Create record > Record type - A - Routes traffic to IPV4 address > use IPV4 IP in value > SAVE
+
+Define another simple record
+
+Add ‘www’ to Record name > Add ‘domain name’ in value > Recored type - CNAME > SAVE & CREATE RECORDS
+
+2.4 Use 4 DNS from AWS & update Name-servers them to Domain providers (Like GoDaddy/ others)
+DONOT COPY ‘last .’ From AWS DNS
+
+
+
+ELASTIC IP ADDRESS
+EC2 > Network > Elastic IP
+Allocate Elastic IP address
+
+
+
+
+
+
+
+
+
 
 
 
