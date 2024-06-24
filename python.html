@@ -170,28 +170,48 @@ other magic methods starts wih __
 
 
 ** DJANGO **
-python3 --version       >> check python version
+Check
+python3 --version       >> check python version     >> 3.12.4
 PIP is a package manager for Python packages. comes default
-pip3 --version          >> check pip version
+pip3 --version          >> check pip version        >> 24.0
 vscode extension needed >> python
 
-install django
+Create virtual environment
+python3 -m venv .venv (mac/ linus) || py -m venv .venv (windows)
 
+** Activate the v env (inside .venv)
+source .venv/bin/activate (mac/ linus) || source .venv/Scripts/activate (windows)
 
+To deactivate the v env
+type 'deactivate'
 
+Install Django
+python3 -m pip install Django (Mac/ linux)
+py -m pip install Django (windows)
 
+To update PIP (optional)
+python3 -m pip install -U pip
 
+Verify Django/ check django version
+python3
+>> import django
+>> print(django.get_version())
+5.0.6
+>> quit()
 
+** Now, still in the .venv, start django admin
+django-admin startproject <project_name>
+django-admin startproject newset
 
+> new folder (newset inside newset) will be created
+> go inside newset > cd newset & start server
 
+** python3 manage.py runserver (inside the `1st newset folder`)
 
+while doing this, error faced, could not import django, run > pip install django
 
-
-
-
-
-
-
+* might see some unapplied migrations error
+runs on localhost:8000
 
 
 
