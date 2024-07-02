@@ -207,6 +207,7 @@ django-admin startproject myproject
 > go inside myproject > cd myproject & start server
 
 ** python3 manage.py runserver (inside the `1st myproject folder`)
+python3 manage.py runserver 8001 (specify port 8001/ runs on default 8000)
 
 while doing this, error faced, could not import django, run > pip install django
 
@@ -214,27 +215,71 @@ while doing this, error faced, could not import django, run > pip install django
 runs on localhost:8000
 
 
-Route/ URLs
-goto urls.py
+Route/ URLs and VIEWS
+
+1. creating a simple HTTP response text
+create new file > views.py (myproject > myproject > views.py)
+
+from django.http import HttpResponse
+
+def homepage(request):
+    return HttpResponse("Hello world ! This is homepage")
+
+def about(request):
+    return HttpResponse("This is about page")
+
+2. goto 'views'
+goto urls.py, to import the views.py file
+
+from . import views
+
+path('', views.homepage)
+path('about/', views.about)
+
+Restart runserver and check
+python3 manage.py runserver
+
+3. HTML template
+inside the outer myproject > create 'templates' folder > add home.html + about.html
+
+goto settings.py
+TEMPLATES = [
+    {
+        'DIRS': ['templates']       # add template's folder name
+    }
+]
+
+goto views.py file
+# from django.http import HttpResponse
+from dgango.shortcuts import render
+
+def homepage(request):
+    # return HttpResponse("Hello world ! This is homepage")
+    return render(request, 'home.html')
+
+def about(request):
+    # return HttpResponse("This is about page")
+    return render(request, 'about.html')
+
+4. Static CSS & JS file
+inside the outer myproject > create 'static/ assets' folder > add 'css' > style.css + 'js' > main.js folder
+
+goto settings.py
+very top > import os
+
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+in home.html
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Django APPS
+apps are modular & can be used in another project
 
 
 
