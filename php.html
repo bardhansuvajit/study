@@ -235,8 +235,11 @@ process of containing information || process of obtaining information
 use access specifier || use interface & abstract class
 
 
-** INTERFACE (keyword - interface, implements)
+** INTERFACE
+(keyword - interface, implements)
 PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
+Also, Interface is used to ensure a class has certain methods
+
 class Class3 extends Class1, Class2 {...} // this would throw error
 
 Alternate is Interface. Which,
@@ -273,7 +276,9 @@ $obj3 = new class3();
 $obj3->function2();     >> OP >> here in func1
 
 
-STATIC MEMBERS
+** STATIC MEMBERS
+To access properties/ methods without creating onject of a class
+
 1. To access static properties/ methods, do not create 'object'. Call it's class
 2. Concept of 'this' keyword does not work here, as 'this' represents current object and there is no concept of object creation. use 'self' instead
 3. 'constructor' wont be called here, as there is no concept of creating 'object'
@@ -286,7 +291,7 @@ class class1 {
         echo "inside function1";
     }
 
-    public static function func1() {
+    public static function func2() {
         echo self::num; // only to access static property
         echo self::num2; // would throw
         echo $this->num2;
@@ -300,7 +305,7 @@ echo class1::$num;          >> OP >> 10
 echo class1::func1();       >> OP >> inside function1
 
 
-TRAIT (keyword - trait, use)
+** TRAIT (keyword - trait, use)
 Problem with 'Inheritance' is when extended to multiple classes, the inherited/ child class has access to all the properties/ methods of parent class and classes before them. 'Trait' solves this.
 EXAMPLE
 class class1{...}
@@ -332,7 +337,7 @@ $obj = new class1();
 $obj->func1(); // this would work
 
 
-POLYMORPHISM
+** POLYMORPHISM
 same operation may behave differently in different class. 
 2 process - Through Abstract class & Interface
 2 types - Compile time (Method overloading) & Run time (Method overriding)
