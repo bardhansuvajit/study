@@ -394,7 +394,7 @@ $obj2 = new Class3();
 $obj2->absFunc1();      >> OP >> fun 3
 
 METHOD/ FUNCTION OVERLOADING
-When same function name is defined twice/ multiple times using different parameters. (Not supported by PHP)
+When same function name is defined twice/ multiple times using different parameters. (Not supported by PHP traditionally, but can be achieved a form of overloading by using __call() magic method)
 class Test {
     function plus($num1, $num2) {...}
     function plus($num1, $num2, $num3) {...}
@@ -403,12 +403,36 @@ METHOD/ FUNCTION OVERRIDING
 When you extend a class & rewrite a same function that already exists in parent class
 
 
-NAMESPACE
+** NAMESPACE
 prevent conflict among classes with same name
 
 1. when we have multiple SameNameClass and we need to include them in a same php file
 2. instantiate 'namespace namespaceName' at very top of file
 3. to create instance/ object, $obj = new namespaceName\SameNameClass
+
+
+** MAGIC METHOD
+Called automatically, when something happens with your objects (like creating, accessing a property/ method). 
+> They allow you to customize how the object behaves
+> start with double underscores
+
+COMMON METHODS
+__construct, automatically called when a new object is created
+__destruct, called when an object is destroyed
+__call(), handles calling to undefined/ inaccessible methods
+__callStatic(), handles calling to undefined/ inaccessible STATIC methods (same as __call())
+__get(), __set(), 
+
+EXAMPLE
+class Example {
+    public function __call($name, $arguments) {
+        echo "Called method $name with arguments: " . implode(', ', $arguments);
+    }
+}
+
+$obj = new Example();
+$obj->someMethod('arg1', 'arg2'); // Outputs: Called method someMethod with arguments: arg1, arg2
+
 
 
 REQUIRE vs INCLUDE
@@ -417,27 +441,63 @@ will stop execution of script || wont stop
 
 
 FINAL
-'Final' keyword prevents subclass from overriding a method and prevents a class from being inherited
+the final keyword is used to prevent a class/ method from being extended or overridden. 
+> It's a way of saying, "This is the final version—don't change it."
+
+EXAMPLE
+final class BaseClass {
+    public function func() {
+        echo "Hello from BaseClass!";
+    }
+}
+
+// This will cause an error because BaseClass cannot be extended.
+class ChildClass extends BaseClass {
+    ...
+}
 
 
-NEW in PHP 7
+
+** NEW in PHP 7 than 5
+1.  Faster execution & reduced memory usage
+2.  Scalar type declarations
+    > Specify type for function arguments
+    > function someFunc(int $num1) {...}
+3.  Return type declarations
+    > define expected return type to function
+    > // function Func(int $num1) : int {...}
+4.  Null Coalescing operator (??)
+    > $username = $_GET['user'] ?? 'guest';
+5.  Spaceship operator (<=>)
+    > returns -1,0,1 when two variables are less than, equal to, greater than
+    > echo 2 <=> 3; // Outputs: -1
+6.  Anonymous class
+    > $obj = new class {
+        public function sayHello() {
+            return "Hello!";
+        }
+    };
+    echo $obj->sayHello();
+7.  Constant arrays using define()
+    > define('ANIMALS', ['dog', 'cat', 'bird']);
+8.  unicode excape // echo "\u{1F602}"; // outputs 😂
+
 https://www.php.net/manual/en/migration70.new-features.php
-Scalar type declarations // function Func(int $num1) {...}
-Return type declarations // function Func(int $num1) : int {...}
-Null Coalescing operator (??)
-Spaceship operator (<=>) // returns -1,0,1 when two variables are less than, equal to, greater than
-Constant arrays using define()
-Anonymous class
-unicode excape // echo "\u{1F602}"; // outputs 😂
 
 
-NEW in PHP 8
-https://www.php.net/releases/8.0/en.php
-https://stitcher.io/blog/new-in-php-8
+** NEW in PHP 8 than 7
+1.  JIT compiler(Just in time compiler)
+    > to improve performance, to compile PHP code to machine code. can be manually enabled/ disabled
+2. Union types
+    > allow methods to accept multiple types. 
+    > function foo(int|string $value) {
+        return $value;
+    }
 
-JIT compiler // to compile PHP code to machine code. can be manually enabled/ disabled
+
+
 Constructor property promotion // Less code to define & initialize properties
-Union types // allow a parameter, return type, property to accept multiple types of values. function foo(int|string $value): void {..}
+
 
 Named arguments // this allows passing arguments to methods by writing parameter names, rather than relying on the order of params, 
 function greet($name, $age) {
@@ -454,3 +514,9 @@ $result = match ($value) {
 
 Nullsafe operator // ?-> // allows to handle nullable values without needing multiple null checks
 $value = $obj?->getProperty()?->getValue();
+
+https://www.php.net/releases/8.0/en.php
+https://stitcher.io/blog/new-in-php-8
+
+
+
