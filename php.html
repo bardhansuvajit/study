@@ -488,32 +488,74 @@ https://www.php.net/manual/en/migration70.new-features.php
 ** NEW in PHP 8 than 7
 1.  JIT compiler(Just in time compiler)
     > to improve performance, to compile PHP code to machine code. can be manually enabled/ disabled
-2. Union types
+2.  Union types
     > allow methods to accept multiple types. 
     > function foo(int|string $value) {
         return $value;
     }
+3.  Named arguments
+    > pass arguments to a function based on the parameter name rather than the order of the parameters
+    > function greet($name, $greeting) {
+        echo "$greeting, $name!";
+    }
+    greet(greeting: "Hello", name: "John");
+4.  match expression
+    > improved switch statement
+    > $result = match($statusCode) {
+        200, 201 => 'Success',
+        404 => 'Not Found',
+        500 => 'Server Error',
+        default => 'Unknown status',
+    };
+5.  Constructor property promotion
+    > Less code to define & initialize properties
+    > class User {
+        public string $name;
+        public int $age;
+        public string $email;
+    
+        public function __construct(string $name, int $age, string $email) {
+            $this->name = $name;
+            $this->age = $age;
+            $this->email = $email;
+        }
+    }
+    > THIS CODE BECOMES
+    > class User {
+        public function __construct(
+            public string $name,
+            public int $age,
+            public string $email
+        ) {}
+    }
+6.  Nullsafe operator (?->)
+    > allows to handle nullable values without needing multiple null checks
+    > $country = $user?->address?->country;
+7.  Static Return Type
+    > declare static as a return type
+    > class Base {
+        public static function create(): static {
+            return new static();
+        }
+    }
+8.  Weak Maps
+    > store references to objects without preventing those objects from being garbage-collected
+    > manage memory more efficiently
+    > $weakMap = new \WeakMap();
+9.  New String Functions
+    > str_contains(), str_starts_with(), and str_ends_with()
+    > if (str_contains($text, 'needle')) {
+        // Do something
+    }
+    
 
 
 
-Constructor property promotion // Less code to define & initialize properties
 
 
-Named arguments // this allows passing arguments to methods by writing parameter names, rather than relying on the order of params, 
-function greet($name, $age) {
-    echo "Hello $name, you are $age years old!";
-}
-greet(age: 30, name: 'John');
 
-match expression // alternative to switch statement
-$result = match ($value) {
-    1 => 'One',
-    2 => 'Two',
-    default => 'Other',
-};
 
-Nullsafe operator // ?-> // allows to handle nullable values without needing multiple null checks
-$value = $obj?->getProperty()?->getValue();
+
 
 https://www.php.net/releases/8.0/en.php
 https://stitcher.io/blog/new-in-php-8
