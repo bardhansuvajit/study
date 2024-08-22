@@ -251,6 +251,13 @@ Alternate is Interface. Which,
 6. Interface uses 'implements', Inheritance uses 'extends'
 7. Objects cannot be made for interface
 
+* Abstraction vs Interface - the main difference
+use INTERFACE, when you want to force people (other developers including you) to implement a set of methods on the classes they are building. It contains only declaration of the methods, no implementation
+
+use ABSTRACTION, when you want to force people to implement a set of methods and some other methods too
+It contains method implementations as well as declarations
+
+
 interface Class1 {...}
 interface Class2 {...}
 class Class3 implements Class1, Class2 {...}
