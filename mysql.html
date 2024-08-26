@@ -1,0 +1,17 @@
+1.  Duplicate records
+>   select column, count(*) as total_count from table
+    group by column
+    having total_count > 1
+
+2.  ** 3rd highest salary
+>   select salary from table
+    order by salary desc
+    limit 1 offset 2/ limit 2,1
+
+(offset means skip first 2 rows, limit is used to limit the rows count to 1)
+
+BUT, in this case, 100, 90, 90, 80, 70 - 80 being third highest but the above query would return 90 after sorting the table in desc salary order. so correct query would be,
+
+>   select distinct salary from table
+    order by salary desc
+    limit 2,1

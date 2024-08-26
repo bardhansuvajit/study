@@ -171,7 +171,7 @@ console.log(teddy)
 OP >>
 line 1
 bear
-undefined // console log doesn't return anything, so, undefined
+undefined // in a typical browser, console.log doesn't return anything, so, undefined
 
 AGAIN
 console.log('line 1')
@@ -278,7 +278,7 @@ console.log(secret)     >> OP >>        12345
 Now, let/ const is introduced in ES6. They allow us to use Block Scoping properly. If secret is used like, let/ const secret = '12345'... it would not be accessed outside
 
 
-VAR || LET || CONST
+VAR vs LET vs CONST
 var - function-scoped variables, that can be hoisted
 let - block scoped variables, that can be reassigned, cannot be hoisted
 const - block scoped variables, that are constant & cannot be reassigned, cannot be hoisted

@@ -3,7 +3,7 @@ OBJECT ORIENTED PROGRAMMING
 ** CLASS & OBJECT
 Object oriented programming is a concept/ coding style, which has advantages like, less code reusability, DRY method.
 Everything is a object (mobile, laptop, bottle)
-Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising of birds of flying & non-flying bird. 
+Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising birds by flying & non-flying one. 
 
 Class is a template/ blueprint of object and Object is instance (example) of a class
 EXAMPLE
@@ -187,7 +187,7 @@ Abstract means partial/ incomplete. Abstract class contains atleast one Abstract
 5. Any class that extends an abstract class must either implement all of its abstract methods or itself be declared abstract
 6. Abstract classes can also contain non-abstract (concrete) methods but must contain at leats one abstract method
 
-// creating 'abstract' class
+// HOW NOT to create 'abstract' class
 abstract class Class1 {
     // this would throw error, cannot contain body, as abs. function cannot be called/ implemented
     function test() {
@@ -196,7 +196,7 @@ abstract class Class1 {
 }
 $obj = new Class1(); // this would throw error, as object cannot be created
 
-// creating abstract function
+// creating abstract class/function
 abstract class Class1 {
     abstract function test();
 }
@@ -284,7 +284,7 @@ $obj3->function2();     >> OP >> here in func1
 
 
 ** STATIC MEMBERS
-To access properties/ methods without creating onject of a class
+To access properties/ methods without creating object of a class
 
 1. To access static properties/ methods, do not create 'object'. Call it's class
 2. Concept of 'this' keyword does not work here, as 'this' represents current object and there is no concept of object creation. use 'self' instead
@@ -344,8 +344,8 @@ $obj = new class1();
 $obj->func1(); // this would work
 
 
-** POLYMORPHISM
-same operation may behave differently in different class. 
+** POLYMORPHISM (multi behaviour)
+same operation may behave differently in different class.
 2 process - Through Abstract class & Interface
 2 types - Compile time (Method overloading) & Run time (Method overriding)
 
