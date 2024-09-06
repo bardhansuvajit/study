@@ -1,0 +1,565 @@
+OBJECT ORIENTED PROGRAMMING
+
+** CLASS & OBJECT
+Object oriented programming is a concept/ coding style, which has advantages like, less code reusability, DRY method.
+Everything is a object (mobile, laptop, bottle)
+Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising birds by flying & non-flying one. 
+
+Class is a template/ blueprint of object and Object is instance (example) of a class
+EXAMPLE
+class Class1 {
+    function fun1() {   // methods
+        echo "inside fun1";
+    }
+}
+
+// now to access the fun1(), we cant directly call/ instantiate it. It would say 'undefined'. To access functions inside a class, we have to create an object of the class.
+
+$object1 = new Class1();
+$object1->fun1();       >> OP >> inside fun1
+
+
+** PUBLIC & THIS
+Again, to define properties/ variables
+
+class Class1 {
+    // do not write directly $x = 1; it would throw an error. Use 'PUBLIC', access modifier
+    // $x = 1;
+    public $x = 1;
+    function fun1() {   // methods
+        echo "inside fun1";
+    }
+
+    // to access $x inside fun1(), do not directly go for it (check below). Use 'THIS' keyword instead. else it would throw error
+    function fun2() {
+        // echo $x;
+        echo $this->x;
+    }
+}
+
+
+** CONSTRUCTOR & DESTRUCTOR
+when object is called, at very first function Construct is called by default. Similarly, when the object's lifecycle is about to end, destructor function is called by default
+EXAMPLE
+class Class1 {
+    function __construct() {
+        echo "start";
+    }
+    function __destruct() {
+        echo "end";
+    }
+}
+$obj1 = new Class1();   >> OP >> startend
+
+
+
+** INITIALIZE VARIABLE INSIDE CONSTRUCTOR
+function __construct() {
+    // $x = 10;
+    $this->x = 10;
+}
+function fun1() {
+    return $this->x;
+}
+
+** TO MAKE THE VARIABLE DYNAMIC
+function __construct($y) {
+    $this->x = $y;
+}
+// whenever an object is created for this class, we have to pass the value
+$obj1 = new Class1(20);
+echo $obj1->fun1();
+
+
+
+** INHERITANCE (EXTENDS)
+access properties & methods (public & protected) from one class to another class. 
+EXAMPLE
+class class1 {
+    function __construct() {
+        echo "construct1";
+    }
+    function fun1() {
+        echo "fun1";
+    }
+}
+class class2 extends class1 {
+
+}
+
+$obj = new class2();    >> OP >> construct1
+$obj->fun1();           >> OP >> construct1fun1
+
+NOW, if a constructor is added in class2, child class construct has higher priority. Same thing for functions if they (child & parent class) both have same name
+class class2 extends class1 {
+    function __construct() {
+        echo "construct2";
+    }
+}
+$obj = new class2();    >> OP >> construct2
+
+*NOW, to use both constructors, use
+class class2 extends class1 {
+    function __construct() {
+        parent::__construct(); // in JS, this is like, super(argements)
+        echo "construct2";
+    }
+}
+$obj = new class2();    >> OP >> construct1construct2
+
+class class2 extends class1 {
+    function __construct() {
+        echo "construct2";
+        parent::__construct();
+    }
+}
+$obj = new class2();    >> OP >> construct2construct1
+:: is scope resolution operator. if parent class has anotherMethod(), we can call it in child class using, parent::anotherMethod()
+
+** ENCAPSULATION, ACCESS MODIFIER, GETTERS, SETTERS
+Encapsulation means bundling similar data into a structured unit/ into a capsule format
+
+normally we can update the value outside the class, which is not a good thing. Like the following
+EXAMPLE
+class Class1 {
+    public $var1 = 1;
+}
+$obj1 = new Class1();
+echo $obj1->var1;       >> OP >> 1
+$obj1->var1 = 2;
+echo $obj1->var1;       >> OP >> 2
+
+Encapsulation comes here. To define/ modify the access level (Access Modifier). Like a property/ method can/ can not be accessed outside class. All access levels are public by default.
+
+// So, making $var1 to protected solves it. 
+protected $var1 = 1;
+
+// But we cannot access it outside the class (echo $obj1->var1; // will show error saying, cannot access protected property). NOW we will use, Getters & Setters. So, To access var1 outside the class
+// inside the class
+public function getVar1() {
+    return $this->var1;
+}
+// outside the class
+echo $obj1->getVar1();   >> OP >> 1
+
+Types of Access Modifiers
+1. public       >> properties/ methods can be accessed inside/ outside of class scope. This is default
+2. protected    >> properties/ methods can be accessed inside of the class scope & its inherited classes
+3. private      >> properties/ methods can be accessed ONLY inside of the class scope
+
+* REMEMBER, you cannot directly access 'protected' properties/ methods from inherited/ child class (in Class2, you cannot put directly return $this->var1). You can access it by using Getters & Setters.
+EXAMPLE
+class Class1 {
+	protected $var1 = 22; // if this is made private, it wont work
+
+    public function getVar1() {
+    	return $this->var1;
+    }
+
+    protected function function1() {
+    	return "Hello from class 1";
+    }
+}
+
+class Class2 extends Class1 {
+	public function getVar1FromClass1() {
+    	return $this->var1;
+    }
+}
+
+$obj2 = new Class2();
+echo $obj2->getVar1();              >> OP >> 22
+echo $obj2->getVar1FromClass1();    >> OP >> 22
+echo $obj2->function1();            >> OP >> Error: Call to protected method // cannot directly access a 'protected' method.
+
+REMEMBER, in case of same method name in parent & child class, parent class must have less access than child class. LIKE, if someFunc() is public in parent class & protected in child class, it wont work. Opposite of it would work/ same access would work.
+If, both are public someFunc() {...}, called from child class object, it would work and child class will have priority
+If, someFunc() is public in parent class, protected in child class, it wont work
+If, someFunc() is removed/ made protected in parent class, protected in child class, it works
+
+
+** ABSTRACTION (Abstract class)
+Abstract means partial/ incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
+1. Why Incomplete ? because, abstract function must be declared but not called/ instantiated
+2. Objects can not be created from an Abstract class
+3. Inherited/ child class must contain abstract function
+4. declared using the `abstract` keyword
+5. Any class that extends an abstract class must either implement all of its abstract methods or itself be declared abstract
+6. Abstract classes can also contain non-abstract (concrete) methods but must contain at leats one abstract method
+
+// HOW NOT to create 'abstract' class
+abstract class Class1 {
+    // this would throw error, cannot contain body, as abs. function cannot be called/ implemented
+    function test() {
+        echo 'test';
+    }
+}
+$obj = new Class1(); // this would throw error, as object cannot be created
+
+// creating abstract class/function
+abstract class Class1 {
+    abstract function test();
+}
+
+// inheritance/ extending
+class Class2 extends Class1 {
+    // this will result in error, as child class must contain abstract function. Unless, the same test() is called again here
+
+    function test() {
+        echo 'test';
+    }
+}
+
+FINAL EXAMPLE
+abstract class AbstractClass {
+    abstract protected function func1($string);
+}
+
+class New1 extends AbstractClass {
+    public function func1($string) {
+        return 'here: '.$string;
+    }
+}
+
+$classNew = new New1();
+echo $classNew->func1('test name');
+
+WHY USE ABSTRACT CLASS
+when we need to define a common structure among different classes. 
+Suppose, all banks needs idProof(), inside a abstract class bank, we can call abstract function idProof(), now for different classes like, hdfc, sbi extends bank... wont work untill idProof() is used in child class
+
+
+ENCAPSULATION vs ABSTRACTION
+way of protecting data || way of hiding unnecessary information
+process of containing information || process of obtaining information
+use access specifier || use interface & abstract class
+
+
+** INTERFACE
+(keyword - interface, implements)
+PHP doesn't support multiple inheritance. Means, a class cannot inherit/ extend multiple classes
+Also, Interface is used to ensure a class has certain methods
+
+class Class3 extends Class1, Class2 {...} // this would throw error
+
+Alternate is Interface. Which,
+1. Supports multiple inheritance
+2. Interface can only contain abstract methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
+3. We cant define 'properties'/ 'variables' || Abstract classes can have
+4. No 'Construct' inside interface
+5. All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
+6. Interface uses 'implements', Inheritance uses 'extends'
+7. Objects cannot be made for interface
+
+* Abstraction vs Interface - the main difference
+use INTERFACE, when you want to force people (other developers including you) to implement a set of methods on the classes they are building. It contains only declaration of the methods, no implementation
+
+use ABSTRACTION, when you want to force people to implement a set of methods and some other methods too
+It contains method implementations as well as declarations
+
+
+interface Class1 {...}
+interface Class2 {...}
+class Class3 implements Class1, Class2 {...}
+
+NOW,
+interface class1 {
+    // will throw err, as its not an abstract function
+    public function function1() {
+        ...
+    }
+
+    // calling abstract function, which has no body, which must also be called in child class
+    public function function2();
+}
+class class3 implements class1 {
+    public function function2() {
+        return "here in func1";
+    }
+}
+
+$obj1 = new class1(); // this would throw, as interface class canot have object
+$obj3 = new class3();
+$obj3->function2();     >> OP >> here in func1
+
+
+** STATIC MEMBERS
+To access properties/ methods without creating object of a class
+
+1. To access static properties/ methods, do not create 'object'. Call it's class
+2. Concept of 'this' keyword does not work here, as 'this' represents current object and there is no concept of object creation. use 'self' instead
+3. 'constructor' wont be called here, as there is no concept of creating 'object'
+
+class class1 {
+    public static $num = 10;
+    public $num2 = 20;
+
+    public static function func1() {
+        echo "inside function1";
+    }
+
+    public static function func2() {
+        echo self::num; // only to access static property
+        echo self::num2; // would throw
+        echo $this->num2;
+    }
+}
+$obj = new class1();
+echo $obj->num; // cannot be accessed as it's a 'static' variable
+
+// to access static variable, call its class
+echo class1::$num;          >> OP >> 10
+echo class1::func1();       >> OP >> inside function1
+
+
+** TRAIT (keyword - trait, use)
+Problem with 'Inheritance' is when extended to multiple classes, the inherited/ child class has access to all the properties/ methods of parent class and classes before them. 'Trait' solves this.
+EXAMPLE
+class class1{...}
+class class2 extends class1{...}
+class class3 extends class2{...}
+class class4 extends class3{...} // class 4 can access the properties/ methods of class1, class2 & class3. But it does not need the properties/ methods of class1 and class2. 'Trait' solves this.
+
+trait class1{...}       // initializing 'trait', exactly like 'class' keyword, just replace it
+class class2 {
+    use class1;         // using 'trait'
+    ...
+}
+// whenever trait is needed go with, 'use trait1, trait2'
+// if sameNameFunction() is used in both trait & class, function inside class has more preference. Instantiating the function will result content in class
+// if both traits have sameNameFunction(), instantiating the function will throw. to fix it,
+trait t1 {
+    function func1() {...}
+}
+trait t2 {
+    function func1() {...}
+}
+class class1 {
+    use t1, t2 {
+        t1::func1 insteadof t2; // when you need only 'func1' from t1
+        t2::func1 as func2; // if you need 'func1' from t2 too. Use alias 'as' like 'sql'
+    }
+}
+$obj = new class1();
+$obj->func1(); // this would work
+
+
+** POLYMORPHISM (multi behaviour)
+same operation may behave differently in different class.
+2 process - Through Abstract class & Interface
+2 types - Compile time (Method overloading) & Run time (Method overriding)
+
+EXAMPLE through Abstract Class
+abstract class Class1 {
+	abstract function absFunc1();
+}
+
+class Class2 extends Class1 {
+	public function absFunc1() {
+    	echo "fun 2";
+    }
+}
+class Class3 extends Class1 {
+	public function absFunc1() {
+    	echo "fun 3";
+    }
+}
+
+$obj1 = new Class2();
+$obj1->absFunc1();      >> OP >> fun 2
+$obj2 = new Class3();
+$obj2->absFunc1();      >> OP >> fun 3
+
+// NOW, both Class2 & Class3 has same function, absFunc1(), but they retuns/ behaves differently in different classes. This is 'Polymorphism'
+
+EXAMPLE through Interface
+interface Class1 {
+	function absFunc1();
+}
+
+class Class2 implements Class1 {
+	public function absFunc1() {
+    	echo "fun 2";
+    }
+}
+class Class3 implements Class1 {
+	public function absFunc1() {
+    	echo "fun 3";
+    }
+}
+
+$obj1 = new Class2();
+$obj1->absFunc1();      >> OP >> fun 2
+$obj2 = new Class3();
+$obj2->absFunc1();      >> OP >> fun 3
+
+METHOD/ FUNCTION OVERLOADING
+When same function name is defined twice/ multiple times using different parameters. (Not supported by PHP traditionally, but can be achieved a form of overloading by using __call() magic method)
+class Test {
+    function plus($num1, $num2) {...}
+    function plus($num1, $num2, $num3) {...}
+}
+METHOD/ FUNCTION OVERRIDING
+When you extend a class & rewrite a same function that already exists in parent class
+
+
+** NAMESPACE
+prevent conflict among classes with same name
+
+1. when we have multiple SameNameClass and we need to include them in a same php file
+2. instantiate 'namespace namespaceName' at very top of file
+3. to create instance/ object, $obj = new namespaceName\SameNameClass
+
+
+** MAGIC METHOD
+Called automatically, when something happens with your objects (like creating, accessing a property/ method). 
+> They allow you to customize how the object behaves
+> start with double underscores
+
+COMMON METHODS
+__construct, automatically called when a new object is created
+__destruct, called when an object is destroyed
+__call(), handles calling to undefined/ inaccessible methods
+__callStatic(), handles calling to undefined/ inaccessible STATIC methods (same as __call())
+__get(), __set(), 
+
+EXAMPLE
+class Example {
+    public function __call($name, $arguments) {
+        echo "Called method $name with arguments: " . implode(', ', $arguments);
+    }
+}
+
+$obj = new Example();
+$obj->someMethod('arg1', 'arg2'); // Outputs: Called method someMethod with arguments: arg1, arg2
+
+
+
+REQUIRE vs INCLUDE
+when error occurs, generates fatal error (E_COMPILE_ERROR) || generates warning (E_WARNING)
+will stop execution of script || wont stop
+
+
+FINAL
+the final keyword is used to prevent a class/ method from being extended or overridden. 
+> It's a way of saying, "This is the final version—don't change it."
+
+EXAMPLE
+final class BaseClass {
+    public function func() {
+        echo "Hello from BaseClass!";
+    }
+}
+
+// This will cause an error because BaseClass cannot be extended.
+class ChildClass extends BaseClass {
+    ...
+}
+
+
+
+** NEW in PHP 7 than 5
+1.  Faster execution & reduced memory usage
+2.  Scalar type declarations
+    > Specify type for function arguments
+    > function someFunc(int $num1) {...}
+3.  Return type declarations
+    > define expected return type to function
+    > // function Func(int $num1) : int {...}
+4.  Null Coalescing operator (??)
+    > $username = $_GET['user'] ?? 'guest';
+5.  Spaceship operator (<=>)
+    > returns -1,0,1 when two variables are less than, equal to, greater than
+    > echo 2 <=> 3; // Outputs: -1
+6.  Anonymous class
+    > $obj = new class {
+        public function sayHello() {
+            return "Hello!";
+        }
+    };
+    echo $obj->sayHello();
+7.  Constant arrays using define()
+    > define('ANIMALS', ['dog', 'cat', 'bird']);
+8.  unicode escape 
+    > echo "\u{1F602}"; // outputs 😂
+
+https://www.php.net/manual/en/migration70.new-features.php
+
+
+** NEW in PHP 8 than 7
+1.  JIT compiler(Just in time compiler)
+    > to improve performance, to compile PHP code to machine code. can be manually enabled/ disabled
+2.  Union types
+    > allow methods to accept multiple types. 
+    > function foo(int|string $value) {
+        return $value;
+    }
+3.  Named arguments
+    > pass arguments to a function based on the parameter name rather than the order of the parameters
+    > function greet($name, $greeting) {
+        echo "$greeting, $name!";
+    }
+    greet(greeting: "Hello", name: "John");
+4.  match expression
+    > improved switch statement
+    > $result = match($statusCode) {
+        200, 201 => 'Success',
+        404 => 'Not Found',
+        500 => 'Server Error',
+        default => 'Unknown status',
+    };
+5.  Constructor property promotion
+    > Less code to define & initialize properties
+    > class User {
+        public string $name;
+        public int $age;
+        public string $email;
+    
+        public function __construct(string $name, int $age, string $email) {
+            $this->name = $name;
+            $this->age = $age;
+            $this->email = $email;
+        }
+    }
+    > THIS CODE BECOMES
+    > class User {
+        public function __construct(
+            public string $name,
+            public int $age,
+            public string $email
+        ) {}
+    }
+6.  Nullsafe operator (?->)
+    > allows to handle nullable values without needing multiple null checks
+    > $country = $user?->address?->country;
+7.  Static Return Type
+    > declare static as a return type
+    > class Base {
+        public static function create(): static {
+            return new static();
+        }
+    }
+8.  Weak Maps
+    > store references to objects without preventing those objects from being garbage-collected
+    > manage memory more efficiently
+    > $weakMap = new \WeakMap();
+9.  New String Functions
+    > str_contains(), str_starts_with(), and str_ends_with()
+    > if (str_contains($text, 'needle')) {
+        // Do something
+    }
+    
+
+
+
+
+
+
+
+
+
+https://www.php.net/releases/8.0/en.php
+https://stitcher.io/blog/new-in-php-8
+
+
+
