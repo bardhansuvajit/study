@@ -1,0 +1,26 @@
+Laravel 
+> Open source PHP framework
+> follows MVC architechture, which seperates logic with presentation
+> has a lot of ecosystems (Breeze, Fortify, Passport, Horizon etc) for further development
+
+> Prerequisites - PHP, OOP, Namespaces & autoloading, composer, arrays, files, GET/ POST, PDO, cookies/ sessions, GIT, apache/ nginix, html, css, javascript
+> Curve - Setup, MVC, Architechture, Directory, Artisan, Tinker, Routing, Controller, Middleware, SErvice container, Service provider, Facades, Views, Blade, Layouts, Components, Asset bundling, Migration, Query builder, Collections, Models, Eloquent ORM, Relationship, Pagination, Jobs, Queue, Authentication, AUthorization, Security, Form request, Command scheduling, Caching, File system
+
+Setup/ Install Locally
+Laravel Herd - does not use docker
+Laravel Sail - uses docker, to setup Laravel development environment
+* Docker - allows us to package an application, along with dependencies, into a container that makes easy to develope, ship & run ithe application consistently accross all environments
+Other tools to install Laravel Locally are Laragon, Xampp etc.
+
+We will be using Laravel Sail (https://laravel.com/docs/11.x#sail-on-windows)
+> ** Need Docker Desktop & WSL2 enabled (to enable Ubuntu in Command prompt, install ubuntu, wsl --install -d ubuntu/ wsl --install ubuntu)
+> Goto Powershell, begin a new terminal session for ubuntu
+
+> curl -s https://laravel.build/laravel-sail | bash
+> cd laravel-sail
+> ./vendor/bin/sail up -d           // this command is like, docker compose up/ -d is detached mode, meaning the containers will run in background
+> code .
+> explorer.exe .                    // to visit where the files are installed in explorer
+
+Check 'docker-compose.yml' file, when we do sail up, these rae the containers that start running
+Laravel sail uses PHP's built-in server, does not use nginix/ fpm
