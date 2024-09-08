@@ -18,9 +18,30 @@ We will be using Laravel Sail (https://laravel.com/docs/11.x#sail-on-windows)
 
 > curl -s https://laravel.build/laravel-sail | bash
 > cd laravel-sail
-> ./vendor/bin/sail up -d           // this command is like, docker compose up/ -d is detached mode, meaning the containers will run in background
-> code .
 > explorer.exe .                    // to visit where the files are installed in explorer
+> code .                            // open vs code terminal & change to ubuntu
+> ./vendor/bin/sail up -d           // this command is like, docker compose up/ -d is detached mode, meaning the containers will run in background
+> laravel-sail can also be found inside Docker Container
 
 Check 'docker-compose.yml' file, when we do sail up, these rae the containers that start running
 Laravel sail uses PHP's built-in server, does not use nginix/ fpm
+
+> visit localhost                   // http://localhost:8025/ for mailbox port
+> * in case of DB error, change connection to sqlite OR do DB migration again
+> ./vendor/bin/sail artisan migrate
+
+
+MVC Architechture
+Seperates data and business logic from presentation, makes cleaner, modular code, easier to debug & scale
+
+Model           Business logic + Data + Data management + Queries  | Generally communicate with Controller, but sometimes View as well
+View            Presentation (HTML, CSS, JS) | Blade template engine
+Controller      Between Model & View | Handles user requests, handles them by talking to Models, sends data back to browser by loading the View
+
+EXAMPLE
+While subimiting a form in Laravel, the request > Router > Middlewares > Controller > Validate > Interact with Model > Prepares response > presented to user by Views
+
+
+
+
+
