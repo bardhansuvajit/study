@@ -34,14 +34,45 @@ Laravel sail uses PHP's built-in server, does not use nginix/ fpm
 MVC Architechture
 Seperates data and business logic from presentation, makes cleaner, modular code, easier to debug & scale
 
-Model           Business logic + Data + Data management + Queries  | Generally communicate with Controller, but sometimes View as well
-View            Presentation (HTML, CSS, JS) | Blade template engine
-Controller      Between Model & View | Handles user requests, handles them by talking to Models, sends data back to browser by loading the View
+Model
+Business logic + Data + Data management + Queries  | Generally communicate with Controller, but sometimes View as well
+View
+Presentation (HTML, CSS, JS) | Blade template engine
+Controller
+Between Model & View | Handles user requests, handles them by talking to Models, sends data back to browser by loading the View
 
-EXAMPLE
+** EXAMPLE of Laravel's request lifecycle
 While subimiting a form in Laravel, the request > Router > Middlewares > Controller > Validate > Interact with Model > Prepares response > presented to user by Views
 
 
+Laravel folder architechture
+1.  entry point for all web request are inside public/ index.php
+    > index.php is the document root that is configured in web server, like apache/ nginix
+    > what does the script say, according to the code
+        > it first checks if the application is in maintenance mode & handles it accordingly
+        > next, it registers the composer autoloader (../vendor/autoload.php), which allows laravel to load all necessary classes
+        > finally it loads the application from ../bootstrap/app.php, which sets up & configures everything the app needs to run
+2. app.php
+    > once the Application object is created & sent to index.php, then handleRequest() is called (can be found inside Application.php)
+    > handleRequest() takes incoming HTTP request using Kernel & converts it into response after running through the application's logic
+    > Kernel is a contract/ interface (can be found inside Http/Kernel.php)
+    > Now, inside Kernel.php, goto handle()
+    > Now, the request is passed through Router, SendRequestThroughRouter(), inside the method, the bootstrap() method is called. the request is sent thorugh Middleware & dispatched into Router
+        > the bootstrap method is responsible for cofiguring & bootstrapping important part like error handling, logins etc.
+        > Start up process/ Bootstrapping involves setting up service providers, which are like helpers that get everything, like database, queues, routing, validation ready for the app to run properly
+        > $bootstrapers can be found in Kernel, they configures & start up the application. Like regsiterProviders, 
+    > Middlewares acts as filters to requests, can be applied globally or to specific routes
+    > then it's sent to prepare response
 
+Console requests enters the application through the artisan CLI, which bootstraps the application using console kernel, not by public/ index.php
+    > these commands are called Artisan commands & they are handled by the artisan file in root directory
+    > the artisan file is same as public/ index.php but instead of handleRequest(), it uses handleCommand()
+    > handleCommand() can be found inside foundation/console/kernel.php
+
+* Kernels directing how requests are handled, whether they are web requests/ console commands
+
+* first the services/ classes are registered/ bind into the service containers, then booted by boot method, which is action method
+
+* Service Container != Service Provider
 
 
