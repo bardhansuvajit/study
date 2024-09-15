@@ -46,10 +46,15 @@ Base Image/ Parent image
 main template of a project. like a node/ php based project requires a base image of node js/ php
 
 Pull/ Download Image
-> no need to create/ go into any folder. As Docker is installed globally. Same commands for all OS.
-> goto docker hub/ desktop > search for image > like, node js, check for official docker image > you can pull or copy the command, docker pull node & run in terminal
-
-
+> no need to create/ go into any folder, as Docker is installed globally. Same commands for all OS.
+> goto docker hub/ desktop > search for image > like, node js, check for official docker image > you can pull or copy the command, 'docker pull node' & run in terminal
+> to run it, terminal > 'docker run -it node /bin/bash' / docker run node / run through docker desktop
+    > running images can be found in container, with a weird name
+    > NOW, the node version inside the container might be different version than the node installed in system. Doesn't matter
+    > Go inside the container > Terminal > node/ node -v
+> Pulling PHP image
+    > search in docker desktop for 'php' > check for official docker image
+    
 
 
 
