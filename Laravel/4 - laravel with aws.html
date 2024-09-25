@@ -1,12 +1,10 @@
 AWS with LARAVEL
 
-
 **Account (Credit/ debit card required)
 Create new account/ login > aws.amazon.in > goto Console
 
 
-
-**Domain registration + DNS management
+** Domain registration + DNS management
 Route 53 - DNS servers respond to queries on port 53 and provide answers that route end users to your applications on the Internet.
 1 `Register domain` from AWS 
 OR
@@ -31,7 +29,7 @@ DONOT COPY 'last .' From AWS DNS
 
 
 
-**ELASTIC IP ADDRESS
+** ELASTIC IP ADDRESS
 to maintain a consistent address via IP even if instance is stopped or restarted
 EC2 > Network > Elastic IP
 Allocate new IP address > AMazon's pool of IPV4 address > Add a name too > Get the IP address
@@ -40,7 +38,7 @@ The IP could be used in domain registration
 
 
 
-**SECURITY GROUP
+** SECURITY GROUP
 this acts like a virtual firewall that controlls inbound and outbound traffic
 EC2 > Network > Security group
 
@@ -54,21 +52,30 @@ Also name them from the listing page if required
 
 
 
-**RDS INSTANCE
-seperate database server (expensive)
-RDS > 
+** RDS INSTANCE
+seperate database server instead of running on same server ehre we serve the website (expensive)
+try to create a tiny instance with minimal usage. in case the server usage exceeds a certain threshold, use cloud watch
+
+create database > standard create > mysql > desired mysql version > production template > provide name 'productsion-database'/ some-other-name > username 'admin'/ auto generate password * > smallest instance class, Burstable class & select DB micro > storage, general purpose > public access, NO > 
+
+to use the new database, we need these 3
+      instance endpoint
+- can be found in RDS > databases, select identifier > under connectivity & security, Endpoint is available
+master user
+- can be found in RDS > databases, select identifier > under configuration, availability, master username is available
+password
+- was auto generated, will be shown once after the instance is created OR just modify it & add new master password
 
 
+** EC2 INSTANCE - Linux Ubuntu Server
+EC2 > instances > Launch instance > Ububtu server > instance type, t2 micro, free tier > 
+auto aasign [ublic IP, disable it, since we are using elastic IP
+security group, mark those we just create
+review & launch
+to connect to instances we need key-pair value/ pem file > create new key pair > use domain name/ other as key pair name > download key pair
+Launch Instance
 
-
-
-
-
-
-
-
-
-
+ 
 
 
 
