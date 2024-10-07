@@ -31,7 +31,7 @@ Laravel sail uses PHP's built-in server, does not use nginix/ fpm
 > ./vendor/bin/sail artisan migrate
 
 
-MVC ARCHITECHTURE
+## MVC ARCHITECHTURE
 Seperates data and business logic from presentation, makes cleaner, modular code, easier to debug & scale
 
 Model
@@ -45,7 +45,7 @@ Between Model & View | Handles user requests, handles them by talking to Models,
 While subimiting a form in Laravel, the request > Router > Middlewares > Controller > Validate > Interact with Model > Prepares response > presented to user by Views
 
 
-REQUEST LIFESTYLE/ FOLDER ARCHITECHTURE
+## REQUEST LIFESTYLE/ FOLDER ARCHITECHTURE
 1.  entry point for all web request are inside public/ index.php
     > index.php is the document root that is configured in web server, like apache/ nginix
     > what does the script say, according to the code
@@ -74,7 +74,7 @@ Console requests enters the application through the artisan CLI, which bootstrap
 * Service Container != Service Provider
 
 
-FOLDER STRUCTURE
+## DIRECTORY STRUCTURE
 app - contains core code
     > Http - request related logic
         > Controllers
@@ -102,10 +102,57 @@ tests - unit & feature tests
 vendor - contains composer files
 
 
+## ARTISAN COMMAND
+its laravel's command line interface
+atrisan file in laravel's directory. its a php file
+php artisan list - to see all commands
+
+** now, if docker is used in a project, running 'php artisan...' wont work, it would say php not found
+we have to run it in the docker container, wher php is actually installed. so try this...
+> ./vendor/bin/sail artisan list
+
+to directly connect to container from terminal/ run bash shell session, use,
+> docker exec -it [container_name] bash
+
+another way to open a shell, using laravel sail
+> ./vendor/bin/sail shell
+
+php artisan route:list          // remember, route is the namespace, try php artisan route, 
+                                // this command shows all application routes & all registered routes within vendor directory. there might be some packages, which have their own routes. to see only application routes, php artisan route:list --except-vendor
+php artisan config:cache -h     // -h is help, shows description of the command
 
 
+## TINKER
+run php code in terminal, to debug/ experiment/ interact the laravel application directly from the CLI. we can do these by using the tool, called Tinker. 
+> Tinker is a REPL, which is a n environment where user inputs are read and evaluted
+> PHP uses PsySH REPL. Tinker is powered by PsySH
+> So what happenes, when tinker is started, it boots up laravel application interacting with it's service container.
+> to start Tinker session/ enter its environment, use `./vendor/bin/sail artisan tinker` OR `./vendor/bin/sail tinker`
+
+> example: create a page app/PaymentService.php > function process() {echo 'paid';} > restart tinker session (doesnt support hot reload) > try $paymentService = new app\PaymentService() > $paymentService->process() > paid
+
+> in Tinker, we can type `down` or `up` to put or remove the applicationin maintenance mode
+> to config the tinker file, `./vendor/bin/sail artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"`
+& the config file will be available as config/tinker.php. here we can write additional tinker commands
 
 
+## CONFIG FILE
+app.php     > application configuration files, uses variable values from .env file. to check all environment variables, goto tinker, type $_ENV superglobal, check for env('APP_NAME')/ env('SOME_UNDEFINED_VARIABLE') > null/ env('SOME_UNDEFINED_VARIABLE', 'SOME VALUE') > SOME VALUE
+> other commands like, App::environment > local/ App::environment('staging') > false/ App::isProduction > false
+> we can also create custom configuration file, just a basic php file, just try returning an array. to access it, use config('custom.key'), config helper function/ Config::get('custom.key'), config facades
+> we can also set value by Config::set('custom.key', 'some value')
 
+Caching
+> configuration files are cahched to boost performance. so if the .env file is updated, it might not show properly. to cache config files, `php artisan config:cache` OR `./vendor/bin/sail config:cache`
+> to clear config cache, run, `php artisan config:clear` OR `./vendor/bin/sail config:clear`. Try not to cache cofiguration files locally as we keep changing values. better cache them in production
+> cached files can be found in bootstrap/cache/config.php. this file has a large array. when cleared, this file is deleted
 
+local env
+> we can set local env by creating .env.local file & use APP_ENV=local php artisan tinker/ php artisan tinker --env=local, check for config('app.name')
+
+other configuration files
+> laravel had other config files but now they are limited, to generate them, `php artisan config:publish`, a list will appear & u choose your file, like hashing & u can see/ use/ edit them as per need
+> if other libraries, like tinker, has their own config files, u can edit them too, like
+php artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"
+> if the generated files are not needed anymore, simply delete them
 

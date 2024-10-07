@@ -56,10 +56,10 @@ Also name them from the listing page if required
 seperate database server instead of running on same server ehre we serve the website (expensive)
 try to create a tiny instance with minimal usage. in case the server usage exceeds a certain threshold, use cloud watch
 
-create database > standard create > mysql > desired mysql version > production template > provide name 'productsion-database'/ some-other-name > username 'admin'/ auto generate password * > smallest instance class, Burstable class & select DB micro > storage, general purpose > public access, NO > 
+create database > standard create > mysql > desired mysql version > production template > provide name 'productsion-database'/ some-other-name  > username 'admin'/ auto generate password * > smallest instance class, Burstable class & select DB micro > storage, general purpose > public access, NO > 
 
-to use the new database, we need these 3
-      instance endpoint
+** to use the new database, we need these 3
+instance endpoint
 - can be found in RDS > databases, select identifier > under connectivity & security, Endpoint is available
 master user
 - can be found in RDS > databases, select identifier > under configuration, availability, master username is available
@@ -75,7 +75,21 @@ review & launch
 to connect to instances we need key-pair value/ pem file > create new key pair > use domain name/ other as key pair name > download key pair
 Launch Instance
 
- 
+later, edit the name with your domain name, from the Instance list
+
+* Now, map server with the elastic ip
+setup Elastic IP > Action, Associate Elastic IP  > select Instance > Associate
+Back to Instances, refresh, check the server gets assigned to Public IPv4 address, copy it
+
+
+** Export Website - Gathering Requirements
+
+
+
+
+
+
+
 
 
 
