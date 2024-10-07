@@ -10,5 +10,20 @@ Dependency Injection
 Facades
 > way to access services in service container using static syntax
 
+package.json || composer.json
+> composer.json tracks PHP packages, package.json tracks NPM packages
+
+composer.json || composer.lock
+> composer.json says what packages should be installed, with a greater/ less than version || composer.lock records the exact versions. So that you are in the same versions with your co-workers.
+
+In production always use composer install, because updating packages without testing might break the application. Use composer update locally, then commit the updated composer.lock to the repository, and then run composer install on the production server. Always commit composer.lock
+
+composer install
+> checks composer.lock file for exact package versions, which are installed previous previous composer install
+
+composer update
+> checks if a newer version exists, if yes, downloads it & updates composer.lock
+
 composer dump-autoload
 > looks for all the classes and files it needs to include again
+

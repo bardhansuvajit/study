@@ -1,0 +1,81 @@
+Livewire 3
+https://www.youtube.com/watch?v=haQ6pSQgz04&list=PLqDySLfPKRn543NM_fTrJRdhjBgsogzSC
+
+a laravel package that helps building dynamic/ interactive ui components using only php, no js
+
+composer require livewire/livewire
+php artisan make:livewire Clicker           OR          php artisan livewire:make Clicker
+Clicker is component here
+
+To use the component in blade file
+@livewire('clicker')
+OR
+<livewire:clicker />
+
+## EX 1
+Make a simple click event
+Livewire blade > clicker >
+<button wire:click=“buttonClick”>Click me</button>
+
+Livewire class > Clicker
+public function buttonClick() {
+	dump(‘button clicked’);
+}
+
+## Sending data to render() method
+Class file
+Return view(‘livewire.clicker’, [
+	‘title’ => ‘Some title string’,
+	‘users’ => User::all()
+])
+
+Blade file
+{{ $title }}
+{{ count($users) }}
+
+Also, add a public property in class file & directly access it
+public $username = ‘test’;
+{{ $username }}
+
+
+## Data binding form
+Livewire blade file
+<form>
+<input type="text" placeholder="name">
+…
+<button>Submit</button>
+</form>
+
+Livewire class file
+public $name
+
+<input type="text" placeholder="name" wire:model=“name”>
+…
+
+NOW, if we do it like, <button wire:click=“submitForm”>, the page reloads & submits the form, we don’t want it to refresh
+<button wire:click.prevent=“submitForm”>..this could work but do this
+
+blade
+<form wire:submit=“formSubmit”>…
+
+Class
+public function formSubmit() {
+        User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => $this->password,
+        ]);
+}
+public function render() {
+        return view('livewire.clicker', [
+            'users' => User::all()
+        ]);
+}
+
+
+
+
+
+
+
+
