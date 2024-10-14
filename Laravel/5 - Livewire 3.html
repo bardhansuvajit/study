@@ -15,18 +15,18 @@ OR
 ## EX 1
 Make a simple click event
 Livewire blade > clicker >
-<button wire:click=“buttonClick”>Click me</button>
+<button wire:click="buttonClick">Click me</button>
 
 Livewire class > Clicker
 public function buttonClick() {
-	dump(‘button clicked’);
+	dump('button clicked');
 }
 
 ## Sending data to render() method
 Class file
-Return view(‘livewire.clicker’, [
-	‘title’ => ‘Some title string’,
-	‘users’ => User::all()
+Return view('livewire.clicker', [
+	'title' => 'Some title string',
+	'users' => User::all()
 ])
 
 Blade file
@@ -34,11 +34,11 @@ Blade file
 {{ count($users) }}
 
 Also, add a public property in class file & directly access it
-public $username = ‘test’;
+public $username = 'test';
 {{ $username }}
 
 
-## Data binding form
+## Data binding form & Validation
 Livewire blade file
 <form>
 <input type="text" placeholder="name">
@@ -49,33 +49,73 @@ Livewire blade file
 Livewire class file
 public $name
 
-<input type="text" placeholder="name" wire:model=“name”>
+<input type="text" placeholder="name" wire:model="name">
 …
 
-NOW, if we do it like, <button wire:click=“submitForm”>, the page reloads & submits the form, we don’t want it to refresh
-<button wire:click.prevent=“submitForm”>..this could work but do this
+NOW, if we do it like, <button wire:click="submitForm">, the page reloads & submits the form, we don't want it to refresh
+<button wire:click.prevent="submitForm">..this could work but do this
+
+Validation here is basic
 
 blade
-<form wire:submit=“formSubmit”>…
+<form wire:submit="formSubmit">
+    <input type="text" wire:model="name" name="name" placeholder="name">
+    @error('name')
+        <p class="text-red-600 text-xs mb-3">{{ $message }}</p>
+    @enderror
+    ...
+</form>
 
 Class
 public function formSubmit() {
-        User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
+    $this->validate([
+        'name' => 'required|min:2|max:50',
+        'email' => 'required|email',
+        'password' => 'required|min:2',
+    ]);
+
+    User::create([
+        'name' => $this->name,
+        'email' => $this->email,
+        'password' => $this->password,
+    ]);
+
+    $this->reset(); // to reset the form after **
 }
+
 public function render() {
-        return view('livewire.clicker', [
-            'users' => User::all()
-        ]);
+    return view('livewire.clicker', [
+        'users' => User::all()
+    ]);
+}
+
+** Another way of validation is,
+use Livewire\Attributes\Validate;
+...
+
+#[Validate('required|min:2|max:50')]
+public $name;
+
+#[Validate('required|email')]
+public $email;
+
+#[Validate('required|min:3')]
+public $password;
+
+public function save() {
+    $this->validate();
+
+    ...
 }
 
 
+## Flash messages
+class file
+session()->flash('success', 'Post successfully added.');
 
-
-
-
-
-
+blade file
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
