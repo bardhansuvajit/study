@@ -158,3 +158,108 @@ php artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"
 
 
 ## ROUTING
+takes a request, maps it to action, returns response back
+routes folder > console.php, stores closure based command & web .php stores aplication's http routes
+in route file/ web.php while assigning a route, we can 
+    send the route to a view, return view('home.index') 
+    or return text, return 'sample text'
+    or return array, return ['gio', 'tony', 'josh']
+
+laravel's route supports multiple type of HTTP requests, match, any...
+Route::get('/path', function() {
+    return 'hello world';
+})
+Route::match(['get', 'post'], '/another-path', function() {...})
+Route::any('/another-path', function() {...})
+
+Route::redirect('/uri1', '/uri2')
+
+php artisan route:list - shows all routes
+there's a up route defined in bootstrap/app.php, a vendor route
+php artisan route:list --except-vendor
+php artisan route:list --only-vendor
+
+php artisan route:list --path=dashboard - shows all dashboard related routes
+
+php artisan route:cache - cache routes
+php artisan route:clear - clear route cacche
+
+
+## ROUTE PARAMETERS
+Route::get('/transactions/{transactionId}', function($transactionId) {
+    return 'Showing transaction details '.$transactionId;
+});
+
+** parameter order matters
+Route::get('/transactions/{transactionId}/files/{fileId}', function($transactionId, $fileId) {
+    return 'Showing file id '.fileId.' for transaction details '.$transactionId;
+});
+** optional parameter '?'
+Route::get('/report/{year}/{month?}', function($year, $month = null) {
+    return 'Generating report for '.$year.$month;
+});
+
+> Query string parameters is also an option, route/567?year=2024&month=10
+
+** Dependency Injection in route
+Routes night also have dependencies other than route parameters like $year, $month.
+Laravel allows us to inject classes in route actions, whether its controller/ function callback & the service container automatically resolves them.
+
+Ex - a most common dependency we inject within route actions, is Request class. we can access the parameters using the request class
+use Illuminate\Http\Request;
+
+Route::get('/report/{reportId}', function(Request $request, int $reportId) {
+    $year = $request->get('year');
+    $month = $request->get('month');
+
+    return 'Generating report '.$reportId.' for '.$year.' '.$month;
+})
+There are other ways to get the params value, rather than using the dependency injection Request class. but this is better
+
+> regular expression
+Route::get('/transactions/{transactionId}', function(int $transactionId) {
+    return $id;
+})->where('transactionId', '[0-9]+');
+which makes sure transactionId is always sent integer.
+
+where([
+    'transactionId' => '[0-9]+',
+    'fileId' => '[0-9]+'
+]);
+OR
+whereNumber(['transactionId', 'fileId'])
+OR
+> we can also globally define the regular expressions
+AppServiceProvider > boot() method >
+Route::pattern('transactionId', '[0-9]+');
+Route::pattern('fileId', '[0-9]+');
+AND
+whereIn('fileType', ['receipt', 'statement'])
+
+mismatch in these rules, redirects to 404 page
+
+** enums type
+app > Enums (create) > FileType.php (create)
+<?php
+declare(strict_types = 1);
+namespace App\Enums;
+enum FileType: string {
+    case Receipt = 'receipt';
+    case Statement = 'statement';
+}
+
+change in route
+Route::get('/...', function(int $transactionId, string $filetype) {     // pass FileType instead of string type
+    return $filetype->value;
+})->whereIn('fileType', ['receipt', 'statement'])                       // also whereIn can be removed
+
+
+
+
+
+
+
+
+
+
+
