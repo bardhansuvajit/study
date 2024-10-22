@@ -1,0 +1,55 @@
+## INTEGRATIONS
+React native
+Expo router for file based navigation
+Zustand for global state management
+Nativewind for styling
+Expo API routes
+Stripe payment
+data fetch with custom hooks
+reusable components
+TypeScript code
+ESlint & Prettier for code organisation
+Clerk for authentication with email verification
+Postgres using Neon
+
+## FEATURES
+Email verification authentication
+Google signup
+Location access
+Google autocomplete location suggestion
+Smooth from-to map location
+
+## FILE & FOLDER STRUCTURE
+creating it from scratch
+delete app/(tabs) + hooks + constants + components + assets
+
+app/_layout.tsx -
+remove - ThemeProvider tag, keep the Stack only & name=index
+remove - unwanted imports from top, useColorScheme, colorScheme
+
+app/+not-found.tsx
+remove - ThemedText & ThemedView
+change - ThemedView to View & ThemedText to Text
+
+app/index.tsx (create a simple index page)
+const Home = () => {...}
+export default Home;
+
+import {Text} from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
+const Home = () => {
+    return (
+        <SafeAreaView>
+            <Text>Home</Text>
+        </SafeAreaView>
+    );
+};
+export default Home;
+
+* Some assets are needed, add them in 'assets' > splash.png, used in app.config & search whole app folder with assets/images & replace all primary assets
+* Update app.json > app-name, slug & others as needed
+* fonts > download custom fonts > add them in _layout.tsx, like, 
+const [loaded] = useFonts({
+    "Font-Bold": require("../assets/fonts/Font-Bold.ttf"),
+    "Font-ExtraBold": require("../assets/fonts/Font-ExtraBold.ttf"),
+})
