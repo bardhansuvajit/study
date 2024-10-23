@@ -227,7 +227,9 @@ import { Text, TouchableOpcity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import Swiper from "react-native-swiper";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { onboarding } from "@/constants";
+import CustomButton from "@/components/CustomButton";
 
 const Onboarding = () => {
     const swiperRef = useRef<Swiper>(null);
@@ -308,7 +310,7 @@ custom component - root directory > components/CustomButton.tsx
 import {TouchableOPacity} from "react-native";
 const CustomButton = () => (
     <TouchableOpacity>
-        
+
     </TouchableOpacity>
 )
 export default CustomButton;
