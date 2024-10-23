@@ -1,5 +1,6 @@
 React Native
 https://www.youtube.com/watch?v=kmy_YNhl0mw
+https://github.com/adrianhajdin/uber/blob/main/README.md
 
 
 ## INTEGRATIONS
@@ -170,7 +171,7 @@ app/_layout.tsx -
 
 
 ## AUTH
-app/(auth)/_layout.tsx          - copy app/_payout content, remove extras, fonts & others
+app/(auth)/_layout.tsx          - copy app/_layout content, remove extras, fonts & others
 import { Stack } from "expo-router";
 const Layout = () => {
     return (
@@ -183,29 +184,134 @@ const Layout = () => {
 }
 export default Layout;
 
-create these - app/(auth)/welcome.tsx + sign-up.tsx + sign-in.tsx
+create these - app/(auth)/welcome.tsx + sign-up.tsx + sign-in.tsx - copy app/index.tsx content & change names
+
+** NOW, the initial app page is, app/index.tsx, we need to simply redirect it to welcome.tsx. 
+Change - 
+const Home = () => {
+    return <Redirect href="/(auth)/welcome">;
+}
 
 
+## ONBOARDING SLIDER SCREENS
+onboarding/ welcome page -
+import { Text, TouchableOpcity } from "react-native";
+import { router } from "expo-router";
+
+return (
+    <SafeAreaView className="flex h-full items-center justify-between bg-white">
+        <TouchableOpcity 
+            onPress={() => {
+                router.replace("/(auth)/sign-up");    
+            }}
+            className="w-full flex justify-end items-end p-5"
+        >
+            <Text className="text-black text-md font-bold">Skip</Text>
+        </TouchableOpcity>
+
+        // swiping component here
+
+    </SafeAreaView>
+)
+
+TouchableOpcity is like button in html
+
+// swiping component
+>   npm install react-native-swiper
+-   import swiper from "react-native-swiper";
+<Swiper>...</Swiper>
+
+** Full code -
+
+import { Text, TouchableOpcity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import Swiper from "react-native-swiper";
+import { useRef } from "react";
+
+const Onboarding = () => {
+    const swiperRef = useRef<Swiper>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    return (
+        <SafeAreaView className="flex h-full items-center justify-between bg-white">
+            <TouchableOpcity 
+                onPress={() => {
+                    router.replace("/(auth)/sign-up");    
+                }}
+                className="w-full flex justify-end items-end p-5"
+            >
+                <Text className="text-black text-md font-bold">Skip</Text>
+            </TouchableOpcity>
+
+            <Swiper
+                ref={swiperRef}
+                loop={false}
+                dot={<View className="w-[32px] h-[4px] mx-1 rounded-full bg-[#E2E8F0]"></View>}
+                activeDot={<View className="w-[32px] h-[4px] mx-1 rounded-full bg-[#0286FF]"></View>}
+                onIndexChanged={(index) => setActiveIndex(index)}
+            >
+
+                {onboarding.map(item) => {
+                    <View>
+                        <Text>{item.title}</Text>
+                    </View>
+                }}
+
+            </Swiper>
+        </SafeAreaView>
+    )
+}
+
+## ASSETS & TYPE DECLARATIONS
+** in root directory - constants/index.ts (create)
+import onboarding1 from "@/assets/images/onboarding.png";
+
+export const onboarding = [
+    {
+        id: 1,
+        title: "The perfect ride 1",
+        description: "The perfect ride description starts here 1",
+        image: images.onboarding1
+    },
+    {
+        id: 2,
+        title: "The perfect ride 2",
+        description: "The perfect ride description starts here 2",
+        image: images.onboarding2
+    },
+    {
+        id: 3,
+        title: "The perfect ride 3",
+        description: "The perfect ride description starts here 3",
+        image: images.onboarding3
+    },
+]
+
+** in root directory - types/type.d.ts + types/image.d.ts (create)
+get contents from - https://github.com/adrianhajdin/uber/blob/main/README.md
+
+Now, show the image
+{onboarding.map(item) => {
+    <View key={item.key} className="flex items-center justify-center p-5">
+        <Image source={item.image} className="w-full h-[300px]" resizeNode="contain" />
+        <View>
+            <Text className="text-2xl">{item.title}</Text>
+        </View>
+        <Text className="text-sm">{item.description}</Text>
+    </View>
+}}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## SLIDER NEXT BUTTON
+custom component - root directory > components/CustomButton.tsx
+import {TouchableOPacity} from "react-native";
+const CustomButton = () => (
+    <TouchableOpacity>
+        
+    </TouchableOpacity>
+)
+export default CustomButton;
 
 
 
