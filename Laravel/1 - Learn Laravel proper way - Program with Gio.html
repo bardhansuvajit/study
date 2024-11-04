@@ -280,9 +280,33 @@ OR
 Route::get('/transactions/{transactionId}', [TransactionController::class, 'show'])->whereNumber('transactionId');
 
 
+## ROUTE GROUP & ORGANIZE
+group by uri            - prefix()
+group by controller     - controller()
+group by name           - name()
+
+Route::prefix('transactions')->name('transactions.')->group(function() {
+    Route::controller(TransactionController::class)->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+    });
+});
+
+php artisan route:list
+return to_route('transactions.create');    // to redirect to specific route from controller
+
+* we can register separate routes to separate file
+make a separate file to list all transaction routes. create a file 'transaction.php' & move all routes there & register the 
+bootstrap/app.php >
+withRouting(
+    ...,
+    then: function() {
+        Route::prefix('transactions')
+                ->name('transactions.')
+                ->group(base_path('routes/transaction.php'));
+    }
+)
 
 
-
-
-
+## MIDDLEWARE
 
