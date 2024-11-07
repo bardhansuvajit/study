@@ -254,13 +254,59 @@ Route::get('/...', function(int $transactionId, string $filetype) {     // pass 
 })->whereIn('fileType', ['receipt', 'statement'])                       // also whereIn can be removed
 
 
-## CONTROLLERS
+## CONTROLLER
+user request > Controller > Model & Services > Response
+create controller -
+>   ./vendor/bin/sail shell
+>   php artisan make:controller TransactionController
+
+** in the TransactionController file, it says 'extends Controller' & also a default controller.php file exists in app/Http/Controller. the file is empty by default, you can remove the file & also, remove the 'extends Controller' from TransactionController file. Remomber, u can do the step. this is not necessary step in Laravel 11, as the base controller is empty
+
+Connect Route with Controller
+use App\Http\Controllers\TransactionController;
+Route::get('/transactions', [TransactionController::class, 'index']);
+Route::get('/transactions/{transactionId}', [TransactionController::class, 'show']);
+Route::get('/transactions/create', [TransactionController::class, 'create']);
+Route::post('/transactions', [TransactionController::class, 'store']);
+
+in TransactionController file,
+public function index() : string {
+    return 'Transaction page';
+}
+
+** an issue, in the route is /create will be treated as '/{transactionId}', solution is, 
+put '/create' above '/{transactionId}' route
+OR
+Route::get('/transactions/{transactionId}', [TransactionController::class, 'show'])->whereNumber('transactionId');
 
 
+## ROUTE GROUP & ORGANIZE
+group by uri            - prefix()
+group by controller     - controller()
+group by name           - name()
+
+Route::prefix('transactions')->name('transactions.')->group(function() {
+    Route::controller(TransactionController::class)->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+    });
+});
+
+php artisan route:list
+return to_route('transactions.create');    // to redirect to specific route from controller
+
+* we can register separate routes to separate file
+make a separate file to list all transaction routes. create a file 'transaction.php' & move all routes there & register the 
+bootstrap/app.php >
+withRouting(
+    ...,
+    then: function() {
+        Route::prefix('transactions')
+                ->name('transactions.')
+                ->group(base_path('routes/transaction.php'));
+    }
+)
 
 
-
-
-
-
+## MIDDLEWARE
 

@@ -119,3 +119,17 @@ blade file
         {{ session('success') }}
     </div>
 @endif
+
+
+## Pagination
+class file
+use Livewire\WithPagination;
+use WithPagination;
+return view('show-posts', [
+    'posts' => Post::paginate(10),
+]);
+
+
+
+
+
