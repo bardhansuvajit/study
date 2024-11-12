@@ -1,16 +1,108 @@
-DOCKER with Laravel
+** DOCKER with Laravel
+https://www.youtube.com/watch?v=WahJ91Nrgn0&list=PL_aQ9WXSURJ6Mbjt84xB6oiQOku1tqRbz&index=4
 
-DEFINATION
+
+1 DEFINITION
 Docker lets u build and run projects in containers. It's a platform for developing, shipping and running your application.
-
-Typically when u build/ host a laravel project, u need minimum these 3 components installed - a server, a adatabase and php. 
+Typically when u build/ host a laravel project, u need minimum these 3 components installed - a server, a database and php. 
 With docker u can build a container for each component
+Once u create Docker build for your project, u can use it to rebuild your project on any other computer without spending any time configuring your server manually
 
-Once u createDocker build for your project, u can use it to rebuild your project on any other computer without spending any time configuring your server manually
 
-
-INSTALL
+2 INSTALL
 Download docker + WSL2
-check in terminal `docker -v`
-
+> docker -v                     - check in terminal for docker version
 Settings to check > Enable WSL2 based engine + Enable Docker compose v2
+
+
+3 COMMANDS
+> docker ps                     - shows status of all running containers on Docker Engine, including this project
+> dcker-compose ps              - shows status of specific running containers of a project
+
+
+4 FILES
+create a laravel project first
+root_directory > Dockerfile + docker-compose.yaml (/ .yml both are same. but try to use .yaml for standardization)
+root_directory > Docker (folder) > entrypoint.sh
+
+
+5 DATABASE CONTAINER
+first container to run mysql server
+** docker-compose.yaml >
+# version: "3.8"                                    # used in earlier versions
+
+services:
+    # Database server
+    database:                                       # any name
+        image: mysql:8.0
+        ports:                                      # expose ports to connect to database container
+            - 3306:3306                             # host machine port 3306 is mapped to container port 3306
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}         # dynamic from .env
+            # - MYSQL_UESR=${DB_USERNAME}           # used in earlier versions
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        volumes:
+            - db-data:/var/lib/mysql
+
+volumes:
+    db-data: ~                                      # any name
+
+
+> docker-compose up --build     - Build the container now
+> docker-compose ps             - check status
+in case of any errors, try fix them
+> docker-sompose down           - stop running containers, in case any are running, optional step
+rebuild containers using, docker-compose up --build
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
