@@ -1,4 +1,5 @@
 ** DOCKER with Laravel
+Course by - Emad Zaamout
 https://www.youtube.com/watch?v=WahJ91Nrgn0&list=PL_aQ9WXSURJ6Mbjt84xB6oiQOku1tqRbz&index=4
 
 
@@ -146,6 +147,263 @@ it should work properly & the 3 running containers (php, redis, database) should
 
 
 9 IMPORTANT COMMANDS
+** Execute php artisan command inside laravel-docker PHP container. 
+Example, create migration
+    1. check container name > docker compose ps
+    2. docker exec container_name php artisan
+> docker exec laravel11-php-1 php artisan                               # run artisan commands
+    3. connect SSH with container
+> docker exec laravel11-php-1 /bin/sh                                   # connect SSH container, check with 'ls'
+> winpty docker exec -it laravel11-php-1 //bin//sh                      # Only if you are on windows
+
+
+
+10 NODE SERVER
+to run NPM commands & 'npm install'
+1. Dockerfile, at very end
+FROM node:20-alpine AS node
+
+WORKDIR /var/www
+COPY . .
+
+RUN npm install --global cross-env
+RUN npm install
+
+VOLUME /var/www/node_modules
+
+2. dockercompose.yaml
+# Node server
+node:
+    build:
+        context: .
+        target: node
+    volumes:
+        - .:/usr/src
+        - ./node_modules:/usr/src/node_modules
+    tty: true
+> docker compose down; docker compose up -d; docker compose ps                  # check if its working properly
+
+
+
+11 QUEUE CONTAINER
+* 1. dockercompose.yaml, on top of # node server, SAME AS PHP
+# Queue server
+queue:
+    build:
+        context: .
+        target: php
+        args:
+            - APP_ENV=${APP_ENV}
+    environment:
+        - APP_ENV=${APP_ENV}
+        - CONTAINER_ROLE=queue
+    working_dir: /var/www
+    volumes:
+        - ./:/var/www
+2. entrypoint.sh, after .env creation
+role=${CONTAINER_ROLE:-app}                                     # role is a variable & value will be coming from dockercompose.yaml file, so far only set for php & queue
+
+if [ "$role" = "app" ]; then
+    php artisan migrate
+    php artisan key:generate
+    php artisan cache:clear
+    php artisan config:clear
+    php artisan route:clear
+    php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
+    exec docker-php-entrypoint "$@"
+elif [ "$role" = "queue" ]; then
+    echo "Running the quque"
+    php /var/www/artisan queue:work --verbose --tries=3 --timeout=1             # php artisan queue would work too
+fi
+
+> docker logs container_name                                                    # check logs by container
+> docker compose down; docker compose up -d; docker compose ps                  # check if its working properly
+
+
+12 WEBSOCKET CONTAINER
+1. dockercompose.yaml, add after php
+# Websocket service
+    websocket:
+        build:                                                                  # referencing the Dockerfile
+            context: .
+            target: php                                                         # php variable set in Dockerfile
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=websocket
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 6001:6001
+        depends_on:                                                             # this image will build after 'database' & 'redis'
+            - database
+            - redis
+2. entrypoint.sh, another else part for $role
+elif [ "$role" = "websocket" ]; then
+    echo "Running the websocket server"
+    php artisan websocket:serve 
+fi
+
+> docker compose down; docker compose up -d; docker compose ps                  # check if its working properly
+
+
+
+13 WSL2 - Windows Subsystem for Linux & Docker
+https://www.youtube.com/watch?v=kaQQVoEBumY&list=PL_aQ9WXSURJ6Mbjt84xB6oiQOku1tqRbz&index=3
+
+> runs linux environment on windows, no need for virtual machine/ dual boot setup
+> faster than running a VM, uses less resourses
+> its integrated, means you can directly access all linux files in windows machine
+Installation
+    > Docker is needed
+    > google 'microsoft wsl', see instructions
+        > Run powershell as administrator
+        > System restart needed
+        > setup username & password
+.wslconfig
+    > to config all linux distributions, like limiting memory & processors
+    > c:/Users/Linux_username/.wslconfig
+    > content
+        [wsl2]
+        memory=4GB
+        processors=2
+        swap=8GB
+** WSL distribution Starter commands
+    > to access wsl distribution, in explorer address bar, type \\wsl$
+    > here u can see the distribution, Ububtu & browse linux instance
+    > to see wsl commands in CMD
+        > wsl --list                            you should see, Ububtu (Default)
+        > wsl --list --verbose                  status of wsl instance, Ububtu - Stopped - version
+    > start instance
+        > wsl ~
+            > ls -la                            see linux directory files
+            > exit
+        > another option, below network tab in explorer, Linux > Ubuntu, click on it to start
+        > another option, search 'ubuntu on windows', open it & wsl instance will open in terminal
+        > check status by running the '--verbose' command
+        > wsl --shutdown                        close wsl instance
+Docker
+    > install docker
+    > enable WSL 2 in Docker
+        > Settings > enable 'use WSL2 engine' & 'use Docker compose V2'
+VScode WSL2 extension
+    > 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
