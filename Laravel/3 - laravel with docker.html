@@ -11,24 +11,25 @@ Once u create Docker build for your project, u can use it to rebuild your projec
 
 2 INSTALL
 Download docker + WSL2
-> docker -v                     - check in terminal for docker version
+> docker -v                             - check in terminal for docker version
 Settings to check > Enable WSL2 based engine + Enable Docker compose v2
 
 
 3 COMMANDS
-> docker ps                     - shows status of all running containers on Docker Engine, including this project
-> dcker-compose ps              - shows status of specific running containers of a project
-
+> docker ps                             - shows status of all running containers on Docker Engine, including this project
+> dcker-compose ps                      - shows status of running containers of specific project
+ps means process status
 
 4 FILES
 create a laravel project first
-root_directory > Dockerfile + docker-compose.yaml (/ .yml both are same. but try to use .yaml for standardization)
-root_directory > Docker (folder) > entrypoint.sh
+* root_directory > Dockerfile + docker-compose.yaml (/ .yml both are same. but try to use .yaml for standardization)
+* root_directory > Docker (folder) > entrypoint.sh
 
 
 5 DATABASE CONTAINER
-first container to run mysql server
-** docker-compose.yaml >
+Now, create first container to run mysql server
+
+** in docker-compose.yaml > write these
 # version: "3.8"                                    # used in earlier versions
 
 services:
@@ -40,7 +41,7 @@ services:
         environment:
             - MYSQL_DATABASE=${DB_DATABASE}         # dynamic from .env
             # - MYSQL_UESR=${DB_USERNAME}           # used in earlier versions
-            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_PASSWORD=${DB_PASSWORD}         # if DB_PASSWORD in .env is empty, write a password for now
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
         volumes:
             - db-data:/var/lib/mysql
@@ -48,50 +49,104 @@ services:
 volumes:
     db-data: ~                                      # any name
 
-
-> docker-compose up --build     - Build the container now
-> docker-compose ps             - check status
-in case of any errors, try fix them
-> docker-sompose down           - stop running containers, in case any are running, optional step
-rebuild containers using, docker-compose up --build
-
-
-
+> docker compose up --build             - Build the container now
+> docker compose ps                     - check container status
+* in case of any ERRROS, try fix them. Check the errors in Docker Desktop > Containers
+> docker compose down                   - stop running containers, in case any are running, optional step
+> docker compose up --build             - rebuild containers as needed
+> docker compose up -d                  - d is detached mode, runs in the background
+** docker-compose up && docker compose up are practically same. docker-compose is only outdated, but still works
 
 
-
-
-
-
-
-
-
-
+6 REDIS CONTAINER
+services:
+    # Redis server
+    redis:
+        image: redis:alpine
+        command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+        ports:
+            - 6379:6379
 
 
 
+7 PHP CONTAINER
+To run PHP commands we need custom commands set up in 'Dockerfile' - https://hub.docker.com/_/php
+** 1. in Dockerfile, install PHP server first
+FROM php:8.2 AS php                                                     # AS php means, php is a variable here & can be used later
+** 2. in docker-compose.yaml
+services:
+    # PHP service
+    php:
+        build:                                                          # referencing the Dockerfile
+            context: .
+            target: php                                                 # php variable set in Dockerfile
+            args:
+                - APP_ENV=${APP_ENV}
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=app
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:8000
+        depends_on:                                                     # this image will build after 'database' & 'redis'
+            - database
+            - redis
+** 3. in Dockerfile, install extensions & others
+FROM php:8.2 AS php
+
+RUN apt-get update -y                                                   # update server
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev              # installing some extensions, unzip, libpq etc.
+RUN docker-php-ext-install pdo pdo_mysql bcmath                         # install other extensions
+
+RUN pecl install -o -f redis \                                          # install redis || '\' is used for next line
+    && rm -rf /tmp/pear \                                               # after install redis clear /tmp/pear folder
+    && docker-php-ext-enable redis
+
+WORKDIR /var/www                                                        # copy project files to server
+COPY . .                                                                # copy this folder inside work directory
+
+COPY --from=composer:2.3.5 /usr/bin/composer /usr/bin/composer          # copy from this location to project location in server
+
+ENV PORT=8000                                                           # PORT is a variable here, to later use in entrypoint
+ENTRYPOINT [ "docker/entrypoint.sh" ]                                   # entrypoint file to execute commands like, update composer, run migration
+
+
+8 ENTRYPOINT
+Not related to installation
+** in entrypoint.sh > write these
+#!/bin/bash
+
+# install composer dependencies || --no-interaction means, if asked for y/n input, it wont stop the script from running
+if [ ! -f "vendor/autoload.php" ]; then
+    composer install --no-progress --no-interaction
+fi
+
+# create env file
+if [ ! -f ".env" ]; then
+    echo "Creating ENV file for env $APP_ENV"                           # $APP_ENV value coming from docker-compose
+    cp .env.example .env
+else
+    echo "ENV file exists"
+fi
+
+php artisan migrate
+php artisan key:generate
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+
+php artisan serve --port=$PORT --host=0.0.0.0 --env=.env                # coming from Dockerfile
+exec docker-php-entrypoint "$@"
+
+* NOW check for
+> docker compose down; docker compose up -d
+it should work properly & the 3 running containers (php, redis, database) should be visible in Docker Desktop.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+9 IMPORTANT COMMANDS
 
 
 
