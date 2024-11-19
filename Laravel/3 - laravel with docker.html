@@ -249,19 +249,23 @@ fi
 > docker compose down; docker compose up -d; docker compose ps                  # check if its working properly
 
 
+=============================================================================================================================
+=============================================================================================================================
+=============================================================================================================================
+
 
 13 WSL2 - Windows Subsystem for Linux & Docker
 https://www.youtube.com/watch?v=kaQQVoEBumY&list=PL_aQ9WXSURJ6Mbjt84xB6oiQOku1tqRbz&index=3
 
 > runs linux environment on windows, no need for virtual machine/ dual boot setup
-> faster than running a VM, uses less resourses
+> faster than running a VM, uses less resources
 > its integrated, means you can directly access all linux files in windows machine
 Installation
     > Docker is needed
     > google 'microsoft wsl', see instructions
         > Run powershell as administrator
         > System restart needed
-        > setup username & password
+        > setup Linux_username & password
 .wslconfig
     > to config all linux distributions, like limiting memory & processors
     > c:/Users/Linux_username/.wslconfig
@@ -271,7 +275,7 @@ Installation
         processors=2
         swap=8GB
 ** WSL distribution Starter commands
-    > to access wsl distribution, in explorer address bar, type \\wsl$
+    > ** to access wsl distribution, in explorer address bar, type \\wsl$
     > here u can see the distribution, Ububtu & browse linux instance
     > to see wsl commands in CMD
         > wsl --list                            you should see, Ububtu (Default)
@@ -288,16 +292,37 @@ Docker
     > install docker
     > enable WSL 2 in Docker
         > Settings > enable 'use WSL2 engine' & 'use Docker compose V2'
+        > Settings > Resources > WSL integration > enable Ubuntu
 VScode WSL2 extension
-    > 
+    > use wsl extension in vscode
+    > toggle 'linux distribution/ ubuntu' in terminal
+    > cd ~                                      goto home directory
+    > to use
+        > Open ubuntu
+        > ls -la                                check once for existing folders
+        > mkdir workspace; cd workspace         optional, but create a new docker based laravel project
+        > open project in vscode wsl, ehile opening a new project in vscode, it shows prompt like, 'reopen in WSL'
+        > or open ubuntu from search bar, redirect to project folder, code .
+        > docker ps                             check if docker is working properly
+        > docker compose up -d                  start the containers
+Permission issue
+    > ls -la                                    also shows permission of files
+    > chmod +x file_name                        to give/ update permission to file/ folder, like Docker/entrypoint.sh might need updated permission
+    > sudo chown Linux_username:Linux_username vendor/
+    > sudo chown Linux_username:Linux_username node_modules/                changing the user to Linux_username of vendor & node_modules
+    > docker compose up -d                      all the containers should be running
 
 
+=============================================================================================================================
+=============================================================================================================================
 
 
-
-
-
-
+14 Laravel Makefiles
+Stop wasting time in running project commands. Today you remember all commands, but later you might not remember all of them. to simplify repetitive operations
+In WSL terminal, check if 'make' already exists
+    > make                                      type this command in terminal
+    > sudo apt install make                     install make
+    > make                                      confirm its installed, error says, 'No target specified and no makefile found'
 
 
 
