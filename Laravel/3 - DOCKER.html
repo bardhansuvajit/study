@@ -79,6 +79,8 @@ just a process on how to do it production ready - source youtube, Emad Zaamout
 - mkdir new-laravel-project
 - cd new-laravel-project
 - composer create/project laravel/laravel...
+OR
+- git init; git pull...
 
 
 
@@ -345,7 +347,18 @@ In WSL terminal, check if 'make' already exists
     > make                                      type this command in terminal
     > sudo apt install make                     install make
     > make                                      confirm installation, error says, 'No target specified and no makefile found'
-Now, setup laravel application
+
+Now, setup laravel application. Goto Terminal, select WSL instance
+
+Build Makefiles target
+    - create 'Makefile' in root directory, type
+        help:
+            echo "help"
+        temp:
+            echo "temp"
+    - in terminal, type, 'make', makefile
+
+
 
 
 
