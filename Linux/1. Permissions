@@ -1,0 +1,241 @@
+Using WSL2 in Windows OS, which provides a linux subsystem
+Open Terminal in ubuntu subsystem
+
+
+
+===========================================================================
+COMMANDS
+===========================================================================
+
+> ls -la                    
+# shows existing files/ folders 
+    - permissions
+    - link count (how many links/ other files are using this)
+    - user owner & the group set for the file
+    - size of the file, in bytes
+    - last modified date
+    - file/ folder name
+
+example
+drwx------+  5 codeclouds-suvajitb  staff    160 Dec  8  2023 Pictures
+drwxr-xr-x+  4 codeclouds-suvajitb  staff    128 Oct 31  2023 Public
+drwxr-xr-x   4 codeclouds-suvajitb  staff    128 Jun 25 19:37 PycharmProjects
+drwxr-xr-x@ 25 codeclouds-suvajitb  staff    800 Sep  9 18:54 laravel-sail
+-rw-r--r--   1 codeclouds-suvajitb  staff  57898 Mar  5  2024 php
+drwxr-xr-x   2 codeclouds-suvajitb  staff     64 Nov 20 17:34 workspace
+
+> open ./explorer . or start .
+open current directory in explorer/ finder
+
+
+
+===========================================================================
+UNDERSTAND PERMISSIONS
+===========================================================================
+
+Hold 10 characters, every permission string look like ---------- this
+
+Divided into 4 parts
+    File Type - (normally is -/d)
+        dash (-) represents any Regular file, like text file, code file,
+        d represents Directory,
+        c represents Character device file, b means Block device file, s Local socket file, p Named pipe, I Symbolic link
+    Owner Permission --- (normally is rwx)
+        3 characters only 
+    Group Permission --- (normally is rwx)
+        3 characters only
+    Other Users Permission --- (normally is rwx)
+        3 characters only
+
+** Hence, there are 3 permissions to give, to Owners, Groups and other users
+** And 3 types of permissions
+    - No permission for files. Directory content cannot be shown
+    r Read permission for files. Directory content can be shown
+    w Write permission for files. Directory content can be altered
+    x execute permission for files. Directory can be navigated using 'cd'
+
+
+
+===========================================================================
+** EXAMPLE
+===========================================================================
+
+-rwxr-xr--
+    10 characters here
+    1. -    means its a FILE. not directory. it would be 'd' if it was directory
+    2. rwx  means OWNER user can read write & execute
+    3. r-x  means any GROUP user can read & execute. not write
+    4. r--  meansall other users can only read
+
+
+
+===========================================================================
+CHMOD/ CHANGE MODE/ CHANGE PERMISSION
+===========================================================================
+
+chmod needs - scope, action & permissions
+> chmod u=rwx file/ folder_name
+Scope
+    u means user - owner of the file
+    g means users of the group
+    o means other users, not owner/ not in group
+    a all above type users
+Action
+    - means remove permission
+Using WSL2 in Windows OS, which provides a linux subsystem
+Open Terminal in ubuntu subsystem
+
+
+
+===========================================================================
+COMMANDS
+===========================================================================
+
+> ls -la                    
+# shows existing files/ folders 
+    - permissions
+    - link count (how many links/ other files are using this)
+    - user owner & the group set for the file
+    - size of the file, in bytes
+    - last modified date
+    - file/ folder name
+
+example
+drwx------+  5 codeclouds-suvajitb  staff    160 Dec  8  2023 Pictures
+drwxr-xr-x+  4 codeclouds-suvajitb  staff    128 Oct 31  2023 Public
+drwxr-xr-x   4 codeclouds-suvajitb  staff    128 Jun 25 19:37 PycharmProjects
+drwxr-xr-x@ 25 codeclouds-suvajitb  staff    800 Sep  9 18:54 laravel-sail
+-rw-r--r--   1 codeclouds-suvajitb  staff  57898 Mar  5  2024 php
+drwxr-xr-x   2 codeclouds-suvajitb  staff     64 Nov 20 17:34 workspace
+
+> open ./explorer . or start .
+open current directory in explorer/ finder
+
+
+
+===========================================================================
+UNDERSTAND PERMISSIONS
+===========================================================================
+
+Hold 10 characters, every permission string look like ---------- this
+
+Divided into 4 parts
+    File Type - (normally is -/d)
+        dash (-) represents any Regular file, like text file, code file,
+        d represents Directory,
+        c represents Character device file, b means Block device file, s Local socket file, p Named pipe, I Symbolic link
+    Owner Permission --- (normally is rwx)
+        3 characters only 
+    Group Permission --- (normally is rwx)
+        3 characters only
+    Other Users Permission --- (normally is rwx)
+        3 characters only
+
+** Hence, there are 3 permissions to give, to Owners, Groups and other users
+** And 3 types of permissions
+    - No permission for files. Directory content cannot be shown
+    r Read permission for files. Directory content can be shown
+    w Write permission for files. Directory content can be altered
+    x execute permission for files. Directory can be navigated using 'cd'
+
+
+
+===========================================================================
+** EXAMPLE
+===========================================================================
+
+-rwxr-xr--
+    10 characters here
+    1. -    means its a FILE. not directory. it would be 'd' if it was directory
+    2. rwx  means OWNER user can read write & execute
+    3. r-x  means any GROUP user can read & execute. not write
+    4. r--  meansall other users can only read
+
+
+
+===========================================================================
+CHMOD/ CHANGE MODE/ CHANGE PERMISSION
+===========================================================================
+
+chmod needs - scope, action & permissions
+> chmod u=rwx file/ folder_name
+Scope
+    u   means user - owner of the file
+    g   means users of the group
+    o   means other users, not owner/ not in group
+    a   means all above type users
+Action
+    -   means removing permission
+    +   means adding permission
+    =   means replace permission
+Permission
+    r   means read
+    w   means write
+    x   means execute
+
+Example
+nano example.txt                # creating a .txt file
+ctrl + x > Y                    # write something & save file
+ls -la                          # check file status
+
+drwxr-xr-x   3 codeclouds-suvajitb  staff   96 Nov 21 17:09 .                       # . means current folder
+drwxr-x---+ 29 codeclouds-suvajitb  staff  928 Nov 21 14:36 ..                      # .. means current folder
+-rw-r--r--   1 codeclouds-suvajitb  staff    6 Nov 21 17:09 example.txt             
+
+chmod u+x example.txt           # now giving execute permission
+now permission changes to, -rwxr--r--
+chmod a-rwx example.txt         # now remove all permissions for all users, permission changes to ----------
+try doing nano example.txt, cant modify file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
