@@ -18,7 +18,7 @@ Installation
     > google 'microsoft wsl', see instructions
         > Run powershell as administrator
         > System restart needed
-        > setup Linux_username & password
+        > setup Linux_username & password (babai-secret)
 .wslconfig
     > to config all linux distributions, like limiting memory & processors
     > c:/Users/Linux_username/.wslconfig
@@ -127,7 +127,7 @@ services:
             - 3306:3306                             # host machine port 3306 is mapped to container port 3306
         environment:
             - MYSQL_DATABASE=${DB_DATABASE}         # dynamic from .env
-            # - MYSQL_UESR=${DB_USERNAME}           # used in earlier versions
+            - MYSQL_USER=${DB_USERNAME}             # used in earlier versions
             - MYSQL_PASSWORD=${DB_PASSWORD}         # if DB_PASSWORD in .env is empty, write a password for now
             - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
         volumes:
@@ -343,65 +343,150 @@ LARAVEL MAKEFILES
 =================================================================================
 
 Stop wasting time in running project commands. Today you remember all commands, but later might not. to simplify repetitive operations
+
+1. INSTALL
 In WSL terminal, check if 'make' already exists
     > make                                      type this command in terminal
     > sudo apt install make                     install make
     > make                                      confirm installation, error says, 'No target specified and no makefile found'
 
+2. SETUP
 Now, setup laravel application. Goto Terminal, select WSL instance
-
 Build Makefiles target
-    - create 'Makefile' in root directory, type
+    - create 'Makefile' in root directory, type (DONOT use spaces, use indent/ tab, else 'missing separator' error)
         help:
             echo "help"
         temp:
             echo "temp"
-    - in terminal, type, 'make', makefile
+    - in terminal, type, 'make', makefiles always runs first target by default if not specified any
+    - so, OP is
+        echo "help"         // command
+        help                // op
+    - to remove command from OP, use @echo "help"
+
+3. AWK COMMAND
+used to manipulate data & produce formatted report
+    when u type make, we want to show what command are avilable, rather than wunning the first target
+    Get makefile - https://github.com/emad-zaamout/Makefile-Autogenerate-Help/blob/main/Makefile
+
+    help: ## Print help
+	    @awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+4. PHONY
+    when a 'target name' is same as 'filename', Suppose, there is also a file called 'help'. ERROR accurs
+    .PHONY: help other_targets
+
+** 5. DOCKER COMMANDS
+
+.PHONY: help ps
+help: ## Print help
+    @awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+ps: ## Docker containers
+    @docker compose ps
+
+make > 
+Targets:
+    help        Print help
+    ps          Docker containers
+make ps > no running containers
+NAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS
+
+6. DOCKER COMPOSE FILE
+docker-compose.yaml file. each containers has name (php, database, node)
+CONTAINER_PHP, CONTAINER_NODE are variables
+VOLUME_DATABASE value is 'laravel project folder name' '_' 'docker-compose file volume name'
+
+7. FINAL
+.PHONY: help ps
+
+CONTAINER_PHP=php
+CONTAINER_NODE=node
+CONTAINER_DATABASE=database
+
+VOLUME_DATABASE=laravel-project-folder_db-data
+
+help: ## Print help
+    @awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+ps: ## Docker containers
+    @docker compose ps
+
+build: ## Build all containers
+    @docker compose build --no-cache
+
+start: ## Start all containers
+	@docker compose up --force-recreate -d
+
+fresh: stop destroy build start  ## Destroy & recreate all uing dev containers.
+
+stop: ## Stop all containers
+	@docker compose stop
+
+restart: stop start ## Restart all containers
+
+destroy: stop ## Destroy all containers
+    @docker compose down
+    @if [ "$(shell docker volume ls --filter name=${VOLUME_DATABASE} --format {{.Name}})" ]; then \
+        @docker volume rm ${VOLUME_DATABASE}; \
+    fi
+
+cache: ## Cache project
+    docker exec ${CONTAINER_PHP} php artisan view:cache
+    docker exec ${CONTAINER_PHP} php artisan config:cache
+    docker exec ${CONTAINER_PHP} php artisan event:cache
+    docker exec ${CONTAINER_PHP} php artisan route:cache
+
+cache-clear: ## Clear cache
+    docker exec ${CONTAINER_PHP} php artisan cache:clear
+    docker exec ${CONTAINER_PHP} php artisan view:clear
+    docker exec ${CONTAINER_PHP} php artisan config:clear
+    docker exec ${CONTAINER_PHP} php artisan event:clear
+    docker exec ${CONTAINER_PHP} php artisan route:clear
+
+migrate: ## Run migration files
+	docker exec ${CONTAINER_PHP} php artisan migrate
+
+migrate-fresh: ## Clear database and run all migrations
+	docker exec ${CONTAINER_PHP} php artisan migrate:fresh
+
+tests: ## Run all tests
+	docker exec ${CONTAINER_PHP} ./vendor/bin/phpunit
+
+npm-install: ## Install frontend assets
+    docker exec ${CONTAINER_NODE} npm install
+
+npm-dev: ## Compile frontend assets for dev server
+    docker exec ${CONTAINER_NODE} npm run dev
+
+npm-dev: ## Compile frontend assets for production
+    docker exec ${CONTAINER_NODE} npm run production
+
+logs: ## Print all docker logs
+    @docker compose logs -f
+
+logs-php: ## Print php logs
+    @docker logs ${CONTAINER_PHP}
+
+logs-database: ## Print database logs
+    @docker logs ${CONTAINER_DATABASE}
+
+logs-node: ## Print node logs
+    @docker logs ${CONTAINER_NODE}
+
+ssh-php: ## SSH into PHP container
+	docker exec -it ${CONTAINER_PHP} sh
+
+ssh-database: ## SSH into DATABASE container
+	docker exec -it ${CONTAINER_DATABASE} sh
+
+ssh-node: ## SSH into NODE container
+	docker exec -it ${CONTAINER_NODE} sh
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+=================================================================================
+Laravel Docker Nginx + PHP-FPM + op_cache
+=================================================================================
 
 
 
