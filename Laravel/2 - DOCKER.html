@@ -13,6 +13,8 @@ https://www.youtube.com/watch?v=kaQQVoEBumY&list=PL_aQ9WXSURJ6Mbjt84xB6oiQOku1tq
 > runs linux environment on windows, no need for virtual machine/ dual boot setup
 > faster than running a VM, uses less resources
 > its integrated, means you can directly access all linux files in windows machine
+> Explorer location - \\wsl.localhost\Ubuntu\home\babai
+
 Installation
     > Docker is needed
     > google 'microsoft wsl', see instructions
@@ -58,7 +60,7 @@ VScode WSL2 extension
         > or open ubuntu from search bar, redirect to project folder, code .
         > docker ps                             check if docker is working properly
         > docker compose up -d                  start the containers
-Permission issue
+** Permission issue
     > ls -la                                    also shows permission of files
     > chmod +x file_name                        to give/ update permission to file/ folder, like Docker/entrypoint.sh might need updated permission
     > sudo chown Linux_username:Linux_username vendor/
@@ -73,7 +75,7 @@ SETUP NEW LARAVEL PROJECT
 
 just a process on how to do it production ready - source youtube, Emad Zaamout
 - Open WSL terminal
-- las -la               check file/ folder
+- ls -la                check file/ folder
 - mkdir workspace       optional
 - cd workspace          optional
 - mkdir new-laravel-project
