@@ -78,7 +78,7 @@ just a process on how to do it production ready - source youtube, Emad Zaamout
 - cd workspace          optional
 - mkdir new-laravel-project
 - cd new-laravel-project
-- composer create/project laravel/laravel...
+- composer create-project laravel/laravel .
 OR
 - git init; git pull...
 
@@ -488,20 +488,100 @@ ssh-node: ## SSH into NODE container
 Laravel Docker Nginx + PHP-FPM + op_cache
 =================================================================================
 
+1. INSTALL
+    > mkdir laravel11-docker-nginix-opcache     > cd laravel11-docker-nginix-opcache    > code .
+    > composer create-project laravel/laravel .
+2. ENV
+    > use suitable DB_DATABASE name && new username & password in DB_USERNAME & DB_PASSWORD
+    > APP_URL http://127.0.0.1:8000
+3. DOCKER STARTER FILES
+    > root > docker > nginix > nginix.conf
+    > root > docker > php > php.ini + php-fpm.conf
+    > root > docker > entrypoint.sh
+    > root > Dockerfile
+    > root > docker-compose.yaml
+4. DATABASE SERVICE
+    docker-compose.yaml >
+    services:
+        # Database service
+        database:
+            container_name: database
+            image: mysql:8.0
+            ports: 
+                - 3306:3306
+            environment:
+                - MYSQL_DATABASE=${DB_DATABASE}
+                - MYSQL_USER=${DB_USERNAME}
+                - MYSQL_PASSWORD=${DB_PASSWORD}
+                - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            volumes:
+                - db-data:/var/lib/mysql
 
+    volumes:
+        db-data: ~
 
+    > docker compose up -d, the database container should be up
+5. PHP SERVICE
+    Dockerfile >
+    FROM php:8.2-fpm AS php
 
+    docker-compose.yaml > before database service
+    # PHP service
+    php:
+        container_name: php
+        build:
+            context: .
+            target: php
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 800:8000
+        depends_on:
+            - database
+6. PERMISSION ISSUE (optional)
+    > check the issue
+    > check permission using 'la -la'
+    > update permission using 'chmod 755 docker/entrypoint.sh'
+7. CREATE USER, PHP EXTENSIONS & OTHERS
+    # Dockerfile > 'www-data' is username
+    RUN usermod -u 1000 www-data
 
+    RUN apt-get update -y
+    RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev nginx
+    RUN docker-php-ext-install pdo pdo_mysql bcmath curl opcache
 
+    WORKDIR /var/www
+    COPY --chown=www-data . .
 
+    COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+    RUN php artisan cache:clear
+    RUN php artisan config:clear
 
+    RUN chmod -R 755 /var/www/storage
+    RUN chmod -R 755 /var/www/bootstrap
 
+    ENTRYPOINT [ "docker/entrypoint.sh" ]
+8. ENTRYPOINT
+    #!/bin/bash
+    if [ ! -f "vendor/autoload.php" ]; then
+        composer install --no-progress --no-interaction
+    fi
 
+    if [ ! -f ".env" ]; then
+        echo "Creating .env file"
+        cp .env.example .env
+    fi
 
+    php-fpm -D
+    nginix -g "daemon off;"
 
+docker compose build --no-cache; docker compose up --force-create -d
+- in case of 'build' issue. just do 'compose up'
 
-
+9. PHP-FPM.CONF && NGINX.CONF
+https://github.com/emad-zaamout/laravel-docker-template
 
 
 
