@@ -1,6 +1,39 @@
 AWS with LARAVEL
 
-**Account (Credit/ debit card required)
+1. Repository
+2. Docker
+3. AWS CLI
+
+
+** Repository
+github, private x 2 repo
+    1. project-title
+    2. project-title-base-image
+
+
+** Docker
+in local environment, 'database' image is needed
+in production environment, for database, 'AWS RDS' will be used, so no 'database' container is needed
+
+
+** AWS CLI
+to manage AWS services. To authenticate local env with AWS Elastic container repo, which is used to store Docker images
+to install -> google 'aws cli install' -> follow steps (for windows, goto wsl2 container)
+
+to verify -> 
+which aws > returns > /usr/local/bin/aws
+aws --version > returns > aws-cli/2.19.1 Python/3.11.6 Darwin/23.3.0 botocore/2.4.5
+
+
+** Pre deployment preparation
+@docker compose stop
+@docker build --no-cache
+@docker compose up --force-recreate -d
+
+.env.prod > APP_ENV=prod, APP_DEBUG=false, APP_URL=https://domainname.com, 
+
+
+** AWS Account (Credit/ debit card required)
 Create new account/ login > aws.amazon.in > goto Console
 
 
@@ -53,10 +86,10 @@ Also name them from the listing page if required
 
 
 ** RDS INSTANCE
-seperate database server instead of running on same server ehre we serve the website (expensive)
+seperate database server instead of running on same server where we serve the website (expensive)
 try to create a tiny instance with minimal usage. in case the server usage exceeds a certain threshold, use cloud watch
 
-create database > standard create > mysql > desired mysql version > production template > provide name 'productsion-database'/ some-other-name  > username 'admin'/ auto generate password * > smallest instance class, Burstable class & select DB micro > storage, general purpose > public access, NO > 
+RDS > create database > standard create > mysql > desired mysql version > production template > provide name 'productsion-database'/ some-other-name  > username 'admin'/ auto generate password * > smallest instance class, Burstable class & select DB micro > storage, general purpose > public access, NO > 
 
 ** to use the new database, we need these 3
 instance endpoint

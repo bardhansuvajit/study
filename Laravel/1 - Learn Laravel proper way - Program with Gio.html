@@ -309,4 +309,12 @@ withRouting(
 
 
 ## 14. MIDDLEWARE
+filters HTTP requests
+in Laravel we can register Global Middleware that filters all requests
+create middleware - php artisan make:middleware AssignRequestId
+
+AssignRequestId > handle(Request $request, Closure $next)
+$request is the current request & Closure is to pass the request to the next middleware/ layer of the application
+
+
 
