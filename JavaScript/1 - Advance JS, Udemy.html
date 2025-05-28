@@ -1,16 +1,8 @@
 JAVASCRIPT ENGINE
 
-> JS is single threaded language that uses callback key. 
+> JS is single threaded language (only one statement is executed at a time) that uses callback key. 
 > JS is also called a interpreted language
-
-ECMAScript engine/ JS engine is a program that executes source code to computer language. 
-Example V8 (written in C++, used in chrome, node js), Spider monkey (used in firefox), Chakra (used in IE, Edge)
-** ECMAScript is a programming language, which defines how Javascript code standard should be.
-Brendon Eich first created JS & JS engine
-
-
-HOW JS ENGINE WORKS
-when a code is passed to the engine, it's parsed to a data structure AST (Abstruct Syntax Tree). AST is used to create machine codes
+> Brendon Eich first created JS & JS engine
 
 
 INTERPRETER
@@ -20,13 +12,31 @@ reads & understands entire code, optimises if required & then translates into ma
 
 ** Interpreter is initially faster than Compiler, but doesn't do optimization. Like, for a chunk of code/ when loops exist in code, it makes the process slower. Compiler does a better job here, as it understands the entire code first and optimizes it. So, to make the engines faster, JIT COMPILER (Just in Time) is introduced, using both Interpreter & Compiler
 
-** HOW V8 ENGINE WORKS
-Code is parsed -> passed to AST (Abstruct Syntax Tree) -> Interpreter (called Ignition in V8) -> bytecode
--> Profiler/ Monitor watches code as it runs, makes notes on how the code can be optimized 
--> If optimization/ modification is needed, JIT compiler (called Turbo Fan in V8) is used and replaces bytecode with optimized machine code
-
 JS IS NOT ENTIRELY AN INTERPRETED LANGUAGE
 Normally, High-level language, like JS, converted into bytecode, then to machine code. Computers doesn't understand bytecode. Then a JVM (Java Virtual Machine) or JS engine is needed to execute bytecode to executable code. So, in JS, Interpreter & Compiler both are used and it's not an interpreted language. The first JavaScript engines were using Interpreters, but all modern engines use JIT (just-in-time) compilation for improved performance.
+
+
+ECMAScript engine/ JS engine is a program that executes source code to computer language. 
+Example V8 (written in C++, used in chrome, node js), WarpMonkey (used in firefox), Chakra (legacy, used in IE), v8 is also used by Edge, Brave, Opera, Nitro (Safari)
+** ECMAScript is a programming language, which defines how Javascript code standard should be.
+
+
+HOW JS ENGINE WORKS
+when a code is passed to the engine, it's parsed to a data structure AST (Abstruct Syntax Tree). AST is used to create machine codes
+
+
+** HOW V8 ENGINE WORKS
+Code is parsed (code is read & understood)
+→ converted into an AST (Abstract Syntax Tree)
+→ passed to the interpreter (called Ignition in V8)
+→ turned into bytecode
+→ code runs immediately using the bytecode
+
+→ Meanwhile, a Profiler (also called the "monitor") watches the code while it runs, looking for "hot" code (frequently used)
+→ When hot code is detected, it is sent to the JIT compiler (called TurboFan in V8)
+→ TurboFan compiles that bytecode into optimized machine code
+→ The optimized machine code replaces the old version for faster execution
+
 
 
 BABEL
@@ -877,7 +887,7 @@ arr.__proto__.__proto__
 
 EXAMPLE
 let dragon = {
-    name: 'Tanya',
+    name: 'Jean',
     fire: true,
     fight() {
         return 5
