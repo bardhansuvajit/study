@@ -1,0 +1,34 @@
+NODE JS
+
+PREREQUISITES
+
+GUI & CLI
+Graphical User Interface & Command Line Interface (click on icons/ buttons to control software/ device vs commands into terminal to operate)
+
+NODE JS - 	
+NPM - 		
+
+FUNCTION STATEMENT - way todefine function
+FUNCTIONS ARE FIRST CLASS CITIZEN - 
+1. They can be assigned to variables (FUNCTION EXPRESION)
+2. Pass functions as arguments into another function
+FUNCTION EXPRESSION -
+function used directly as an argument inside a function
+
+MODULE
+reusable piece of code
+e.g.
+2 files - cart.js (function addToCart() {...}) & checkout.js
+
+NOW, if call it from cart.js & see results from checkout.js,
+use require('./cart.js');
+
+IF, call 'addToCart' from checkout.js, export 'addToCart' function
+module.exports = addToCart; // if function name is not passed, module.exports returns {}/ empty object
+
+module.exports = {
+     addToCart,
+     checkCoupons
+}
+
+
