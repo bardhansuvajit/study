@@ -5,8 +5,9 @@ PREREQUISITES
 GUI & CLI
 Graphical User Interface & Command Line Interface (click on icons/ buttons to control software/ device vs commands into terminal to operate)
 
-NODE JS - 	
-NPM - 		
+NODE JS - Javascript runtime environtime, can execute JS code outside browser
+RUNTIME ENVIRONMENT - JavaScript runtime environment is like a container, that has all the things to run a JavaScript Code. This environment needs an JS engine to run (V8)
+NPM -
 
 FUNCTION STATEMENT - way todefine function
 FUNCTIONS ARE FIRST CLASS CITIZEN - 
@@ -14,6 +15,7 @@ FUNCTIONS ARE FIRST CLASS CITIZEN -
 2. Pass functions as arguments into another function
 FUNCTION EXPRESSION -
 function used directly as an argument inside a function
+
 
 MODULE
 reusable piece of code
@@ -26,9 +28,18 @@ use require('./cart.js');
 IF, call 'addToCart' from checkout.js, export 'addToCart' function
 module.exports = addToCart; // if function name is not passed, module.exports returns {}/ empty object
 
+// in cart.js
 module.exports = {
-     addToCart,
-     checkCoupons
+    addToCart: addToCart, 
+    qtyUpdate: qtyUpdate
 }
+
+// in checkout.js
+const cart = require('./cart');
+cart.qtyUpdate(5);
+
+
+EVENTS
+
 
 
