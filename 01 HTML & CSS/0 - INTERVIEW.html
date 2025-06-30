@@ -1,0 +1,155 @@
+=======================================================================
+==================*************** HTML ***************=================
+=======================================================================
+
+HTML
+- Hypertext (Text with reference/ text that can be accessed) Markup (used TAGS to mark language) Language
+
+IDE
+- integrated (together) delelopment environment, like vs code, sublime text, 
+- increases productivity, code auutocomplete, syntax highlight, error check
+
+API
+    Application Programming Interface - used to communicate with different systems
+    REST API - Representational State Transfer - Uses HTTP methods (GET, POST, PUT, DELETE) - uses JSON data format
+    SOAP API - Simple Object Access Protocol - XML-based, very strict and formal - Often used in banking/ enterprise/ legacy systems - Old web services or government APIs
+    GraphQL API - created by Facebook - Client can request exact data needed - Efficient &  flexible, especially in modern apps
+    gRPC (Google Remote Procedure Call) - very fast, uses binary format (Protocol Buffers) - Ideal for microservices
+
+HTML || XML || XHTML
+    HTML for most websites.
+    XML when storing or sharing data. (eXtensible Markup Language)
+        some old/ enterprise systems still send data in XML, like SOAP APIs
+        Many apps/tools use XML for configuration (e.g., Android AndroidManifest.xml, VS Code settings).
+        JSON replaced XML
+    XHTML only if required to follow strict standards. (eXtensible HTML)
+        Some older sites still use XHTML 1.0 Strict or Transitional.
+        HTML5 replaced XHML
+
+HTML list
+- orderred, unordered & definition (dl/dt/dd - Definition List/ Definition Term/ Definition Description)
+
+Meta tag
+    provides additional info about website - like, author, desc, keyword
+
+HTML || HTML 5
+    needed Flash/ plugins to work with audio/ video file || built in audio & video tags
+    used div always || uses semantic tags <header> <main> <footer> for better understanding
+    only input type text & password supported || new types, date email range etc
+
+!DOCTYPE
+    "DOCTYPE" = Document Type. 
+    When declared, it means, this document is type - HTML5. Browser will render it using modern rules
+    Helps the browser avoid quirks mode. Uses Standard mode
+
+** Quirks Mode || Standards mode || Almost Standards Mode (Browser modes)
+✅ Standards Mode -         Follows modern HTML/CSS rules (triggered by <!DOCTYPE html>)
+🟡 Quirks Mode -            Uses old, forgiving rules (if DOCTYPE is missing or wrong)
+🔵 Almost Standards Mode -  Mostly modern, but with a few quirks (very rare)
+
+What Happens in Quirks Mode?
+    CSS may behave unexpectedly (div { width: 100px; padding: 20px;} - Total width becomes 140px but in standard mode it should be 100px width, with inside padding)
+    Layouts can be inconsistent
+    Box model (width/height) may break
+    Doesn't use ECMAScript-standard JS
+
+HTML 5 tags/ Semantic elments
+    more than 30 new tags came along
+    Structural / Semantic Tags (for better layout) - header, footer, nav, section, article, aside, main, figure, figcaption
+    Multimedia - audio, video, source, track
+    Graphics - canvas (Draw graphics via JavaScript), svg (Scalable Vector Graphics inline drawings)
+    Form - datalist, keygen (Generate cryptographic keys - deprecated now), output (Display calculation results)
+    Input types - email, date, time, range, number, search, color, tel, url
+Other than new tags, localStorage & sessionStorage, <meta name="viewport">, Geolocation API, draggable (<div draggable="true">Drag me!</div>), Service Workers (Offline web app), Web Workers (runs JS in background without freezing main page), websockets etc were introduced in HTML 5
+
+** If div/ any other tag is used instead of main/ article/ section. what happens ?
+    code loses Semantic Meaning/ structure/ code readability issue
+    loses Accessibility (for screen readers)
+    poor SEO
+
+figure || img
+    when image needs caption
+
+meter || progress
+    static vs dynamic measurement
+    battery level, test score vs file upload, loading status
+
+MathML/ complex math formulas
+    MathML/ Mathematical Markup Language is XML based used to show math equations in web pages
+    📄 Used inside HTML5
+    🔠 Looks like XML: uses tags like <math>, <mrow>, <mi>, <mo>, <msup>, etc.
+    🧠 Semantic: tells browsers what each part of the math means (not just how it looks)
+    🧪 Best supported in Firefox (Chrome needs MathJax for full support)
+    🛠️ Used in education, scientific publishing, and accessible math
+
+SSE
+    Server Sent Events - a way for a server to send automatic updates to web page using HTTP connection
+    The server keeps the connection open and pushes updates to the client (browser) whenever there's new data.
+    The client doesn't need to keep asking (like in polling).
+    It uses a special JavaScript object: EventSource.
+    e.g. lie score, news feed, stock price update, chat notification, real time dashboard
+
+SSE || Websocket || Polling (legacy)
+    Server to Client, one way || two way || Client keeps asking
+    HTTP || custom over TCP || HTTP
+
+Web Worker
+    a JavaScript feature that lets you run scripts in the background, without freezing the main webpage.
+    * unline ajax, which sends HTTP requests, it only runs background js code
+    used for, heavy math/ data processing, image filter, real-time graphs
+    they mianly run in external JS files. but to run internally, use a blob 
+
+Manifest File in HTML5
+    manifest file/ AppCache manifest was originally used to make web apps work offline by telling the browser which files to cache.
+    replaced by Service workers, manifest files are obsolete now
+    e.g. <html manifest="app.manifest">...</html>
+    in app.manifest > 
+        # Files to cache
+        index.html
+        style.css
+        script.js
+        images/logo.png
+
+        NETWORK:
+        *
+
+Service Worker
+    JS file that runs in the background, separate from web pages
+    Usage - 🧱 Caching pages and files + 🌐 Offline access + 🔔 Push notifications + ⏳ Background sync
+    e.g. <script>navigator.serviceWorker.register('/service-worker.js');</script>
+
+Geolocation API
+    lets website/ app ask the user's device for physical location, like latitude, logitude
+    e.g. <script>
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            const timestamp = position.coords.timestamp;
+        });
+    </script>
+
+Web component
+    build reusabsle, custom elements in HTML, with their own structure, style & behavior
+    types,
+        Custom Elements     Make your own HTML tags	                    Clean,reusable components
+        Shadow DOM          Keep styles & layout private                Avoids conflicts with other styles
+        HTML Templates      Reuse hidden HTML chunks in JavaScript      Dynamic layouts without duplication
+
+Physical tags || Logical/ Semantic tags
+    focuses on style || focuses on meaning
+    <b>/<i> || <strong>/<em>
+
+
+
+
+
+=======================================================================
+==================*************** CSS ***************==================
+=======================================================================
+
+
+
+
+
+
