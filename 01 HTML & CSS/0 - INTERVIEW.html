@@ -144,9 +144,147 @@ Physical tags || Logical/ Semantic tags
 
 
 
+
+
+
+
+
+
 =======================================================================
 ==================*************** CSS ***************==================
 =======================================================================
+
+Limitations of CSS
+    not a programming language. no conditional logic/ loops
+    cant perform calculation other than calc()
+    cant modify DOM element
+    with CSS, what works with one browser might not always work with another
+
+Highest priority CSS/ CSS specificity
+    Inline > Internal > External
+    CSS specificity determines which style rule is applied when multiple rules target the same element.
+        Inline style            1000 (specificity value)
+        ID selector             100
+        Class selectors (.class), attribute selectors ([type="text"]), pseudo-classes (:hover) - 10
+        Type selectors (div, p), pseudo-elements (::before) - 1
+        Universal selector (*), combinators (+, >, ~), and negation (:not()) - 0
+
+CSS Custom Properties - Variables
+    :root {
+        --primary-color: #4f46e5;
+    }
+    .button {
+        background: var(--primary-color);
+    }
+
+Layout system - 1D & 2D
+    2D
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+    1D
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+Pseudo-Elements & Pseudo-Classes
+    *** Pseudo-element - Pseudo-elements let you style specific parts of an element's content like before or after content - ::after, ::before, ::first-letter, ::selection, ::placeholder
+
+    *** Pseudo-class - Pseudo-classes define a special state of an element - :hover, :first-child, :focus, :active, :visited, :checked, :nth-child(), :last-of-type, :not(selector)
+
+    h1::after {
+        content: '✨';
+    }
+
+    a:hover {
+        color: red;
+    }
+
+Scroll Snap
+
+:has() Selector
+
+Box Model
+    box model describes how elements are structured and spaced on webpage. like content, padding, border, margin
+
+px || % || em || rem
+    fixed size || based on parent dimension size || Relative to the element's own font size || 
+
+Media Query
+    apply different CSS styles based on conditions like - Screen width or height, Device type (screen, print, etc.), Screen resolution, Orientation (landscape or portrait)
+
+Optimize CSS
+    minify css, use shorthand properties, avoid deep nesting (.container .card .content .title {...}), Use CSS Variables, reduce repetition.
+
+** Render-Blocking CSS
+    when extrenal css is found in a web page, It pauses and waits to finish downloading and reading that file before showing anything on the screen. the BORWSER BLOCKS/ STOPS RENDERING THE PAGE UNTIL CSS IS READY
+
+    How does that hurt performance?
+    It causes a blank white screen for longer, especially on slow networks. Users see nothing for a few extra seconds.
+
+Critical CSS?
+    Critical CSS is the small part of the full CSS that is needed right away to show the top part of the page (what users see first without scrolling — called “above the fold”). We can inline that small part directly in the HTML <head> so the browser doesn't have to wait.
+
+    Critical CSS: Helps show page faster.
+    Render-blocking CSS: Slows down page if not handled properly.
+
+Contain, Will-change, Compositing
+    contain property tells browser to treat an element independant from rest of the page
+    will-change property tells browser that a certain property of an element will change soon
+    Compositing is not a CSS property, but a rendering process inside the browser. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
