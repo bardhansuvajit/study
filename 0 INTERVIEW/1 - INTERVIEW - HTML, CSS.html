@@ -1,5 +1,5 @@
 =======================================================================
-==================*************** HTML ***************=================
+=================*************** HTML ***************==================
 =======================================================================
 
 HTML
@@ -140,6 +140,84 @@ Physical tags || Logical/ Semantic tags
     focuses on style || focuses on meaning
     <b>/<i> || <strong>/<em>
 
+What are semantic HTML elements?
+    Semantic HTML elements are HTML tags that clearly describe their meaning and purpose in both human and machine-readable ways. Like, hedaer, footer, nav etc.
+     Benefits:
+        Accessibility: Screen readers can interpret content more accurately.
+        better SEO
+        Maintainability: Code is easier to read and maintain.
+        Standardization
+
+<div> || <span>
+    Both are non-semantic eleemnts. But
+    Block || inline level
+
+HTML4 || HTML5
+    released in 1997 || 2014
+    No semantic elements || header, footer, nav, article, section
+    requires plugin like Flash for Multimedia Support || Native support for <audio>, <video>, <canvas>
+    No built-in APIs || Supports APIs like Web Storage, Geolocation, Drag & Drop, WebSockets, etc.
+    Basic text input text, password || more types like email, date, range, tel etc.
+    Deprecated tags like <font>, <center>
+    Graphics Support needs plugins ||<canvas> and <svg> supported natively
+
+data- attributes
+    custom attributes that allow you to store extra information on HTML elements
+
+local storage || session storage
+    Feature	            Local Storage	                                            Session Storage
+    🕓 Lifetime	        Until manually cleared by user/ JS	                        Until the browser tab/ window closes
+    📦 Storage Size	    ~5-10 MB per origin	                                        ~5 MB per tab
+    🌍 Scope	        Shared across all tabs/windows                              Unique to each tab/window
+    🔁 Persistence	    Data persists even after reloads or browser restarts	    Data clears on tab close
+    🔒 Security	        Same-origin policy applies	                                Same-origin policy applies
+    🔃 Auto-expiry?	    ❌ No automatic expiration	                              ✅ Expires with tab/window
+    📖 Accessibility	Across tabs/windows (same origin)	                        Only in current tab/window
+
+How would you embed audio and video in HTML5?
+    <audio controls autoplay loop muted preload>
+        <source src="song.mp3" type="audio/mpeg">
+        <source src="song.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+    <video width="640" height="360" controls poster="thumbnail.jpg">
+        <source src="video.mp4" type="video/mp4">
+        <source src="video.ogg" type="video/ogg">
+        Your browser does not support the video tag.
+    </video>
+
+Accessibility in HTML
+    Accessibility in HTML means designing the web content so that everyone, including people with disabilities can perceive, navigate, and interact with it effectively.
+    HOW
+        using semantic tags
+        alt tags for images
+        labels for form inputs
+        Keyboard Navigability (onclick, onkeydown, onkeypress)
+        use ARIA for modals, sliders (role="button", role="dialog", aria-expanded, aria-label)
+        Ensure sufficient contrast between text and background
+        Use captions, transcripts, and <track> tags for audio/video (<track src="subtitles.vtt" kind="subtitles" srclang="en" label="English">)
+        Avoid Auto-Playing Content
+        Avoid generic links like "Click here". Instead: <a href="/pricing">View pricing plans</a>
+
+What Are Screen Readers?
+    Software tools used by visually impaired or blind users to read aloud the content of a webpage. 
+    They interpret HTML, text, and structure — and convert it into speech or Braille output.
+
+What are ARIA roles and why are they used?
+    ARIA (Accessible Rich Internet Applications) roles are used to improve accessibility by providing extra information to assistive technologies (like screen readers) — especially when semantic HTML alone is not enough.
+
+defer and async attributes on script tag
+
+What is the shadow DOM and how does it work with web components?
+
+
+
+
+
+
+
+
+
 
 
 
@@ -192,9 +270,9 @@ Layout system - 1D & 2D
         }
 
 Pseudo-Elements & Pseudo-Classes
-    *** Pseudo-element - Pseudo-elements let you style specific parts of an element's content like before or after content - ::after, ::before, ::first-letter, ::selection, ::placeholder
+    Pseudo-elements let you style specific parts of an element's content like before or after content - ::after, ::before, ::first-letter, ::selection, ::placeholder
 
-    *** Pseudo-class - Pseudo-classes define a special state of an element - :hover, :first-child, :focus, :active, :visited, :checked, :nth-child(), :last-of-type, :not(selector)
+    Pseudo-classes define a special state of an element - :hover, :first-child, :focus, :active, :visited, :checked, :nth-child(), :last-of-type, :not(selector)
 
     h1::after {
         content: '✨';
@@ -237,42 +315,25 @@ Contain, Will-change, Compositing
     will-change property tells browser that a certain property of an element will change soon
     Compositing is not a CSS property, but a rendering process inside the browser. 
 
+Flexbox || Grid
 
+Transitions and animations
 
+How does the cascade work in CSS?
 
+center a div vertically and horizontally using Flexbox
 
+pure CSS tooltip
 
+How do you handle browser compatibility issues in CSS?
 
+What is the purpose of CSS preprocessors like SASS or LESS?
 
+Have you used tools like PostCSS, Autoprefixer, or PurgeCSS?
 
+How do you manage CSS in large-scale applications?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Explain the difference between mobile-first and desktop-first design.
 
 
 

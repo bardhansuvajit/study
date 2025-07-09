@@ -1,0 +1,523 @@
+===================================================================================================
+=================*************** 🔧 Core PHP & Language Concepts ***************===================
+===================================================================================================
+
+PHP parser
+    part of PHP inetrpreter, that reads PHP codes, breaks it (into Tokens), understand sturcture, then sends to interpreter/ compiler to execute
+
+AST
+    Abstract syntax tree, shows logical part of code. NOT what we typed, but what it means
+    e.g. echo 2 + 3 >>> ECHO, ADD, NUMBER, 2, NUMBER, 3
+
+== vs ===
+    checks value vs checks value & type
+
+Variable scoping
+    Global: Declared outside functions.
+    Local: Declared inside functions.
+    Static: Retains value between function calls with static keyword.
+
+inlcude || require
+    error handling - gives warning if file not found (script execution continues) || gives fatal error (script execution stops)
+    use case - file optional || file required
+
+unset || unlink
+    destroys variable || deletes file from filesystem
+
+Call by Value || Call by Reference
+    passes copy of the variable, keeping the original unchanged || passes the actual variable, allowing modification
+    e.g. $a = 1; $b = $a; $b = 2; echo $a; > 1
+    e.g. $a = 1; $b = &$a; $b = 2; echo $a; > 2
+
+** ERROR TYPES
+    notices     - non critical. user cant see these. e.g. undefined variable
+    warnings    - important than notice. script execution is not interrupted. user can see. e.g. include() does not have a file
+    syntax/ parsing error   - php parser is unable to execute. e.g. missing semicolon/ quote mark/ parenthesis
+    fatal       - script execution immediately terminated. e.g. accessing non existing object property
+to see errors in php.ini set, ini_set('display_errors', 1)
+then include error_reporting(E_ALL) in all pages
+
+MVC
+    when user visits an url, https://example.com/products/show/1 > 
+    router analyzes the URL & sends request to CONTROLLER
+    CONTROLLER asks MODEL for data & handles request
+    MODEL fetches data from DB
+    then VIEW displays output
+
+** Warning: Cannot modify header information - headers already sent ---- WHY THIS HAPPENS & HOW TO SOLVE ?
+    in PHP, header(), setcookie(), session_start() must be called before any output sent to browser
+        1 e.g.
+        echo "Welcome!";
+        header("Location: dashboard.php");  // ❌ Warning here
+        2 e.g.
+        ␣<?php
+        header("Location: login.php");  // ❌ Warning, There's a space before <?php on the first line
+        3 e.g.
+        include 'header.php';  // this might output HTML or whitespace
+        header("Location: profile.php");  // ❌ Warning
+
+    SOLUTION
+        1. No output before header()
+        2. Check for whitespace or blank lines
+        3. Use output buffering, allows PHP to delay output until all headers are sent:
+            <?php
+                ob_start();  // Start output buffering
+                header("Location: next.php");  // Safe even if there's echo after this
+                ob_end_flush(); // Send output at the end
+            ?>
+
+$i = 016;
+echo $i / 2; OUTPUT ?
+    Numbers that start with 0 are interpreted as octal
+
+Closure
+    anonymous functions (function without name) to capture variable from its surrounding scope using the use keyword.
+    e.g.
+        $prefix = "Hi";
+        $sayHello = function($name) use ($prefix) {
+            return "$prefix, $name!";
+        };
+        echo $sayHello("Suvajit"); // Output: Hi, Suvajit!
+
+isset() || empty() || is_null()
+    isset() for existence check, empty() for blank checks, and is_null() for null-specific logic.
+
+Garbage Collection
+    manage memory by cleaning up unused objects or circular references that are no longer accessible.
+    PROBLEM
+        Variables in PHP keep track of how many references point to it. When variable is unset, the count decreses. If the reference count drops to zero, PHP frees the memory immediately. 
+        But freeing up memory is not easy like this, MEMORY LEAK happens when 2 variables reference each other, even when unset, memory won't be free
+    SOLUTION
+        PHP solves this using a cyclic garbage collector, which:
+            Detects circular references (When 2 variables reference each other, memory could never be free making Memory Leak)
+            Uses "Root Buffer" to track possible cycles
+            Periodically collects and frees them using gc_collect_cycles();
+    Garbage Collection in PHP is automatic. But to tune performance we can manually manage
+        gc_enable();             // Turn GC back on
+        gc_disable();            // Turn GC off
+        gc_collect_cycles();     // Force collection now
+        gc_enabled();            // Check if it's on
+        gc_status();             // See stats 
+
+Magic Methods
+    Special methods like __construct, __get, __set, __call, etc.
+    They enable object lifecycle management, dynamic method/property access, and custom behavior (e.g., serialization, cloning).
+
+How does PHP handle type juggling
+
+session management
+
+Apache || Nginx?
+
+Explain the lifecycle of a PHP request.
+
+What tools do you use for profiling and debugging PHP code?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==========================================================================================
+=================*************** 🧱 OOP & Architecture ***************===================
+==========================================================================================
+
+pillars of OOP. with Examples
+
+SOLID principle
+    acronym for 5 principles of object-oriented design.
+    S - Single Responsibility Principle (SRP)
+        A single class should have a single responsibility.
+        e.g.
+            class UserManager {
+                public function createUser() { ... }
+                public function sendWelcomeEmail() { ... } // Email logic doesn't belong here
+            }
+    O - Open/Closed Principle (OCP)
+        Classes should be opened for extension (add new features by extending the existing code), closed for modification (dont change existing code that is already working)
+        e.g.
+            // ❌ Without OCP
+            class Payment {
+                public function pay($type, $amount) {
+                    if ($type === 'paypal') {
+                        // PayPal logic
+                    } elseif ($type === 'stripe') {
+                        // Stripe logic
+                    }
+                    // what if we add Razorpay? keep editing this 😫
+                }
+            }
+            ✅ With OCP — Flexible Design Using Interface
+            interface PaymentMethod {
+                public function pay($amount);
+            }
+            class Paypal implements PaymentMethod {
+                public function pay($amount) {
+                    echo "Paying ₹$amount via PayPal";
+                }
+            }
+            class Stripe implements PaymentMethod {
+                public function pay($amount) {
+                    echo "Paying ₹$amount via Stripe";
+                }
+            }
+            // Now, if you want to add Razorpay:
+            class Razorpay implements PaymentMethod {
+                public function pay($amount) {
+                    echo "Paying ₹$amount via Razorpay";
+                }
+            }
+    L - Liskov Substitution Principle (LSP)
+        Subclasses should be substitutable for their base classes. If class B is a subclass of A, you should be able to use B anywhere A is expected — without breaking the app.
+        e.g.
+            class Bird {
+                public function fly() {}
+            }
+            class Eagle extends Bird {
+                public function fly() { echo \"Flying\"; }
+            }
+            ✅ Eagle behaves like a Bird.
+            ❌ If Penguin extends Bird but can't fly → LSP is broken.
+    I - Interface Segregation Principle (ISP)
+        Clients shouldn't be forced to depend on methods they don't use. Prefer many small interfaces over one big one.
+        e.g.
+            ❌ Bad:
+            interface Worker {
+                public function work();
+                public function eat();
+            }
+            ✅ Good:
+            interface Workable { public function work(); }
+            interface Eatable { public function eat(); }
+
+            class Human implements Workable, Eatable {}
+            class Robot implements Workable {}
+
+    D - Dependency Inversion Principle (DIP)
+        Depend on abstractions, not concrete classes. Instead of hardcoding dependencies, rely on interfaces.
+        e.g.
+            ❌ Bad:
+            class OrderService {
+                public function __construct() {
+                    $this->payment = new Paypal(); // tightly coupled
+                }
+            }
+            ✅ Good:
+            class OrderService {
+                public function __construct(PaymentMethod $payment) {
+                    $this->payment = $payment;
+                }
+            }
+
+** TRAIT
+    traits allow to use resuable code in laguage like PHP where multiple inheritance is not supported
+    e.g. // ❌ ERROR: Cannot extend multiple classes
+    class C extends A, B { ... }
+    class C {
+        use Logger, Notifier;
+        ...
+    }
+
+** Dependency Injection
+    A design pattern where one object gives another object the things it needs (its dependencies) — instead of making the object create them itself.
+    e.g.
+        class UserController {
+            private $service;
+
+            // ❌ Without Dependency Injection (Tightly Coupled)
+            public function __construct() {
+                $this->service = new UserService();
+            }
+
+            // ✅ With Dependency Injection (Loosely Coupled)
+            public function __construct(UserService $service) {
+                $this->service = $service;
+            }
+
+            public function show() {
+                return $this->service->getUser();
+            }
+        }
+
+
+Factory || Strategy || Singleton
+
+** Interface || Abstract Class
+
+Static Binding + Late Static Binding
+
+How would you organize a large PHP codebase for maintainability
+
+self:: || static::
+
+
+
+
+
+
+
+
+
+
+
+===========================================================================================
+===============*************** 🧪 Testing & Best Practices ***************=================
+===========================================================================================
+
+How do you write unit tests in PHP? What tools do you use (e.g., PHPUnit)?
+
+Explain test doubles: stubs, mocks, fakes.
+
+How do you ensure your code is SOLID and testable?
+
+What is code coverage and why does 100% coverage not always mean good tests?
+
+
+
+
+
+
+
+
+
+
+
+==========================================================================
+==============*************** 🛡️ Security ***************=================
+==========================================================================
+
+** What are SQL Injections, how do you prevent them and what are the best practices?
+    a security vulnerability where a malicious user can inject arbitary SQL code into query - potentially giving them access to, or control over, your database.
+    Example of a Vulnerable PHP Code:
+        <?php
+            $username = $_GET['username'];
+            $password = $_GET['password'];
+
+            $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+            $result = mysqli_query($conn, $sql);
+        ?>
+
+        NOW, If someone enters this in the URL:
+        ?username=admin' --&password=anything
+
+        It becomes:
+        SELECT * FROM users WHERE username = 'admin' --' AND password = 'anything'
+        The -- starts a comment, so the password part is ignored
+        The attacker can log in as admin without a password
+
+    Prevention
+        1. Use Prepared Statements (Parameterized Queries)
+            mysqli >
+                $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+                $stmt->bind_param("ss", $username, $password);
+                $stmt->execute();
+            pdo >
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username AND password = :password");
+                $stmt->execute(['username' => $username, 'password' => $password]);
+        2. Validate and Sanitize User Input
+            $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+
+prevent XSS and CSRF attacks in PHP?
+
+Explain CSRF and how you protect against it in PHP apps.
+
+What is session fixation? How does PHP handle session security?
+
+How do you store and verify passwords securely in PHP? (e.g., password_hash)
+
+validate and sanitize user input in PHP
+
+prevent file upload vulnerabilities in PHP
+
+
+
+
+
+
+
+
+
+
+
+==========================================================================
+========************ 📈 PERFORMANCE & OPTIMIZATION ************===========
+==========================================================================
+
+How do you optimize/ performance improve large-scale PHP applications?
+
+What are common bottlenecks in PHP applications and how do you identify them?
+
+How would you scale a PHP application (horizontally vs vertically)?
+
+What are PHP OPcache and realpath_cache? How does OPcache improve PHP performance?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================================================================
+========************ ⚙️ Composer & Autoloading ************===========
+=======================================================================
+
+What is Composer? How does PSR-4 autoloading work?
+COMPOSER
+    Composer is a dependency manager for PHP.
+        📦 Install and manage libraries (like Laravel, Guzzle, PHPUnit)
+        🔄 Automatically load them using autoloading
+        📜 Keep track of packages and versions in a composer.json file
+
+What's the difference between require, require-dev, and autoload in composer.json?
+
+How do you create a reusable Composer package?
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================================================
+========************ 🔧 Database & Query Optimization ************===========
+==============================================================================
+
+How do you prevent N+1 query problems in PHP?
+
+Explain the difference between prepared statements and stored procedures.
+
+PDO + Why use PDO over mysqli?
+
+How do you handle transactions in PHP with PDO?
+
+How would you design a schema for millions of rows? Any indexing tips?
+
+How would you optimize a slow SQL query?
+
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================
+========************ 🧠 Scenario-Based / System Design ************===========
+============================================================================================
+
+Design a REST API in PHP — what tools, patterns, and structure would you use?
+
+How would you build a modular plugin-based architecture in PHP?
+
+How do you build multi-tenant apps in Laravel or plain PHP?
+
+How do you ensure code reusability across multiple PHP projects?
+
+Write a function to detect palindrome in PHP.
+
+Write a class in PHP implementing Singleton design pattern.
+
+How would you structure a large-scale PHP application?
+
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================
+========************ ⚙️ DevOps & Deployment ************===========
+============================================================================================
+
+How do you deploy PHP applications — CI/CD, Docker, GitHub Actions, etc.?
+
+How do you manage PHP versioning and dependencies in production?
+
+How do you use .env configuration securely in production environments?
+
+
+
+
+
+
+
+
+============================================================================================
+========================************ 🗂 PSR Standards ************===========================
+============================================================================================
+
+PSR
+    PHP Standards Recommendations, a coding style guide
+
+What are PSR-1, PSR-4, PSR-7, and PSR-12?
+
+What's the benefit of following PSR standards in large teams/projects?
+
+How do you use PSR-7 (HTTP message interfaces) in a custom microservice?
+
+
+
+
+
+
+
+
+=============================================================================================
+================************ 🤔 Behavioral / Experience-Based ************===================
+=============================================================================================
+
+Tell us about a time you optimized a slow PHP application.
+
+What was your biggest architecture challenge in PHP, and how did you solve it?
+
+How do you mentor junior developers in PHP best practices?
+
+How do you stay up to date with PHP trends and improvements?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
