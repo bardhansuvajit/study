@@ -206,13 +206,38 @@ What Are Screen Readers?
 What are ARIA roles and why are they used?
     ARIA (Accessible Rich Internet Applications) roles are used to improve accessibility by providing extra information to assistive technologies (like screen readers) — especially when semantic HTML alone is not enough.
 
+How does browser work when an script tag is found without/ with defer or async
+    When the browser loads an HTML page, it parses (reads) the HTML from top to bottom, building the page structure called DOM
+    If it encounters a script without defer or async, like <script src="script.js"></script>
+    the browser will:
+        Stop parsing > Download the script > Run the script > then continue parsing rest of the page
+    This "pause" is called parsing blocked.
+    It can delay the page from rendering, especially if the script takes time to load or execute.
+
 defer and async attributes on script tag
+    With defer or async:
+    HTML parsing continues while the script is downloading — ✅ non-blocking
+    So, the page can load faster 
+    
+    MAIN Difference
+    async Executes as soon as it's downloaded (possibly before HTML finishes parsing)	
+    defer Executes after HTML parsing is complete
+
+    OTHER Differences
+    | Feature                            | No Attribute               | `defer`            | `async`               |
+    | ---------------------------------- | -------------------------- | ------------------ | --------------------- |
+    | Download time                      | Asynchronous               | Asynchronous       | Asynchronous          |
+    | Parsing (HTML page read) blocked   | Yes                        | No                 | No                    |
+    | ***Execution time                  | Immediately after download | After HTML parsing | As soon as downloaded |
+    | Execution order (multiple scripts) | In order                   | In order           | Not guaranteed        |
+    | DOM Ready Dependency               | Shouldn't depend           | Safe               | Not safe              |
+
 
 What is the shadow DOM and how does it work with web components?
+    A built-in browser feature that lets you encapsulate (unaffected) a part of your HTML, CSS, and JavaScript so it's isolated from the rest of the page, by creating custom HTML elements — like your own <my-button> or <user-card>.
+    You use Shadow DOM by attaching it to a custom HTML element using JavaScript.
 
-
-
-
+    Web components consist of - Custom elements + SHadow DOM + HTML templates
 
 
 
@@ -241,8 +266,9 @@ Limitations of CSS
 Highest priority CSS/ CSS specificity
     Inline > Internal > External
     CSS specificity determines which style rule is applied when multiple rules target the same element.
+        !important              Overrides specificity
         Inline style            1000 (specificity value)
-        ID selector             100
+        #ID                     100
         Class selectors (.class), attribute selectors ([type="text"]), pseudo-classes (:hover) - 10
         Type selectors (div, p), pseudo-elements (::before) - 1
         Universal selector (*), combinators (+, >, ~), and negation (:not()) - 0
@@ -283,8 +309,14 @@ Pseudo-Elements & Pseudo-Classes
     }
 
 Scroll Snap
+    CSS feature for creating smooth, precise scrolling experiences (especially useful for carousels, sliders, and full-page scroll layouts).
+    ✅ Make elements "stick" to specific positions when scrolling (horizontally or vertically).
 
 :has() Selector
+    lets you style an element based on what it contains.
+    div:has(img) {
+        border: 2px solid green;
+    }
 
 Box Model
     box model describes how elements are structured and spaced on webpage. like content, padding, border, margin
@@ -315,25 +347,238 @@ Contain, Will-change, Compositing
     will-change property tells browser that a certain property of an element will change soon
     Compositing is not a CSS property, but a rendering process inside the browser. 
 
-Flexbox || Grid
+Flexbox || Grid - 2 powerful CSS Layout
+    | Feature                  | Flexbox                           | Grid                                |
+    | ------------------------ | --------------------------------- | ----------------------------------- |
+    | **Layout type**          | One-dimensional (row *or* column) | Two-dimensional (row *and* column)  |
+    | **Best for**             | Aligning content                  | Designing entire page sections      |
+    | **Item placement**       | Flow-based (auto in order)        | Grid-based (can place anywhere)     |
+    | **Control over layout**  | Limited                           | High precision                      |
+    | **Responsive design**    | Easy stacking                     | Great for defining responsive zones |
+    | **Overlapping elements** | Difficult                         | Easy with `grid-area`               |
 
 Transitions and animations
+    | Feature           | **Transition**                           | **Animation**                                   |
+    | ----------------- | ---------------------------------------- | ----------------------------------------------- |
+    | Trigger           | Needs a state change (e.g. hover, class) | Can run **automatically** or on loop            |
+    | Control           | Simple: start to end                     | More complex: **multiple steps** with keyframes |
+    | Keyframes         | ❌ No                                     | ✅ Yes                                           |
+    | Looping           | ❌ No                                     | ✅ Yes with `animation-iteration-count`          |
+    | Start/End control | Limited                                  | Full control (timing, delay, direction)         |
 
 How does the cascade work in CSS?
+    The cascade is the process by which the browser decides which CSS rule to apply when multiple rules match the same element.
+    Follow Specificity
 
 center a div vertically and horizontally using Flexbox
+    <div class="flex-container">
+        <div class="centered-box">I'm centered!</div>
+    </div>
+
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: center; /* horizontal centering */
+            align-items: center;     /* vertical centering */
+            height: 100vh;           /* full viewport height */
+            background: #f0f0f0;
+        }
+        .centered-box {
+            width: 20px;
+            height: 20px;
+            background: #4caf50;
+        }
+    </style>
 
 pure CSS tooltip
+    <div class="tooltip">
+        Hover me
+        <span class="tooltip-text">This is a tooltip</span>
+    </div>
+
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 140px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+
+            position: absolute;
+            bottom: 125%; /* Position above */
+            left: 50%;
+            transform: translateX(-50%);
+            
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        /* Show the tooltip on hover */
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 
 How do you handle browser compatibility issues in CSS?
+    use @supports
+        @supports (display: grid) {
+            .layout {display: grid;}
+        }
+        @supports not (display: grid) {
+            .layout {display: flex;}
+        }
+    use fallback
+        .button {
+            background: linear-gradient(to right, #f06, #4a90e2); /* modern */
+            background: #f06; /* fallback for older browsers */
+        }
+    Use Autoprefixers
+        -webkit-transform/ -moz-transition/ -ms-grid
 
 What is the purpose of CSS preprocessors like SASS or LESS?
+    to manage CSS easier, faster, and more maintainable, especially in large projects. Features like,
+        1. Write reusable values for colors, fonts, spacing, etc. $primary-color: #4caf50; .button {background-color: $primary-color;}
+        2. Organize CSS more like HTML structure. 
+        div {
+            ul {
+                a {
+                    color :white;
+                }
+            }
+        }
+        3. Mixins - Reusable blocks of styles, like functions. 
+        @mixin button-style {
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .button {
+            @include button-style;
+        }
+        4. Inheritance (@extend)
+        5. Math and Functions
 
 Have you used tools like PostCSS, Autoprefixer, or PurgeCSS?
+    these tools are used to make CSS more powerful, cleaner, and compatible across browsers.
+    1. PostCSS - The CSS Transformer Engine
+        processes & modify CSS before it's sent to the browser
+    2. Autoprefixer - Browser Compatibility Helper
+        adds correct vendor prefixes to CSS automatically (like -webkit-, -ms-, etc.).
+    3. PurgeCSS - Remove Unused CSS
+        scans HTML, JS, and templates to find out which CSS classes you actually use, and removes everything else.
 
-How do you manage CSS in large-scale applications?
 
 Explain the difference between mobile-first and desktop-first design.
+    📱 Mobile-First Design
+    You start designing for the smallest screen (mobile), then progressively enhance for larger devices like tablets and desktops.
+        /* Mobile styles (default) */
+        body {
+            font-size: 14px;
+        }
+        /* Larger screens — enhance */
+        @media (min-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+        }
+
+    💻 Desktop-First Design
+    You start with large screen styles, then use media queries to scale down for smaller devices.
+        /* Desktop styles (default) */
+        body {
+            font-size: 18px;
+        }
+        /* Smaller screens — override */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+        }
+
+    Use **Mobile-First** when:
+    | ------------------------------------------- |
+    ✅ Building modern, responsive web apps
+    ✅ Prioritizing mobile users (e.g., eCommerce, news)
+    ✅ You want better performance & accessibility
+
+    Use **Desktop-First** when:             
+    | ------------------------------------------- |
+    ✅ You're updating an old desktop-only app
+    ✅ Mobile traffic is negligible
+    ✅ You need rich, complex desktop interfaces
+
+
+How to properly manage CSS in large-scale applications?
+    1. Use a Scalable CSS Architecture
+        BEM (Block Element Modifier)
+        Naming convention for clarity and reusability
+            <div class="card card--highlight">
+                <h2 class="card__title">Title</h2>
+                <p class="card__description">Details</p>
+            </div>
+
+        OOCSS (Object-Oriented CSS)
+        Separate structure from look, like object-oriented programming does with behavior and data.
+            <div class="media box bg-light">
+                <img src="..." class="media__img">
+                <div class="media__body">Text</div>
+            </div>
+
+        SMACSS (Scalable and Modular)
+        Classify styles by role (base, layout, etc.)
+            /* base/_typography.scss */
+            body { font-family: sans-serif; }
+
+            /* layout/_grid.scss */
+            .l-grid { display: grid; }
+
+            /* module/_button.scss */
+            .btn { padding: 10px; }
+
+            /* state/_visibility.scss */
+            .is-hidden { display: none; }
+
+        Atomic CSS / Utility-First (e.g., Tailwind)
+        Small utility classes (no custom CSS per component)
+            <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+                Click Me
+            </button>
+
+
+    2. Organize CSS Codebase (modular folder structure)
+        /styles
+            ├── base/         ← Reset, typography
+            ├── components/   ← Buttons, cards, inputs
+            ├── layout/       ← Grids, header, footer
+            ├── pages/        ← Page-specific styles
+            ├── utils/        ← Mixins, variables, helpers
+            main.scss
+
+    3. Use Preprocessors or PostCSS
+    4. Follow Naming Conventions
+        Use BEM, camelCase, or kebab-case — but stick to one.
+        Avoid generic class names like .box, .style1, .foo.
+    5. Lint and Validate Your CSS
+        stylelint - Enforces consistent CSS style rules
+        Prettier - Formats CSS uniformly
+    6. Optimize CSS for Performance
+        PurgeCSS: Remove unused styles
+        Minify with cssnano
+    7. Treat styles as components
+        each UI element should have its own self-contained style.
+    8. Use a Design System or Component Library
+        Helps maintain consistent look & feel across the app.
+        Create reusable UI components (buttons, forms, cards)
+    9. Documentation & Team Standards
+        Write a style guide for how to name, structure, and write CSS
+        Use code reviews to enforce consistency
 
 
 
