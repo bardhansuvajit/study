@@ -1,24 +1,402 @@
 ===================================================================================================
-=================*************** 🔧 Core Concepts ***************===================
+=================*************** 🔧 Core Concepts ***************=================================
 ===================================================================================================
 
 What is the difference between hasOne, belongsTo, hasMany, belongsToMany in Eloquent?
+    | `hasOne`        | One-to-one, current model **owns** another. (e.g. User hasOne Profile)
+    | `belongsTo`     | One-to-one, current model **belongs** to another. (e.g. Profile belongsTo User)
+    | `hasMany`       | One-to-many, one model has multiple related. (e.g. User hasMany Posts)
+    | `belongsToMany` | Many-to-many with pivot table. (e.g. User belongsToMany Roles)
 
 Explain Laravel middleware and use cases.
+    filter HTTP requests. Use cases:
+        Authentication check
+        Blocking under maintenance
+        Setting language or timezone
+        Validating input globally
 
 What's the difference between middleware and guards in Laravel?
+    | Feature  | Middleware                             | Guards                                  |
+    | -------- | -------------------------------------- | --------------------------------------- |
+    | Role     | General request filter                 | Handles **how** users are authenticated |
+    | Layer    | Runs **around routes**                 | Runs **inside auth system**             |
+    | Examples | `auth`, `throttle`, `cors`, `verified` | `web`, `api`, `sanctum`, `passport`     |
 
 How do Laravel queues work?
+    Laravel queues let you delay time-consuming tasks so your app feels fast.
+    How it works:
+        You dispatch a job (like sending email)
+        Laravel adds it to a queue (DB, Redis, SQS, etc.)
+        A queue worker picks it up in the background
 
 What are service providers in Laravel?
+    Service providers are the bootstrappers of a Laravel app.
+    They register services, bind classes into the container, and configure packages.
+    EXAMPLE
+        Registering custom helper classes
+        Binding interfaces to implementations
+        Setting global configurations
 
 What is the difference between Auth::user() and auth()->user()?
+    | `Auth::user()`   | **Facade** based static access
+    | `auth()->user()` | **Helper function**, more flexible and chainable
 
 How does Laravel's IOC container work?
+    Laravel's IoC (Inversion of Control) container is a system that manages class dependencies.
+    WHAT IT DOES
+        Automatically injects needed classes into controllers, jobs, etc.
+        You define dependencies in constructors, Laravel resolves them.
 
 How do you manage event-driven architecture in Laravel (events, listeners, queues)?
+    Event = Something happened (e.g. UserRegistered)
+    Listener = Handle what to do (e.g. SendWelcomeEmail)
+
+    EXAMPLE
+    php artisan make:event UserRegistered
+    php artisan make:listener SendWelcomeEmail --event=UserRegistered
+
 
 How does Laravel handle query caching or route caching?
+    query caching
+        $users = Cache::remember('active_users', 60, function () {
+            return User::where('active', 1)->get();
+        });
+    route caching
+        php artisan route:cache
+
+What is facade
+    facade is a shortcut to access a class or service in the Laravel service container
+    ✅ Common Laravel Facades:
+        | `Cache`     | `Illuminate\Cache\CacheManager`       |
+        | `DB`        | `Illuminate\Database\DatabaseManager` |
+        | `Auth`      | `Illuminate\Auth\AuthManager`         |
+        | `Route`     | `Illuminate\Routing\Router`           |
+        | `Log`       | `Illuminate\Log\LogManager`           |
+        | `Validator` | `Illuminate\Validation\Factory`       |
+
+
+register || boot
+    register() → “Set up services”
+    boot() → “Start services once everything is ready”
+
+
+
+
+
+
+
+
+
+===================================================================================================
+=================*************** 🛠️  Advanced Laravel Features ***************====================
+===================================================================================================
+
+How does Laravel's job batching and chaining work?
+    Job Chaining
+        Run multiple jobs one after another, in a defined order.
+        The next job starts only after the previous one completes successfully.
+        Bus::chain([
+            new JobA,
+            new JobB,
+            new JobC,
+        ])->dispatch();
+
+    Job Batching
+        Run multiple jobs in parallel as a batch.
+        Bus::batch([
+            new JobA,
+            new JobB,
+            new JobC,
+        ])->then(fn() => Log::info('Batch complete'))->dispatch();
+
+
+What is Horizon? When and why would you use it?
+    Horizon is Laravel's dashboard for queue monitoring.
+    Built-in UI to monitor jobs, failed jobs, throughput, etc.
+
+How does Laravel's Gate differ from Policy?
+    | Feature   | Gate                                | Policy                                                |
+    | --------- | ----------------------------------- | ----------------------------------------------------- |
+    | Purpose   | Simple, closure-based authorization | Organized, class-based authorization                  |
+    | Usage     | Good for one-off checks             | Good for resource-based logic (like Post, User, etc.) |
+    | Structure | Defined in `AuthServiceProvider`    | Each model gets its own Policy class                  |
+
+
+What are Observer classes in Laravel and when do you use them?
+    Observers let you hook into model lifecycle events like:
+    creating, updating, deleted, restored, etc.
+    EXAMPLE
+        class UserObserver {
+            public function creating(User $user) {
+                $user->uuid = Str::uuid();
+            }
+        }
+        // Register in service provider
+        User::observe(UserObserver::class);
+
+
+What's the role of app/Providers folder in Laravel?
+    This folder contains Service Providers - classes that bootstrap and register parts of your application.
+
+
+How does Laravel handle Dependency Injection?
+    Laravel uses a powerful IoC (Inversion of Control) container:
+        It automatically injects dependencies into classes or methods
+        It resolves and provides the needed class by type-hinting
+
+
+How do you write custom Artisan commands?
+    Create custom command
+        php artisan make:command SendReport
+    Implement logic in app/Console/Commands/SendReport.php
+        public function handle()
+        {
+            // code logic here
+        }
+    Laravel 11/ 12 auto register commands, if not register it in app/Console/Kernel.php
+
+
+What are macros in Laravel and where can you define them?
+    Macros allow you to extend Laravel classes (like Collections, Routes, etc.) with your own methods.
+    Response::macro('caps', fn($value) => Response::make(strtoupper($value)));
+    You can define them in:
+        A Service Provider
+        A custom MacroServiceProvider
+
+
+How do you create a custom validation rule?
+    Generate
+        php artisan make:rule Uppercase
+    Logic
+        public function passes($attribute, $value)
+        {
+            return strtoupper($value) === $value;
+        }
+    use in validation
+        $request->validate([
+            'name' => ['required', new Uppercase]
+        ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================================
+=================*************** ⚙️  Performance & Optimization ***************===================
+===================================================================================================
+
+How do you use route caching, config caching, and view caching?
+    php artisan route:cache
+    php artisan config:cache
+    php artisan view:cache
+
+
+How does Laravel's query builder compare with raw SQL in performance?
+    Laravel's Query Builder                 | Raw SQL
+    --------------------------------------------------------------------------------------------------
+    Safer (prevents SQL injection)          | Slightly faster (no abstraction)
+    More readable                           | Less readable and harder to maintain
+    Slightly slower due to abstraction      | Use when performance is critical or for complex queries
+
+
+How do you prevent N+1 problems in Laravel?
+    N+1 = When you run one query to get records, and N queries to get their relations
+    FIX: Use Eager Loading
+    Example (Bad - N+1):
+        $posts = Post::all();
+        foreach ($posts as $post) {
+            echo $post->author->name;               // causes N queries
+        }
+    Example (Good - Eager load):
+        $posts = Post::with('author')->get();       // 1 query
+
+
+How would you optimize large Eloquent queries?
+    Use select() to fetch only needed columns
+    Use chunk() or cursor() for large datasets
+    Use indexes on commonly filtered columns
+    Use whereHas(), withCount() for relations efficiently
+    Avoid unnecessary relations or deep nesting
+    Consider caching results
+
+
+What tools can you use to profile a Laravel application?
+    Laravel Debugbar (local dev)
+    Clockwork
+    Telescope (detailed insights into requests, queries, etc.)
+    Xdebug + profiler
+    Blackfire.io (production-grade profiler)
+    Laravel Telescope (official, great for queues, mail, jobs)
+
+
+What is the difference between eager loading, lazy loading, and lazy eager loading?
+    1 LAZY LOADING
+        Loads relation when you access it, one-by-one — can cause N+1 issues.
+            $posts = Post::all();
+            foreach ($posts as $post) {
+                echo $post->user->name;
+            }
+        What happens here:
+            Laravel runs 1 query to fetch all posts.
+            Then for each post, it runs another query to get the user (so, N more queries).
+            If you have 100 posts, it runs 101 queries total — this is the N+1 query problem.
+    2 EAGER LOADING
+        Loads everything upfront, with JOIN-like queries, before you access it.
+            $posts = Post::with('user')->get();
+            foreach ($posts as $post) {
+                echo $post->user->name;
+            }
+        What happens here:
+            Laravel runs 2 queries:
+            One to get all posts
+            One to get all the users for those posts
+            Efficient — no matter how many posts, just 2 queries total
+    3 LAZY EAGER LOADING
+        First load the parents, then load relations later, all at once.
+            $posts = Post::where('category', 'News')->get();
+            // Later in code
+            $posts->load('user');
+            foreach ($posts as $post) {
+                echo $post->user->name;
+            }
+        What happens here:
+            1st query: get the posts
+            2nd query (from load()): get all users for those posts
+            🧠 Useful when:
+                You didn't eager load at the beginning
+                You decide to load relations dynamically later
+
+
+How can you cache database results effectively in Laravel?
+    $users = Cache::remember('active_users', 60, function () {
+        return User::where('active', 1)->get();
+    });
+
+
+
+
+
+
+
+
+
+===================================================================================================
+=================*************** 🧪 Testing & Quality ***************===================
+===================================================================================================
+
+How do you write unit tests and feature tests in Laravel using PHPUnit?
+
+What are test doubles? How do you use mocking in Laravel?
+
+How does Laravel handle database migrations and seeders in test environments?
+
+What is RefreshDatabase and DatabaseMigrations in Laravel testing?
+
+How do you test queued jobs and events?
+
+How can you test APIs using Laravel's Http testing methods?
+
+
+
+
+
+
+
+
+
+
+===================================================================================================
+=================*************** 🔐 Security & Best Practices ***************===================
+===================================================================================================
+
+How do you protect against SQL injection in Laravel?
+    Laravel uses PDO prepared statements by default, which automatically escape input.
+    User::where('email', $email)->first();
+    OR
+    DB::select('SELECT * FROM users WHERE email = ?', [$email]);
+
+
+What are CSRF tokens and how does Laravel handle them?
+    CSRF (Cross-Site Request Forgery) is when an attacker tricks a user into submitting unwanted actions.
+    Laravel protects your app by:
+        Automatically adding a CSRF token to each form.
+        Verifying the token on POST, PUT, PATCH, DELETE requests.
+
+
+How do you securely manage .env files and sensitive configs?
+    .env should never be committed to Git — use .gitignore.
+    On production, use server-level env variables or deploy-time secrets.
+    Use config caching (php artisan config:cache) for performance and consistency.
+    Laravel reads sensitive values via env() only inside config files.
+    Use config('services.mailgun.key') in app logic — not env() directly.
+
+
+What is form request validation? How is it better than validating inside controllers?
+    Form Request Validation moves validation logic to a dedicated class.
+        php artisan make:request StoreUserRequest
+        Then in StoreUserRequest.php >>
+            public function rules()
+            {
+                return ['email' => 'required|email|unique:users'];
+            }
+        In Controller
+            public function store(StoreUserRequest $request)
+            {
+                // Validated already!
+            }
+        ✅ Cleaner controllers, reusable rules, better organization.
+
+
+What are the best practices for handling file uploads?
+    Use the store() or storeAs() methods with validation:
+        $request->validate(['avatar' => 'required|image|max:2048']);
+        $path = $request->file('avatar')->store('avatars');
+    Store outside public folder (e.g., storage/app) and use symlink (php artisan storage:link) for access.
+    Rename files using hashName() to avoid overwriting.
+    Scan MIME types, not just extensions.
+    ✅ Store paths in the database, not the actual file contents.
+
+
+How would you encrypt and decrypt data in Laravel?
+    Laravel uses AES-256 encryption with a secure key from .env (APP_KEY).
+    ENCRYPT
+        $encrypted = encrypt('secret data');
+    DECRYPT
+        $decrypted = decrypt($encrypted);
+
+
+What's the role of Laravel Sanctum and Passport?
+    Both are used for API authentication, but serve different use cases:
+    🔐 Sanctum:
+        Best for SPA or mobile APIs
+        Lightweight
+        Uses token-based auth or cookie-based auth
+        Easy setup
+    🔐 Passport:
+        Full OAuth2 implementation
+        Best when dealing with third-party apps, scopes, or token authorization servers
+        More complex
+
+
+
+
+
+
+
+
+
+
+
 
 
 
