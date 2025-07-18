@@ -101,12 +101,12 @@ Garbage Collection in JS uses Mark and Sweep algorithm, when reference to a vari
 
 
 ** MEMORY LEAKS
-create an infinite loop, that would fill up our memory & browser will crash. as nothing is popped off the stack. 
-Common Memory Leaks
-1. Using too many GLOBAL VARIABLES, all our memory will get used up
-2. Keep adding EVENT LISTENERS, when using too many and not removed
-3. OBJECTS IN SETINTERVAL, they will never be garbage-collected, unless removed itself
-Remember, memory is limited. JS runs and stores memory in CALL STACK & MEMORY HEAP. Do not have STACK OVERFLOW & MEMORY LEAK 
+    create an infinite loop, that would fill up memory & browser will crash. as nothing is popped off the stack. 
+    Common Memory Leaks
+    1. Using too many GLOBAL VARIABLES, all our memory will get used up
+    2. Keep adding EVENT LISTENERS, when using too many and not removed
+    3. OBJECTS IN SETINTERVAL, they will never be garbage-collected, unless removed itself
+    Remember, memory is limited. JS runs and stores memory in CALL STACK & MEMORY HEAP. Do not have STACK OVERFLOW & MEMORY LEAK 
 
 
 ** SINGLE THREADED PROGRAMMING LANGUAGE (SYNCHRONOUS)

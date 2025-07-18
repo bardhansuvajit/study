@@ -2,25 +2,105 @@
 ===================*************** 🔹 Core JavaScript (ES6+) ***************======================
 ===================================================================================================
 
-Explain the difference between var, let, and const.
+VAR vs LET vs CONST
+    var - function-scoped variables, that can be hoisted. Can be redeclared and updated
+    let - block scoped variables, that can be reassigned, cannot be hoisted. Can be updated but not redeclared in the same scope.
+    const - block scoped variables, that are constant & cannot be reassigned, cannot be hoisted. Cannot be redeclared or reassigned (but object/array properties can be modified).
+
 
 What are closures? How do they work?
+    Closure allows inner functions to access the outer scope of a function. It makes it possible for a function to have "private" variables.
+    EXAMPLE
+        function outer() {
+            let x = 10;
+            return function inner() {
+                console.log(x); // Remembers 'x' even after outer() finishes
+            };
+        }
+        const closureFn = outer();
+        closureFn(); // Output: 10
+
 
 What is hoisting and how does it affect variable/function declarations?
+    Move all variables and function declarations to the top of current scope. 
+    Functions are hoisted first, then variables. Functions are fully hoisted whereas, variables are partially. Variables are set as undefined first.
+
+    var is hoisted and initialized as undefined
+    With let and const, you get a ReferenceError
+
 
 What is the difference between shallow copy and deep copy in JavaScript?
+    Shallow Copy: Copies top-level properties, but nested objects are still referenced.
+        Methods: Object.assign(), spread operator (...).
+    Deep Copy: Creates a completely independent copy (including nested objects).
+        Methods: JSON.parse(JSON.stringify(obj)), libraries like Lodash.
+    EXAMPLE
+        const obj = { a: 1, nested: { b: 2 } };
+        const shallowCopy = { ...obj }; // nested is shared
+        const deepCopy = JSON.parse(JSON.stringify(obj)); // Fully independent
+
 
 Explain event delegation and its advantages.
+    when you attach a single event listener to a parent, and use event.target to handle child interactions.
+    EXAMPLE
+        document.getElementById('list').addEventListener('click', function(e) {
+            if (e.target.tagName === 'LI') {
+                console.log('Clicked:', e.target.textContent);
+            }
+        });
+
 
 What is the Temporal Dead Zone (TDZ)?
+    The TDZ is the time between entering a block and the actual declaration of a let or const variable — where accessing it throws a ReferenceError.
+    console.log(a); // ❌ ReferenceError
+    let a = 10;
+
 
 What is the difference between == and === in JavaScript?
+    == (Loose Equality): Checks value after type coercion (e.g., 5 == "5" → true).
+    === (Strict Equality): Checks value and type (e.g., 5 === "5" → false).
+
 
 What are higher-order functions? Give examples.
+    Functions that take a function as an argument and/or return a function.
+    EXAMPLE
+        // 1. Accepts function
+        function higherOrder(callback) {
+            callback();
+        }
+        // 2. Returns function
+        function multiplier(factor) {
+            return (x) => x * factor;
+        }
+        // Built-in examples: map(), filter(), reduce()
+
 
 Explain JavaScript prototypal inheritance.
+    Objects inherit properties/methods from a prototype (a template object).
+    EXAMPLE
+        function Person(name) {
+            this.name = name;
+        }
+        Person.prototype.greet = function() { console.log(`Hi, ${this.name}`); };
+        const john = new Person("John");
+        john.greet(); // Inherits from Person.prototype
+
 
 Difference between call, apply, and bind.
+    All three change this context for a function:
+
+    call: Invokes immediately, takes arguments individually.
+    func.call(context, arg1, arg2);
+
+    apply: Invokes immediately, takes arguments as an array.
+    func.apply(context, [arg1, arg2]);
+
+    bind: Returns a new function with bound this (does not invoke immediately).
+    const boundFn = func.bind(context);
+    boundFn();
+
+
+
 
 
 
@@ -30,15 +110,62 @@ Difference between call, apply, and bind.
 ===================*************** 🔹 Asynchronous JavaScript ***************======================
 ===================================================================================================
 
+XML in AJAX
+    AJAX = Asynchronous JavaScript and XML
+    Initially, AJAX used XML to send/receive structured data from the server without reloading the page.
+    Example: A browser sends a request, the server responds with XML data, JavaScript reads it using the XMLHttpRequest object.
+    ✅ JSON (JavaScript Object Notation) has mostly replaced XML because:
+
+
 What is the event loop? Explain with examples.
+    EVENT LOOP checks if the callstack is empty & entire JS file is read once & if its empty, it pushes it into 'Call Stack'
+    simply monitors the call stack & the callback queue
+    HOW DOES IT WORK
+        1. JS runs synchronously first (line by line).
+        2. Async functions (like setTimeout, Promises, etc.) are handed off to the Web APIs (handled by browser/Node.js).
+        3. The Call Stack executes all synchronous code and becomes empty.
+        4. Then 
+            Microtasks (Promises etc.) go to the Microtask Queue
+            Macrotasks (timeouts etc.) go to the Task Queue
+        4. Then Event Loop checks:
+            "Is the Call Stack empty?"
+        5. If yes, then runs:
+            → ALL microtasks
+            → ONE macrotask
+            → ALL microtasks again
+            → NEXT macrotask
+            → ...
+    Why It Runs “ALL microtasks again”:
+        Because microtasks can be added at any time, especially from inside a macrotask.
+
 
 What are microtasks and macrotasks in the event loop?
+    Microtasks >>   Promise.then, queueMicrotask. Executed first (before next render)
+    Macrotasks >>   setTimeout, setInterval, I/O. Executed after all microtasks
+
 
 Difference between Promise.then, async/await, and callbacks.
+    | Feature        | Callbacks              | Promises (`.then`)  | `async/await`                |
+    | -------------- | ---------------------- | ------------------- | ---------------------------- |
+    | Syntax         | Function in function   | Chainable `.then()` | Syntactic sugar for Promises |
+    | Readability    | Harder (callback hell) | Better              | Best (linear style)          |
+    | Error handling | Try/catch hard         | `.catch()`          | `try/catch` easily           |
+    | Control Flow   | Nested logic           | Chainable flow      | Top-down flow                |
+
 
 How does Promise.all, Promise.race, Promise.allSettled work?
 
 What is a race condition and how do you prevent it in async JS code?
+    A race condition occurs when multiple async operations depend on shared data, and the outcome depends on timing.
+    EXAMPLE PROBLEM
+        let loggedIn = false;
+        fetch('/login').then(() => {
+            loggedIn = true;
+        });
+        fetch('/logout').then(() => {
+            loggedIn = false;
+        });
+
 
 
 
@@ -49,10 +176,52 @@ What is a race condition and how do you prevent it in async JS code?
 ===================================================================================================
 
 How does the DOM event propagation work? (capture, target, bubble)
+    DOM Event Propagation is the process that determines the order in which event handlers are called when an event (like a click) happens on nested HTML elements.
+    It happens in 3 phases:
+        1. Capturing Phase/ Capture/ Trickle Down
+            The event starts from the root (window/document) and goes down the DOM tree to the target element.
+            If you attach an event listener with { capture: true }, it runs during this phase.
+        2. Target Phase
+            The event reaches the target element (the one that was actually clicked or interacted with).
+            Handlers on this element are run.
+        3. Bubbling Phase/ Bubble Up
+            After the event hits the target, it bubbles back up the DOM tree from the target to the root.
+            By default, most event listeners trigger in this phase.
+    EXAMPLE
+        <div id="outer">
+            <button id="inner">Click Me</button>
+        </div>
+
+        <script>
+            outer.addEventListener("click", () => console.log("outer"), true); // capture
+            inner.addEventListener("click", () => console.log("inner"));       // bubble
+        </script>
+
+    OUTPUT
+        outer inner
+        ✅ outer runs first because it's in capture phase,
+        ✅ inner runs in the bubbling phase.
+    You can control event flow using:
+        event.stopPropagation() → stops further propagation.
+        event.preventDefault() → prevents default browser behavior.
+
 
 How do you optimize DOM manipulation for performance?
+    DOM manipulation is how you make dynamic changes to a web page after it loads.
+    OPTIMIZE
+        Store DOM references in variables (  const button = document.querySelector("#btn");  )
+        Group multiple changes together instead of one by one.
+        Libraries like React use a Virtual DOM to reduce direct DOM updates.
+        innerHTML is fast but re-renders everything inside — avoid using it often.
+        Use textContent, or DOM methods (createElement, appendChild) for small changes.
+        Use CSS animations/transitions instead of JavaScript-based animation when possible — they're optimized by the browser.
+
 
 Explain the difference between document.querySelector and getElementById.
+    getElementById() targets only id || Any valid CSS selector
+    return type element/ null || first matching element
+    getElementById() is slighty faster
+
 
 
 
@@ -63,6 +232,20 @@ Explain the difference between document.querySelector and getElementById.
 ======================================================================================================
 
 What are memory leaks in JavaScript? How do you identify and fix them?
+    create an infinite loop, that would fill up memory & browser will crash. as nothing is popped off the stack. 
+    Common Memory Leaks
+        1. Using too many GLOBAL VARIABLES, all our memory will get used up
+        2. Keep adding EVENT LISTENERS, when using too many and not removed
+        3. OBJECTS IN SETINTERVAL, they will never be garbage-collected, unless removed itself
+    Remember, memory is limited. JS runs and stores memory in CALL STACK & MEMORY HEAP. Do not have STACK OVERFLOW & MEMORY LEAK
+    How Do You Identify Memory Leaks?
+        1. Watch for page freezing & alowing down
+        2. Check DevTools -> Memory tab & take snapshot
+        3. Look for Detached DOM Nodes - These are elements that were removed from the DOM but still exist in memory because something (like an event listener or closure) is referencing them.
+    FIX
+        1. Avoid Global Variables
+
+
 
 Explain debouncing vs throttling with use cases.
 
