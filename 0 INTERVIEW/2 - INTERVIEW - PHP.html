@@ -201,22 +201,97 @@ What tools do you use for profiling and debugging PHP code?
 =================*************** 🧱 OOP & Architecture ***************===================
 ==========================================================================================
 
+Class & Object
+    Class is a template/ blueprint of an object.
+    Object is an example/ instance of a class.
+
+PUBLIC & `this` keyword
+    public is a visibility keyword. means the properties & methods can be access from anywhere
+    this refers to current object. Used to access properties & methods inside class
+
+Constructor & Destructor
+    CONSTRUCTOR is a function that runs automatically when an instance of a class is created/ when an object is created
+        Used to set initial values
+    DESTRUCTOR is a function that runs automatically when an object is destroyed
+        Used to close files/ DB connection
+
 pillars of OOP. with Examples
     INHERITANCE (EXTENDS)
-        access properties & methods (public & protected) from one class to another class.
+        access properties & methods (public & protected) from one class to another.
         class class2 extends class1 {...}
-    ENCAPSULATION (ACCESS MODIFIER)
-        Encapsulation means bundling similar data into a structured unit/ into a capsule format
+        * if there are constructor in both classes (parent & child), child class has higher priority. Same thing goes for when both have same method name.
+        * parent::__construct() - When we use parent::__construct() inside a child class constructor, it calls the parent class's constructor. So both parent and child constructors run
+        * parent::anotherMethod() - when parent & child classes have same name, only child class's method runs (Method Overriding) but if you want to run parent class's method, use this inside child class's method
+        * :: -> Scope Resolution Operator - used to access class constants, static properties, and static methods, or refer to a parent class.
+        * Method Overriding - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
+        * Method Overloading - same method name with different number of arguments — but PHP doesn't support this directly.
+        * final keyword - Cannot Be Extended. used to prevent inheritance/ prevent method overriding. final class A {...} && final public function someFunction() {...}
+    ENCAPSULATION (ACCESS MODIFIER, Getters & Setters)
+        bundling similar data into a structured unit/ into a capsule format
         1. public       >> properties/ methods can be accessed inside/ outside of class scope. This is default
         2. protected    >> properties/ methods can be accessed inside of the class scope & its inherited classes
         3. private      >> properties/ methods can be accessed ONLY inside of the class scope
+        EXAMPLE
+            ❌ Without Encapsulation (Bad Practice):
+            class BadBank { public $balance = 0; }
+            $acc = new BadBank();
+            $acc->balance = -9999; // ❌ no control, dangerous!
+
+            ✅ Example (Full):
+            class BankAccount {
+                private $balance = 0;
+                public function deposit($amount) {
+                    if ($amount > 0) { $this->balance += $amount; }
+                }
+
+                public function getBalance() { return $this->balance; }
+            }
+
+            $acc = new BankAccount();
+            $acc->deposit(1000);
+            echo $acc->getBalance(); // ✅ 1000
+
+        * Why Encapsulation - You decide what can be accessed or modified
+        * Hiding internal state & behavior of an object, and only exposing controlled access via methods.
+        * Internal logic can be changed without affecting others
     ABSTRACTION (Abstract class)
         Abstract means partial/ incomplete. Abstract class contains atleast one Abstract/ incomplete function (others maybe regular functions).
-        abstract class Class1 {
-            abstract function test();
-        }
+        EXAMPLE
+            abstract class AbstractClass {
+                abstract protected function func1($string);
+            }
+            class New1 extends AbstractClass {
+                public function func1($string) {
+                    return 'here: '.$string;
+                }
+            }
+            $classNew = new New1();
+            echo $classNew->func1('test name');
+        * Why Incomplete ? because, abstract function must be declared but not called/ instantiated
+        * Objects can not be created from an Abstract class
+        * Inherited/ child class must contain abstract function
+        * declared using the `abstract` keyword
+        * Any class that extends an abstract class must either implement all of its abstract methods or itself be declared abstract
+        * Abstract classes can also contain non-abstract (concrete) methods but must contain at leats one abstract method
+        * Why Abstraction - when we need to define a common structure among different classes. 
     INTERFACE (interface, implements)
         used to ensure a class has certain methods & it supports multiple inheritance
+        * Supports multiple inheritance
+        * Interface can only contain abstract methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
+        * We cant define 'properties'/ 'variables' || Abstract classes can have
+        * No 'Construct' inside interface
+        * All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
+        * Interface uses 'implements', Inheritance uses 'extends'
+        * Objects cannot be made for interface
+
+    ABSTRACTION vs INTERFACE
+        single inheritance || mutiple inheritance
+        can have regular methods || only abstract methods, no regular methods
+
+    ENCAPSULATION vs ABSTRACTION
+        way of protecting data || way of hiding unnecessary information
+        process of containing information || process of obtaining information
+        use access specifier || use interface & abstract class
 
 SOLID principle
     acronym for 5 principles of object-oriented design.

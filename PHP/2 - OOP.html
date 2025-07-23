@@ -6,6 +6,10 @@ Everything is a object (mobile, laptop, bottle)
 Class is categorisation of objects based on attribute/ property (variables) & behaviour/ methods (functions). Like, categorising birds by flying & non-flying one. 
 
 Class is a template/ blueprint of object and Object is instance (example) of a class
+EXAMPLE (Real-world analogy):
+Blueprint: A house plan on paper → says there should be 3 rooms, 2 windows, etc.
+Object: An actual house built using that plan.
+
 EXAMPLE
 class Class1 {
     function fun1() {   // methods
@@ -69,6 +73,73 @@ function __construct($y) {
 // whenever an object is created for this class, we have to pass the value
 $obj1 = new Class1(20);
 echo $obj1->fun1();
+
+
+
+
+
+_______________________________
+-----***** EXAMPLE 1 *****-----
+-------------------------------
+class NewClass {
+    function func1 () {
+        echo 'Inside func 1.';
+    }
+}
+$obj1 = new NewClass();
+$obj1->func1();
+O/P >>>> Inside func 1.
+
+_______________________________
+-----***** EXAMPLE 2 *****-----
+-------------------------------
+class NewClass {
+    public $x = 11;
+
+    function func1 () {
+        echo 'Inside func 1. Value of x is '.$this->x;
+    }
+}
+$obj1 = new NewClass();
+$obj1->func1();
+O/P >>>> Inside func 1. Value of x is 11
+
+_______________________________
+-----***** EXAMPLE 3 *****-----
+-------------------------------
+class NewClass {
+    public $x = 11;
+
+    function __construct () {
+        echo 'Inside Construct function<br>';
+    }
+
+    function func1 () {
+        echo 'Inside func 1. Value of x is '.$this->x;
+    }
+}
+$obj1 = new NewClass();
+$obj1->func1();
+O/P >>>> Inside Construct function
+         Inside func 1. Value of x is 11
+
+_______________________________
+-----***** EXAMPLE 4 *****-----
+-------------------------------
+class NewClass {
+    function __construct ($x) {
+        $this->x = $x;
+    }
+
+    function func1 () {
+        echo 'Inside func 1. Value of x is '.$this->x;
+    }
+}
+$obj1 = new NewClass(22);
+$obj1->func1();
+O/P >>>> Inside func 1. Value of x is 22
+
+
 
 
 

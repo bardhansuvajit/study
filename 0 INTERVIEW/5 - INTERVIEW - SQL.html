@@ -1,217 +1,139 @@
-🔹 SQL Queries
+🔧 Performance & Optimization
 
-How would you find the 2nd highest salary from a table?
+1. How does indexing work in MySQL? What are the types of indexes?
+    Explain B-Tree, Hash, Full-text, and Spatial indexes.
+    Know differences between primary, unique, composite, covering indexes.
 
-What is the difference between RANK(), DENSE_RANK() and ROW_NUMBER()? Give examples.
+2. What is a covering index?
+    A covering index is one that contains all the columns needed by a query.
+    So the query can be satisfied entirely by the index, without touching the table (no "back to table" lookup).
 
-How do you handle duplicate records in a large dataset?
+3. How does the MySQL query optimizer work?
+    The optimizer decides the most efficient way to run a query.
+    Uses statistics, index cardinality, join order, index selectivity.
 
-Write a query to pivot data without using PIVOT keyword (if not supported).
+4. What is the difference between EXISTS vs IN vs JOIN? Which is faster?
+    Use EXISTS for correlated subqueries.
+    IN loads a full result set.
+    JOIN can outperform both, but may return duplicate rows if not handled.
 
-How do you write a recursive query using CTE (Common Table Expression)?
+5. How do you detect slow queries?
+    Enable and inspect the slow query log.
+    Use EXPLAIN, ANALYZE, or performance_schema for deep profiling.
 
-Write a SQL query to find employees who have managers in the same department.
+6. How would you optimize a slow query?
+    Use EXPLAIN to analyze execution plan.
+    Add proper indexes, rewrite joins, eliminate filesort, reduce temp tables.
+    Denormalize if necessary for heavy-read systems.
 
-What is the difference between EXISTS vs IN vs JOIN in terms of performance?
 
 
 
 
+📊 Data Modeling & Design
 
+7. How do you design a schema for multi-language support?
+    Option 1: Translation tables per entity.
+    Option 2: JSON columns.
+    Option 3: EAV (use cautiously).
 
+8. How would you handle large volumes of data (e.g., logs, events)?
+    Use partitioning, sharding, archival strategies.
+    Use InnoDB compression, or migrate to OLAP systems if needed.
 
+9. What is database normalization? When would you denormalize?
+    Normalize for data integrity.
+    Denormalize when performance and read speed matter more than write duplication.
 
 
-🔹 Database Design & Normalization
 
-Explain normalization and denormalization. When would you choose one over the other?
 
-What are the anomalies removed by 1NF, 2NF, and 3NF?
 
-What is a surrogate key vs a natural key?
+🔐 Transactions & Concurrency
 
-How would you design a database for a library system / e-commerce application?
+10. What is the difference between READ COMMITTED and REPEATABLE READ?
+    READ COMMITTED: No dirty reads, but non-repeatable reads can happen.
+    REPEATABLE READ: No dirty or non-repeatable reads; uses MVCC to provide consistent snapshots.
 
-Explain star schema vs snowflake schema in a data warehouse.
+11. Explain deadlocks. How can you prevent or detect them?
+    Deadlocks occur when two transactions wait on each other.
+    Prevent by consistent locking order, smaller transactions, or deadlock detection logs.
 
+12. What is MVCC in InnoDB?
+    Multi-Version Concurrency Control.
+    Lets readers work without blocking writers, by providing snapshots of data.
 
 
 
 
 
+📁 Indexing & Query Internals
+13. How does MySQL use composite indexes?
+    Order matters. Index on (a, b) can be used for queries with:
+    WHERE a = ?
+    WHERE a = ? AND b = ?
+    ❌ Not WHERE b = ? alone
 
+14. What are common index pitfalls?
+    Index on low-cardinality columns (like is_active)
+    Over-indexing (hurts write performance)
+    Not using prefix indexes for long VARCHAR
 
 
-🔹 Indexing & Performance Tuning
 
-What are clustered and non-clustered indexes?
 
-When does a SQL query not use an index even when one exists?
 
-How would you find slow-running queries in a production system?
+🔐 Security & Access
+15. How would you secure MySQL in a production environment?
+    Use strong auth, least privilege access, SSL/TLS, disable remote root login, monitor logs.
 
-What is execution plan and how do you read one?
 
-What are covering indexes? When should they be used?
 
-What are database statistics and how do they affect query optimization?
 
 
+💥 Stored Procedures & Triggers
+16. Pros and cons of using stored procedures?
+    Pros:
+        Encapsulation
+        Faster for repetitive tasks
+        Less network latency
+    Cons:
+        Harder to version control
+        Debugging is painful
+        Less flexible than application logic
 
+17. What are BEFORE vs AFTER triggers?
+    BEFORE: Run before insert/update/delete — can modify data
+    AFTER: Run after — good for logging or chaining
 
 
 
 
 
+📦 Partitioning & Scaling
+18. What is partitioning? When do you use it?
+    Splits large tables into parts for better performance.
+    Useful for time-series data or very large datasets.
+    Types: RANGE, LIST, HASH, KEY
 
-🔹 Joins and Set Operations
+19. How would you scale MySQL?
+    Vertical scaling (more CPU/RAM)
+    Read replicas for read scaling
+    Sharding for write scaling
+    Use a proxy layer like ProxySQL for routing
 
-Explain all types of joins with real-world examples.
 
-What is the difference between INNER JOIN and OUTER JOIN?
 
-How does FULL OUTER JOIN behave when one side has NULLs?
 
-Difference between UNION and UNION ALL. Which is faster and why?
 
-Write a query using INTERSECT and explain its use case.
+🧪 Advanced Query Writing
+20. Write a query to get the second highest salary in a table.
+    SELECT MAX(salary)
+    FROM employees
+    WHERE salary < (SELECT MAX(salary) FROM employees);
 
-
-
-
-
-
-
-
-
-🔹 Transactions & Concurrency
-
-What are ACID properties in a database?
-
-Explain isolation levels and how dirty reads, non-repeatable reads, and phantom reads occur.
-
-What is the difference between optimistic and pessimistic locking?
-
-How do you handle deadlocks in SQL Server or Oracle/MySQL?
-
-Explain what happens internally during a rollback.
-
-
-
-
-
-
-
-
-
-🔹 Stored Procedures, Functions, and Triggers
-
-Difference between stored procedure and user-defined function.
-
-Can you call a stored procedure from a function and vice versa?
-
-What are INSTEAD OF and AFTER triggers? Give examples.
-
-When would you prefer triggers over application-level logic?
-
-How do you debug a stored procedure in production?
-
-
-
-
-
-
-
-
-
-🔹 ETL, Data Migration & Integration
-
-Have you worked with any ETL tools like Informatica, SSIS, Talend? Describe a complex data pipeline.
-
-How would you handle data migration from an old system to a new one with minimal downtime?
-
-How do you validate data consistency during migrations?
-
-Explain slowly changing dimensions (SCD) and how you manage them.
-
-How do you import/export large datasets efficiently?
-
-
-
-
-
-
-
-
-
-
-🔹 Real-World Scenarios
-How do you design a database that can scale for millions of users?
-
-You are given a table with millions of records and poor query performance. How would you approach fixing it?
-
-What are your steps to ensure high availability and data integrity in a mission-critical SQL system?
-
-How do you handle schema changes in a live production system?
-
-What backup and recovery strategies have you implemented in your projects?
-
-
-
-
-
-
-
-
-
-🔹 Security and Compliance
-
-How do you manage database-level security (users, roles, privileges)?
-
-How do you handle sensitive data like PII or financial data in SQL?
-
-What is SQL injection and how can you prevent it at the database level?
-
-How do you audit database changes?
-
-What are data masking and encryption techniques in SQL databases?
-
-
-
-
-
-
-
-
-
-🔹 Behavioral / Scenario-Based
-
-Have you led a data migration project? What challenges did you face?
-
-Have you been involved in database design reviews? What are the key things you look for?
-
-How do you mentor junior developers in writing efficient SQL?
-
-What tools do you use for query analysis and performance benchmarking?
-
-Describe a time when a SQL issue brought down production. How did you handle it?
-
-
-
-
-
-
-
-
-
-✅ Bonus: Practical Questions
-
-Write a SQL to get running total of sales per customer.
-
-Find customers who placed orders in two consecutive months.
-
-Write a query to split a comma-separated string into rows.
-
-Find products that were never sold.
-
-Write a query to detect gaps in a sequence column.
+21. How do you calculate running totals using SQL?
+    (If MySQL 8+ supports window functions)
+    SELECT name, salary, 
+    SUM(salary) OVER (ORDER BY id) AS running_total
+    FROM employees;

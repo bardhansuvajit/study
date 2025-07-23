@@ -244,16 +244,71 @@ What are memory leaks in JavaScript? How do you identify and fix them?
         3. Look for Detached DOM Nodes - These are elements that were removed from the DOM but still exist in memory because something (like an event listener or closure) is referencing them.
     FIX
         1. Avoid Global Variables
-
+        2. Remove Uncleared timers (setInterval, setTimeout) (clearInterval() when done)
+        3. Don't hold onto all data forever.
+        4. removeEventListener() when component unmounts or DOM removed
+        5. Set node = null after removing from DOM
+        6. Avoid unnecessary variables in closures
 
 
 Explain debouncing vs throttling with use cases.
+    Debouncing delays the execution of a function until a certain amount of time has passed since the last time it was called.
+    Use Case
+        Run a function only after the user has stopped typing (e.g., search input).
+    e.g.
+        const searchInput = document.getElementById("search");
+
+        searchInput.addEventListener("input", debounce(function (e) {
+            console.log("Searching for:", e.target.value);
+        }, 300));
+    
+    Throttling ensures that a function is only called at most once in a given time interval, no matter how many times the event is triggered.
+    Use Case
+        Handle scroll or resize events at intervals, rather than constantly.
+    e.g.
+        window.addEventListener("scroll", throttle(() => {
+            console.log("Scroll event at", Date.now());
+        }, 500));
+
+    🧠 Imagine typing:
+        Debounce: Waits until you're done typing, then fires once.
+        Throttle: Fires every X ms while you type.
+
 
 How do you lazy-load JavaScript modules or components?
+    load JS modules/ components only when needed, rather than at initial page load
+    HOW TO ?
+        Native ES Mdoule/ Vanilla JS
+            button.addEventListener("click", async () => {
+                const module = await import('./myModule.js');
+                module.doSomething();
+            });
+
 
 How does JavaScript garbage collection work?
+    automatic garbage collection. 
+    Reachable objects = can be accessed (from variables, functions, closures, etc.)
+    Unreachable objects = no references to them → they're useless → GC deletes them
+    ⚙️ Algorithm Used: Mark-and-Sweep
+    🚫 What GC Can't Clean Automatically
+        Circular references inside closures
+        Global variables (until page closes)
+
 
 Best practices for optimizing large-scale frontend applications.
+    Code Splitting - use bundles and call them using imports()
+    Webpacks - for lazy-loaded chunks
+    Lazy load - Lazy-load images, components, modules, and routes.
+    Server-Side Rendering (SSR) or Static Generation - use Next.js/ Nuxt
+    Image optimize - Use modern formats like WebP, AVIF
+    Use responsive <img srcset> or lazy-loading (loading="lazy")
+    Optimize SVGs and compress images
+    Lighthouse audit, monitor web vitals
+    XSS protection, input sanitization
+
+
+
+
 
 
 

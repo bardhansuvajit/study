@@ -178,6 +178,58 @@ How do you create a custom validation rule?
         ]);
 
 
+Repository Pattern in Laravel
+    separate business logic from data access logic
+    🔎 What is the Repository Pattern?
+        A repository acts like a mediator between your models (data layer) and the controllers or services (business logic layer). It hides the actual implementation of data access, whether it's Eloquent, Query Builder, raw SQL, external APIs, or anything else.
+    🧠 Why Use the Repository Pattern?
+        Keeps your controller/service logic clean by separating database logic.
+        Easy to swap Eloquent with API, MongoDB, or another source without changing business logic.
+        Shared logic like filters, pagination, etc. can be reused across the app.
+    🛠️ When Should You Use It?
+        Your app is large or growing in complexity.
+        You want to follow clean architecture or DDD (Domain-Driven Design).
+        You want reusable queries (e.g., custom filters used across many controllers).
+    🧑‍💻 How to Implement It in Laravel
+        Step 1: Create an Interface
+            // app/Interfaces/PostInterface.php
+            namespace App\Interfaces;
+            interface PostInterface
+            {
+                public function all();
+                public function find($id);
+                public function create(array $data);
+                public function update($id, array $data);
+                public function delete($id);
+            }
+        Step 2: Create the Repository Class
+            // app/Repositories/PostRepository.php
+            namespace App\Repositories;
+            use App\Models\Post;
+            class PostRepository implements PostRepositoryInterface
+            {
+                public function all()
+                {
+                    return Post::all();
+                }
+                public function find($id)
+                {
+                    return Post::findOrFail($id);
+                }
+                ...
+            }
+        Step 3: Bind Interface to Implementation
+            // app/Providers/AppServiceProvider.php
+            public function register()
+            {
+                $this->app->bind(
+                    \App\Interfaces\PostInterface::class,
+                    \App\Repositories\PostRepository::class
+                );
+            }
+        Step 4: Use It in a Controller or Service
+
+
 
 
 

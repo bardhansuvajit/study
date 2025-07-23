@@ -3,11 +3,11 @@
 =======================================================================
 
 HTML
-- Hypertext (Text with reference/ text that can be accessed) Markup (used TAGS to mark language) Language
+    - Hypertext (Text with reference/ text that can be accessed) Markup (used TAGS to mark language) Language
 
 IDE
-- integrated (together) delelopment environment, like vs code, sublime text, 
-- increases productivity, code auutocomplete, syntax highlight, error check
+    - integrated (together) development environment, like VS code, sublime text
+    - increases productivity, code auutocomplete, syntax highlight, error check
 
 API
     Application Programming Interface - used to communicate with different systems
@@ -27,7 +27,7 @@ HTML || XML || XHTML
         HTML5 replaced XHML
 
 HTML list
-- orderred, unordered & definition (dl/dt/dd - Definition List/ Definition Term/ Definition Description)
+    - orderred, unordered & definition (dl/dt/dd - Definition List/ Definition Term/ Definition Description)
 
 Meta tag
     provides additional info about website - like, author, desc, keyword
@@ -43,9 +43,9 @@ HTML || HTML 5
     Helps the browser avoid quirks mode. Uses Standard mode
 
 ** Quirks Mode || Standards mode || Almost Standards Mode (Browser modes)
-✅ Standards Mode -         Follows modern HTML/CSS rules (triggered by <!DOCTYPE html>)
-🟡 Quirks Mode -            Uses old, forgiving rules (if DOCTYPE is missing or wrong)
-🔵 Almost Standards Mode -  Mostly modern, but with a few quirks (very rare)
+    ✅ Standards Mode -             Follows modern HTML/CSS rules (triggered by <!DOCTYPE html>)
+    🟡 Quirks Mode -                Uses old, forgiving rules (if DOCTYPE is missing or wrong)
+    🔵 Almost Standards Mode -      Mostly modern, but with a few quirks (very rare)
 
 What Happens in Quirks Mode?
     CSS may behave unexpectedly (div { width: 100px; padding: 20px;} - Total width becomes 140px but in standard mode it should be 100px width, with inside padding)
@@ -256,6 +256,9 @@ What is the shadow DOM and how does it work with web components?
 =======================================================================
 ==================*************** CSS ***************==================
 =======================================================================
+
+Cascade
+    The cascade is the process by which the browser decides which CSS rule to apply when multiple rules match the same element.
 
 Limitations of CSS
     not a programming language. no conditional logic/ loops
@@ -518,21 +521,21 @@ Explain the difference between mobile-first and desktop-first design.
 How to properly manage CSS in large-scale applications?
     1. Use a Scalable CSS Architecture
         BEM (Block Element Modifier)
-        Naming convention for clarity and reusability
+            Naming convention for clarity and reusability
             <div class="card card--highlight">
                 <h2 class="card__title">Title</h2>
                 <p class="card__description">Details</p>
             </div>
 
         OOCSS (Object-Oriented CSS)
-        Separate structure from look, like object-oriented programming does with behavior and data.
+            Separate structure from look, like object-oriented programming does with behavior and data.
             <div class="media box bg-light">
                 <img src="..." class="media__img">
                 <div class="media__body">Text</div>
             </div>
 
         SMACSS (Scalable and Modular)
-        Classify styles by role (base, layout, etc.)
+            Classify styles by role (base, layout, etc.)
             /* base/_typography.scss */
             body { font-family: sans-serif; }
 
@@ -546,7 +549,7 @@ How to properly manage CSS in large-scale applications?
             .is-hidden { display: none; }
 
         Atomic CSS / Utility-First (e.g., Tailwind)
-        Small utility classes (no custom CSS per component)
+            Small utility classes (no custom CSS per component)
             <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                 Click Me
             </button>
