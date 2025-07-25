@@ -2,7 +2,7 @@
 =================*************** HTML ***************==================
 =======================================================================
 
-HTML
+HTML (Hypertext, Markup means)
     - Hypertext (Text with reference/ text that can be accessed) Markup (used TAGS to mark language) Language
 
 IDE
@@ -23,8 +23,24 @@ HTML || XML || XHTML
         Many apps/tools use XML for configuration (e.g., Android AndroidManifest.xml, VS Code settings).
         JSON replaced XML
     XHTML only if required to follow strict standards. (eXtensible HTML)
+        XML + HTML = XHTML, follows XML rules
+        Combines the flexibility of HTML with the rigor of XML.
         Some older sites still use XHTML 1.0 Strict or Transitional.
         HTML5 replaced XHML
+
+XHTML
+    ❌ Limitations
+        Strict syntax rules: even minor mistakes can break rendering.
+        Case sensitivity can lead to errors.
+        Older browsers (like IE) may not handle XHTML well.
+        Parsed as HTML in most browsers, not true XML (unless served as application/xhtml+xml).
+        Less forgiving than HTML — not ideal for quick-and-dirty coding.
+    ✅ Advantages
+        Enforces clean, well-structured code (e.g., all tags must be closed).
+        Helps browsers interpret broken HTML more accurately.
+        Case-sensitive: promotes consistency (all tags in lowercase).
+        Useful in mobile web development.
+        Lets you define custom tags (via XML namespaces).
 
 HTML list
     - orderred, unordered & definition (dl/dt/dd - Definition List/ Definition Term/ Definition Description)
@@ -47,6 +63,7 @@ HTML || HTML 5
     "!DOCTYPE" = Document Type Declaration. (! - declaration syntax) 
     When declared, it means, this document is type - HTML5. Browser will render it using modern rules
     Helps the browser avoid quirks mode. Uses Standard mode
+    3 types - strict/ transitional/ frameset
 
 ** Quirks Mode || Standards mode || Almost Standards Mode (Browser modes)
     ✅ Standards Mode -             Follows modern HTML/CSS rules (triggered by <!DOCTYPE html>)
@@ -61,12 +78,18 @@ What Happens in Quirks Mode?
 
 HTML 5 tags/ Semantic elments
     more than 30 new tags came along
-    Structural / Semantic Tags (for better layout) - header, footer, nav, section, article, aside, main, figure, figcaption
-    Multimedia - audio, video, source, track
-    Graphics - canvas (Draw graphics via JavaScript), svg (Scalable Vector Graphics inline drawings)
-    Form - datalist, keygen (Generate cryptographic keys - deprecated now), output (Display calculation results)
-    Input types - email, date, time, range, number, search, color, tel, url
-    Other than new tags, localStorage & sessionStorage, <meta name="viewport">, Geolocation API, draggable (<div draggable="true">Drag me!</div>), Service Workers (Offline web app), Web Workers (runs JS in background without freezing main page), websockets etc were introduced in HTML 5
+    Structural / Semantic Tags (for better layout)
+        - header, footer, nav, section, article, aside, main, figure, figcaption
+    Multimedia
+        - audio, video, source, track
+    Graphics
+        - canvas (Draw graphics via JavaScript), svg (Scalable Vector Graphics inline drawings)
+    Form
+        - datalist, keygen (Generate cryptographic keys - deprecated now), output (Display calculation results)
+    Input types
+        - email, date, time, range, number, search, color, tel, url
+    Other than new tags, 
+        - localStorage & sessionStorage, <meta name="viewport">, Geolocation API, draggable (<div draggable="true">Drag me!</div>), Service Workers (Offline web app), Web Workers (runs JS in background without freezing main page), websockets etc were introduced in HTML 5
 
 ** If div/ any other tag is used instead of main/ article/ section. what happens ?
     code loses Semantic Meaning/ structure/ code readability issue
@@ -99,11 +122,28 @@ SSE || Websocket || Polling (legacy)
     Server to Client, one way || two way || Client keeps asking
     HTTP || custom over TCP || HTTP
 
+    SSE EXAMPLE
+        Live news feed or stock prices
+        Real-time notifications
+        Social media updates
+        Server pushes only — no need for client to send messages
+    WEBSOCKET EXAMPLE
+        Real-time chat apps
+        Online games
+        Collaborative tools (e.g., Google Docs)
+        Live sports scores, auctions
+        Anything needing frequent back-and-forth messaging
+
 Web Worker
     a JavaScript feature that lets you run scripts in the background, without freezing the main webpage.
-    * unline ajax, which sends HTTP requests, it only runs background js code
+    * unlike ajax, which sends HTTP requests, it only runs background js code
     used for, heavy math/ data processing, image filter, real-time graphs
-    they mianly run in external JS files. but to run internally, use a blob 
+    they mianly run in external JS files. but to run internally, use a blob
+
+Service Worker
+    JS file that runs in the background, separate from web pages
+    Usage - 🧱 Caching pages and files + 🌐 Offline access + 🔔 Push notifications + ⏳ Background sync
+    e.g. <script>navigator.serviceWorker.register('/service-worker.js');</script>
 
 Manifest File in HTML5
     manifest file/ AppCache manifest was originally used to make web apps work offline by telling the browser which files to cache.
@@ -118,11 +158,6 @@ Manifest File in HTML5
 
         NETWORK:
         *
-
-Service Worker
-    JS file that runs in the background, separate from web pages
-    Usage - 🧱 Caching pages and files + 🌐 Offline access + 🔔 Push notifications + ⏳ Background sync
-    e.g. <script>navigator.serviceWorker.register('/service-worker.js');</script>
 
 Geolocation API
     lets website/ app ask the user's device for physical location, like latitude, logitude
@@ -243,7 +278,102 @@ What is the shadow DOM and how does it work with web components?
     A built-in browser feature that lets you encapsulate (unaffected) a part of your HTML, CSS, and JavaScript so it's isolated from the rest of the page, by creating custom HTML elements — like your own <my-button> or <user-card>.
     You use Shadow DOM by attaching it to a custom HTML element using JavaScript.
 
-    Web components consist of - Custom elements + SHadow DOM + HTML templates
+    Web components consist of - Custom elements + Shadow DOM + HTML templates
+
+Optimize Web assets - HOW ?
+    🖼️ Images
+        Compress images (TinyPNG, ImageOptim)
+        Use SVG for icons/logos (scalable + lightweight)
+        Avoid transparent PNGs unless needed
+        Prefer solid colors for better compression
+    📦 General
+        Use Content Delivery Network (CDN) to serve assets faster
+        Lazy-load images/videos (loading="lazy")
+        Minify and combine CSS/JS files
+        Avoid inline CSS/JS — use external and minified
+        Reduce number of plugins (especially heavy JS libs)
+        Set proper cache headers (via .htaccess or server)
+    📹 Videos
+        Balance quality vs file size (use appropriate resolution/codecs)
+        Load only when needed (defer or lazy-load)
+
+Reduce page load time - HOW ?
+    use CDN, based on geographic location
+    reduce 301 redirect
+    Minimize third-party scripts
+    use gZIP compression, compress the files that are delivered while loading a site (like HTML, CSS, JS, fonts)
+    Enable caching rules for static assets (via .htaccess or NGINX)
+
+Multi-lingual site - things to remember
+    Use: <html lang="en" dir="ltr">
+    Consider:
+        Word/sentence length varies by language
+        Use CLDR (Common Locale Data Repository) for: Currency, Dates, Plurals, Language codes
+        Avoid flags — one language can be spoken in many countries
+        Language URL structure: example.com/en/  OR  example.com?lang=es
+        Detect language via IP or browser preference
+        Respect regional formats:
+            US: May 30, 2025
+            EU: 30 May 2025
+        Colors have different meanings in different cultures
+
+Broken imgae/ Link - WHY ?
+    Incorrect src/ href path
+    File renamed/ missing
+    Case-sensitive mismatch
+    File not uploaded to server
+    Corrupted image file
+
+Tags vs Elements
+    Tags - <p>, </div>, <img />
+    Elements - <p>Hello</p> is a paragraph element
+        <p> → Opening tag             Hello → Content             </p> → Closing tag             Together: <p>Hello</p> → Element
+
+WEBPACK
+    Webpack is a module bundler for JavaScript applications.
+    It bundles JS files, styles (CSS/SASS), images, and other assets into one or more files for efficient loading.
+
+    WHY
+        Bundles & minifies many JS/CSS files into fewer files
+        Loads and optimizes assets automatically
+
+multipart/form-data
+    content type used when submitting forms with files or binary data (like images, PDFs) — it tells the browser to send each part of the form separately.
+    Sends data in multiple parts (each input field as a part), not as a single query string.
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="profile_pic">
+        <button type="submit">Upload</button>
+    </form>
+
+enctype
+    enctype stands for encoding type - hw to encode form data when sending to the server
+    TYPES
+        | Value                               | When to Use                                      | Description                                             |
+        | ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+        | `application/x-www-form-urlencoded` | ✅ Default<br>✅ For regular forms (text, numbers) | Data is encoded in URL-like format (e.g., `name=value`) |
+        | `multipart/form-data`               | ✅ For **file uploads**                           | Splits form data into parts, good for files & binary    |
+        | `text/plain`                        | 🚫 Rarely used                                   | Sends data as plain text (no encoding)                  |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

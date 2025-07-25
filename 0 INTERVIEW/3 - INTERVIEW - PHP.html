@@ -4,7 +4,7 @@
 
 PHP
     Personal Home Page: Hypertext Preprocessor
-    A preprocessor is Server-side engine that processes PHP code before outpu
+    A preprocessor is Server-side engine that processes PHP code before output
 
 PHP parser
     part of PHP inetrpreter, that reads PHP codes, breaks it (into Tokens), understand sturcture, then sends to interpreter/ compiler to execute
@@ -202,7 +202,7 @@ What tools do you use for profiling and debugging PHP code?
 
 
 ==========================================================================================
-=================*************** 🧱 OOP & Architecture ***************===================
+=============*********** 🧱 OOP & Architecture & Design Pattern ***********===============
 ==========================================================================================
 
 Class & Object
@@ -227,8 +227,8 @@ pillars of OOP. with Examples
         * parent::__construct() - When we use parent::__construct() inside a child class constructor, it calls the parent class's constructor. So both parent and child constructors run
         * parent::anotherMethod() - when parent & child classes have same name, only child class's method runs (Method Overriding) but if you want to run parent class's method, use this inside child class's method
         * :: -> Scope Resolution Operator - used to access class constants, static properties, and static methods, or refer to a parent class.
-        * Method Overriding - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
-        * Method Overloading - same method name with different number of arguments — but PHP doesn't support this directly.
+        * Method Overriding (Run-time Polymorphism) - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
+        * Method Overloading (Compile-time Polymorphism) - same method name with different number of arguments — but PHP doesn't support this directly.
         * final keyword - Cannot Be Extended. used to prevent inheritance/ prevent method overriding. final class A {...} && final public function someFunction() {...}
     ENCAPSULATION (ACCESS MODIFIER, Getters & Setters)
         bundling similar data into a structured unit/ into a capsule format
@@ -277,25 +277,55 @@ pillars of OOP. with Examples
         * declared using the `abstract` keyword
         * Any class that extends an abstract class must either implement all of its abstract methods or itself be declared abstract
         * Abstract classes can also contain non-abstract (concrete) methods but must contain at leats one abstract method
-        * Why Abstraction - when we need to define a common structure among different classes. 
-    INTERFACE (interface, implements)
-        used to ensure a class has certain methods & it supports multiple inheritance
-        * Supports multiple inheritance
-        * Interface can only contain abstract methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
-        * We cant define 'properties'/ 'variables' || Abstract classes can have
-        * No 'Construct' inside interface
-        * All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
-        * Interface uses 'implements', Inheritance uses 'extends'
-        * Objects cannot be made for interface
+        * Why Abstraction - when we need to define a common structure among different classes.
+ 
+        INTERFACE (interface, implements, contract)
+            used to ensure a class has certain methods & it supports multiple inheritance
+            * Supports multiple inheritance
+            * Interface can only contain abstract methods (no body functions), no regular methods and those function must also be called in 'inherited'/ 'child' class || Abstract classes can have regular methods
+            * We cant define 'properties'/ 'variables' || Abstract classes can have
+            * No 'Construct' inside interface
+            * All methods must be 'public' || Abstract class methods can be 'public'/ 'protected'
+            * Interface uses 'implements', Inheritance uses 'extends'
+            * Objects cannot be made for interface
+            * LIke, legal contract if you implement (sign) it, you must implement all methods (follow the rules). "Any class that implements this interface MUST define these methods."
+            EXAMPLE
+                interface Logger {
+                    public function log($message);
+                }
+                class FileLogger implements Logger {
+                    public function log($message) {
+                        echo "Logging to file: $message";
+                    }
+                }
+                class DatabaseLogger implements Logger {
+                    public function log($message) {
+                        echo "Logging to DB: $message";
+                    }
+                }
+
+    POLYMORPHISM (multi behaviour)
+        same operation may behave differently in different class.
+        2 process - Through Abstract class & Interface
+        2 types - Compile time (Method overloading) & Run time (Method overriding)
+        * Method Overriding (Run-time Polymorphism) - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
+        * Method Overloading (Compile-time Polymorphism) - same method name with different number of arguments — but PHP doesn't support this directly.
 
     ABSTRACTION vs INTERFACE
         single inheritance || mutiple inheritance
         can have regular methods || only abstract methods, no regular methods
+        can have properties || cant have
+        methods must be public/ protected || public 
 
     ENCAPSULATION vs ABSTRACTION
         way of protecting data || way of hiding unnecessary information
         process of containing information || process of obtaining information
         use access specifier || use interface & abstract class
+
+    INTERFACE vs POLYMORPHISM
+        Structure/contract for classes || Ability to behave differently with same method
+        Enforces consistency || Enables flexibility in behavior
+
 
 SOLID principle
     acronym for 5 principles of object-oriented design.
@@ -438,6 +468,10 @@ SOLID principle
     No properties                                       can have properties
     Only method signatures                              Can have both abstract & normal methods
     When you want to guarantee behavior             	When you want to reuse common logic
+
+CONSTANT
+
+STATIC
 
 Static Binding + Late Static Binding
     binding means: Which method or property should PHP call at runtime?

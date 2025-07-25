@@ -354,6 +354,8 @@ $obj3 = new class3();
 $obj3->function2();     >> OP >> here in func1
 
 
+
+
 ** STATIC MEMBERS
 To access properties/ methods without creating object of a class
 
@@ -474,12 +476,16 @@ METHOD/ FUNCTION OVERRIDING
 When you extend a class & rewrite a same function that already exists in parent class
 
 
+
+
 ** NAMESPACE
 prevent conflict among classes with same name
 
 1. when we have multiple SameNameClass and we need to include them in a same php file
 2. instantiate 'namespace namespaceName' at very top of file
 3. to create instance/ object, $obj = new namespaceName\SameNameClass
+
+
 
 
 ** MAGIC METHOD
@@ -506,9 +512,12 @@ $obj->someMethod('arg1', 'arg2'); // Outputs: Called method someMethod with argu
 
 
 
+
 REQUIRE vs INCLUDE
 when error occurs, generates fatal error (E_COMPILE_ERROR) || generates warning (E_WARNING)
 will stop execution of script || wont stop
+
+
 
 
 FINAL
@@ -526,6 +535,7 @@ final class BaseClass {
 class ChildClass extends BaseClass {
     ...
 }
+
 
 
 
@@ -555,6 +565,8 @@ class ChildClass extends BaseClass {
     > echo "\u{1F602}"; // outputs 😂
 
 https://www.php.net/manual/en/migration70.new-features.php
+
+
 
 
 ** NEW in PHP 8 than 7
