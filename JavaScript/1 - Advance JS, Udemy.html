@@ -529,7 +529,8 @@ Pass by Value - copy the value & create the value somewhere else in memory
 
 EXAMPLE
 var a = 5;
-var b = a; b++;
+var b = a; 
+b++;
 console.log(a); console.log(b);             >> OP >> 5 6
 
 
@@ -543,7 +544,7 @@ console.log(obj1); console.log(obj2);       >> OP >> {name: 'Leo', password: 'ea
 Note that both passwords are changed, which differs from the code we wrote. This happens due to Pass by Reference.
 Objects stored in memory are passed by reference. Both objects, obj1 & obj2 are both pointing to memory, that contains the object values. Now while changing 'password', change 'password' in the object in memory, so both gets updated
 
-AGAIN
+AGAIN, same thing happens for arrays
 let arr1 = [1,2,3,4,5]
 let arr2 = arr1
 arr2.push(6)
@@ -553,8 +554,7 @@ This is good for saving memory. Now if you dont want to passs by reference, use 
 let arr2 = [].concat(arr1) // take an empty array & concat it  with arr1. concat means whatever arr1 has it pushes to arr2
 
 for Objects, 
-1.
-let obj2 = Object.assign({}, obj1)   
+1. let obj2 = Object.assign({}, obj1)   
 2. Spread Operator
 let obj3 = {...obj1}
 

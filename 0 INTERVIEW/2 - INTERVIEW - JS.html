@@ -52,6 +52,7 @@ VAR vs LET vs CONST
 
 
 What are closures? How do they work?
+    A function remembers the variables from the place where it was created — even if that place is gone now.
     Closure allows inner functions to access the outer scope of a function. It makes it possible for a function to have "private" variables.
     EXAMPLE
         function outer() {
@@ -73,6 +74,29 @@ What is hoisting and how does it affect variable/function declarations?
 
 
 What is the difference between shallow copy and deep copy in JavaScript?
+    objects are passed by reference. when copying/ cloning big/ nested object, it clones first level only. but changing deeply nested properties affects both original & copy object
+
+    EXAMPLE
+    let obj1 = {
+        name: 'Test',
+        age: 32,
+        others: {
+            hello: 'world'      // this is nested
+        }
+    }
+    let obj2 = obj1;        // siple clone
+    OR 
+    let obj2 = {...obj1}    // better clone, still changing deeply nested properties affects both original & copy object
+
+    CHANGING, obj1.others.hello = 'new world';
+    this changes both objects, 
+    now console.log(obj1.others.hello)  >> OP >> 'new world'
+    and console.log(obj2.others.hello)  >> OP >> 'new world'
+    THIS IS SHALLOW COPY/ SHALLOW CLONE
+
+    let obj3 = JSON.parse(JSON.stringify(obj1))     // This is Deep Clone, doesnt affect
+
+
     Shallow Copy: Copies top-level properties, but nested objects are still referenced.
         Methods: Object.assign(), spread operator (...).
     Deep Copy: Creates a completely independent copy (including nested objects).
@@ -84,6 +108,10 @@ What is the difference between shallow copy and deep copy in JavaScript?
 
 
 Explain event delegation and its advantages.
+    Instead of adding event listeners to many child elements,
+    you add one listener to their common parent,
+    and let events bubble up to that parent.
+
     when you attach a single event listener to a parent, and use event.target to handle child interactions.
     EXAMPLE
         document.getElementById('list').addEventListener('click', function(e) {
@@ -156,6 +184,18 @@ CALLBACK
             callback();
         }
         greet("Suvajit", () => console.log("This is a callback"));
+
+array SLICE vs SPLICE
+    slice creates a copy, donot modify original array || Changes the original array, Can remove, replace, or add elements
+
+    EXAMPLE
+        const arr = [1, 2, 3, 4, 5];
+
+        const sliced = arr.slice(1, 4);  // [2, 3, 4]
+        console.log(arr);                // [1, 2, 3, 4, 5] (unchanged)
+
+        const removed = arr.splice(1, 2);  // [2, 3] removed
+        console.log(arr);                  // [1, 4, 5] (modified)
 
 
 
