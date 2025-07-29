@@ -5,7 +5,7 @@
 
 $(document).ready() vs window.onload
     ready occurs after HTML document is loaded || load occurs after all assets (images, CSS-JS files, fonts, videos-audios, iframes, third-party resources) are loaded
-    ready is fired first, then onload
+    ready is fired first || then onload
     multiple doc.ready can be there but only one onload
     ready event is specific to jQuery & fires asap when DOM is ready || onload event is standard in DOM, built in JS event
     EXAMPLE
@@ -18,13 +18,13 @@ $(document).ready() vs window.onload
 
 
 ** DOM (Document Object Model)
-    the HTML is parsed/ read as objects and nodes (Tree-like structure) by the browser, so that JS can access & manipulate it. 
+    HTML is parsed/ read as objects and nodes (Tree-like structure) by the browser, so that JS can access & manipulate it. 
     This tree like structure is called DOM.
 
     SHADOW DOM
         a separate hidden DOM. used in reusable component. 
         To keep the internal structure (HTML, CSS & JS) private and separate from the rest of the page. Code inside shadow DOM component cannot be accessed/ affected by the code outside
-        Used for encapsulation (separate capsule format) in Web Components.
+        Used for encapsulation (separate capsule format) in Web Components. Web components consist of - Custom elements + Shadow DOM + HTML templates
 
     BOM (Browser Object Model)
         set of objects by browser to interact with browser window, not just web page
@@ -122,9 +122,16 @@ Explain event delegation and its advantages.
 
 
 What is the Temporal Dead Zone (TDZ)?
-    The TDZ is the time between entering a block and the actual declaration of a let or const variable — where accessing it throws a ReferenceError.
-    console.log(a); // ❌ ReferenceError
-    let a = 10;
+    TDZ is the time between:
+        when a let/ const variable is declared and initialized (assigned a value)
+    EXAMPLE - ERROR
+        console.log(a); // ❌ ReferenceError (TDZ)
+        let a = 5;
+    // ERROR because let and const are not hoisted like var
+
+    EXAMPLE - SAFE
+        let a = 5;
+        console.log(a); // ✅ Works fine
 
 
 What is the difference between == and === in JavaScript?
@@ -133,7 +140,7 @@ What is the difference between == and === in JavaScript?
 
 
 What are higher-order functions? Give examples.
-    Functions that take a function as an argument and/or return a function.
+    A function that takes another function as an argument or returns a function.
     EXAMPLE
         // 1. Accepts function
         function higherOrder(callback) {
@@ -144,6 +151,32 @@ What are higher-order functions? Give examples.
             return (x) => x * factor;
         }
         // Built-in examples: map(), filter(), reduce()
+
+    CALLBACK
+        A callback is just a function passed as an argument to another function, to be called later.
+
+
+map vs filter vs reduce
+    map---------transform each elements in array & returns new array
+                apply something to all elements
+    filter------filter elements based on condition & returns new array
+                when need only some elements
+    reduce------reduce all elements to a single value (number, object, array, etc.)
+                when need to sum/ combine values
+    forEach-----run function on each elements
+                when you want side effects (e.g., console log, DOM manipulation).
+    find--------return first item that matches condition
+    some--------same as filter, but returns true only if any item matches condition.
+    every-------returns true only if all items matche condition
+    sort--------sorts array in place (changes original).
+    flat--------flattens nested arrays into single level array.
+
+    EXAMPLE
+        const arr = [1, 2, [3, 4], [5, [6]]];
+        console.log(arr.flat());    // flattens one level    
+        // ➜ [1, 2, 3, 4, 5, [6]]
+        console.log(arr.flat(2));   // flattens two levels   
+        // ➜ [1, 2, 3, 4, 5, 6]
 
 
 PROTOTYPE
@@ -197,7 +230,12 @@ array SLICE vs SPLICE
         const removed = arr.splice(1, 2);  // [2, 3] removed
         console.log(arr);                  // [1, 4, 5] (modified)
 
-
+How JS works in browser
+    When the browser encounters JavaScript (inline or in a .js file):
+        1. JS engine - The JS engine (V8 in Chrome) takes over (not the browser).
+        2. AST - The engine parses/ reads the code to build AST (Abstract Syntax Tree).
+        3. Interpreter - The AST is sent to interpreter (e.g. V8's "Ignition"). It converts the AST into bytecode (low-level code for fast execution).
+        4. Compiler, JIT - If some code runs often (hot code), the engine uses JIT (Just-in-time) compilation (e.g. V8's “TurboFan”) to convert it to optimized machine code. Now it runs faster!
 
 
 
@@ -216,6 +254,8 @@ XML in AJAX
     Initially, AJAX used XML to send/receive structured data from the server without reloading the page.
     Example: A browser sends a request, the server responds with XML data, JavaScript reads it using the XMLHttpRequest object.
     ✅ JSON (JavaScript Object Notation) has mostly replaced XML because:
+        1. JSON is lightweight and easier for humans to read and write. XML requires opening and closing tags, making it more verbose
+        2. JSON is based on JavaScript object syntax. You can directly use JSON.parse() and JSON.stringify() in JS. XML requires additional parsing using DOMParser, XPath, or XMLHttpRequest.
 
 
 What is the event loop? Explain with examples.
@@ -255,6 +295,14 @@ Difference between Promise.then, async/await, and callbacks.
 
 
 How does Promise.all, Promise.race, Promise.allSettled work?
+    Promise.all()
+        Waits for all promises to resolve.
+        If any promise fails (rejects) → the entire result fails immediately.
+    Promise.race()
+        Returns the result of the first settled (resolved or rejected) promise, and ignores the rest.
+    Promise.allSettled()
+        Waits for all promises to complete, regardless of success or failure. Returns status and value/reason for each.
+
 
 What is a race condition and how do you prevent it in async JS code?
     A race condition occurs when multiple async operations depend on shared data, and the outcome depends on timing.
