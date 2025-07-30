@@ -154,6 +154,7 @@ What are higher-order functions? Give examples.
 
     CALLBACK
         A callback is just a function passed as an argument to another function, to be called later.
+        JS is single-threaded, handles works one by one. Callback says, when this work is done, call this next
 
 
 map vs filter vs reduce
@@ -314,6 +315,8 @@ What is a race condition and how do you prevent it in async JS code?
         fetch('/logout').then(() => {
             loggedIn = false;
         });
+
+
 
 
 
