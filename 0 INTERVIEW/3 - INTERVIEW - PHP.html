@@ -38,8 +38,9 @@ Call by Value || Call by Reference
     warnings    - important than notice. script execution is not interrupted. user can see. e.g. include() does not have a file
     syntax/ parsing error   - php parser is unable to execute. e.g. missing semicolon/ quote mark/ parenthesis
     fatal       - script execution immediately terminated. e.g. accessing non existing object property
-to see errors in php.ini set, ini_set('display_errors', 1)
-then include error_reporting(E_ALL) in all pages
+
+    to see errors in php.ini set, ini_set('display_errors', 1)
+    then include error_reporting(E_ALL) in all pages
 
 MVC
     when user visits an url, https://example.com/products/show/1 > 
@@ -450,7 +451,6 @@ SOLID principle
             we need an object. But we dont need to manually write new someClass() everytime.
             instead we call a FACTORY METHOD and it return the correct object.
             tell the factory what you want, and it decides which class to create and returns it.
-
     STRATEGY PATTERN
         choose behavior at runtime by switching between different algorithms (strategies).
         Strategy is when you switch between different behaviors (algorithms) at runtime, like picking a payment method.

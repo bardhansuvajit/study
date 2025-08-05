@@ -30,8 +30,16 @@ How do Laravel queues work?
         Laravel adds it to a queue (DB, Redis, SQS, etc.)
         A queue worker picks it up in the background
 
+Dependency Injection
+    Giving an object what it needs (its dependencies) from the outside, instead of the object creating them itself.
+
+What are Service Container
+    Laravel handles Dependency Injection by itself, using Service Container
+    The Service Container is Laravel's Dependency Injection engine.
+    It manages class dependencies, creates objects, and injects them automatically wherever needed.
+
 What are service providers in Laravel?
-    Service providers are the bootstrappers of a Laravel app.
+    Service providers are the bootstrappers (starting up) of a Laravel app.
     They register services, bind classes into the container, and configure packages.
     EXAMPLE
         Registering custom helper classes
@@ -56,7 +64,6 @@ How do you manage event-driven architecture in Laravel (events, listeners, queue
     php artisan make:event UserRegistered
     php artisan make:listener SendWelcomeEmail --event=UserRegistered
 
-
 How does Laravel handle query caching or route caching?
     query caching
         $users = Cache::remember('active_users', 60, function () {
@@ -74,7 +81,6 @@ What is facade
         | `Route`     | `Illuminate\Routing\Router`           |
         | `Log`       | `Illuminate\Log\LogManager`           |
         | `Validator` | `Illuminate\Validation\Factory`       |
-
 
 register || boot
     register() → “Set up services”
@@ -429,12 +435,11 @@ How would you encrypt and decrypt data in Laravel?
 
 
 What's the role of Laravel Sanctum and Passport?
-    Both are used for API authentication, but serve different use cases:
+    Both are used for API authentication.
     🔐 Sanctum:
         Best for SPA or mobile APIs
-        Lightweight
         Uses token-based auth or cookie-based auth
-        Easy setup
+        Lightweight. Easy setup
     🔐 Passport:
         Full OAuth2 implementation
         Best when dealing with third-party apps, scopes, or token authorization servers
