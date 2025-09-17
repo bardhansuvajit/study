@@ -15,3 +15,258 @@ SOLID principle
 CMS - what is it ? 
 MVC - how it works
 
+
+FRONTEND
+PSD to HTML ?
+pseudo class in CSS
+SAAS experience ?
+anything new in CSS you learnt in last 1 year
+CDN ?
+- Content Delivery Network. network of servers distributed across the world
+- deliver web content to users faster, depending on their location.
+
+
+
+BACKEND
+node experience ?
+custom php & laravel experience & projects done ?
+what is .htaccess (HyperText Access)
+- config file for Apache web servers. Laravel (and many PHP apps) use it for URL rewriting, redirects, security, caching, etc.
+
+
+
+LARAVEL
+why use laravel for ecommerce, not shopify ?
+events (used to decouple logic) & scheduling (use dfor cron jobs)
+3rd party packages used in laravel & how did you use them ?
+what is composer ?
+
+composer.lock file ? composer.json (whats needed) vs composer.lock (whats exactly needed, with version)
+- packages with version(^1.19) vs exact version (v1.19.1) on previous 'composer install'
+
+which one to use in production - composer install or composer update ? 
+- composer INSTALL, because sometimes updating packages without testing could break your application. Use composer update locally, then commit the updated composer.lock to the repository, and then run composer install on the production server.
+
+Caching in laravel
+Migrations ? primary use of migration in laravel ? (Keep track of schema changes, without it's hard to sync changes with teammates)
+Softdelete in laravel (Laravel just marks the record as deleted)
+
+
+** request life cycle in laravel
+- URL hit > public/index.php > vendor/autoload.php > Service Providers > Routing > Middleware (before) > Controller / Logic (Service Container works here) > Middleware (after) > Response created → view/json/redirect > Response sent to browser
+
+
+Service containers (dependency injection system) & service providers (registers services in container)
+Middlewares (filter HTTP request)
+MVC model in laravel
+when middlewares are being called ?
+
+Dependency injection in Laravel - Laravel service container is a powerful tool for managing class dependencies and performing dependency injection. Dependency injection is a fancy phrase that essentially means this: class dependencies are "injected" into the class via the constructor or, in some cases, "setter" methods.
+
+Relationships in eloquoent ORM ?
+One To One - A user has one profile
+One To Many - A user has many blogs/ posts.
+Many To Many (reccords both sides) - A user can have many roles, and a role can belong to many users.
+Has One - 
+Has Many - 
+
+example of manyToMany relationship - product & categories table relationship
+
+Repository design pattern
+any other design pattern used in laravel ?
+
+* Facades in laravel
+basically a shortcut (static interface) to classes that are inside the service container.
+
+
+
+
+
+
+PHP
+* interface vs abstract class
+Interface → Can only declare methods no implementation
+Abstract Class → Can declare and implement methods (some methods may have code, some may be abstract).
+
+A class can implement multiple interfaces (multi inheritance).
+A class can extend only one abstract class (single inheritance).
+
+written any abstarct classes/ interfaces before ?
+
+Trait & its uses
+- a way to reuse code across multiple classes, supports multiple inheritance
+how u use trait to achieve multiple inheritance
+- in Laravel
+- use Illuminate\Database\Eloquent\SoftDeletes;
+- inside class...use SoftDeletes;
+- use Illuminate\Notifications\Notifiable; (sending notifications)
+- use Illuminate\Database\Eloquent\Factories\HasFactory; (model factories for seeding)
+
+does train support access specifier ?
+concept of function overriding
+- Method Overriding (Run-time Polymorphism) - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
+- Method Overloading (Compile-time Polymorphism) - same method name with different number of arguments — but PHP doesn't support this directly.
+
+ever done exception handling in codes ?
+- by using try...catch block
+- Throwing Own Exception - throw new Exception("Some exception message");
+
+array functions
+array_push → add value at the end
+array_merge($arr1, $arr2) → merges arrays
+array_combine($keys, $values) → combines 2 arrays into key-value
+array_map($callback, $arr) → apply function to each element
+array_filter($arr, $callback) → filter values
+* array_map and array_filter return a new array — they do not modify the original array.BUT foreach updates the original array
+
+any web token u used in Rest APIs
+- A JWT is a long string with 3 parts
+- Header → Info about the token (like type = JWT, algorithm = HS256).
+- Payload → Actual data (like user id, role, email).
+- Signature → A secret-based signature to prove it wasn’t tampered with.)
+
+different methods in Rest APIs
+POST vs PUT method
+POST- Create a **new resource** on the server
+PUT- Update an **existing resource completely**/create it if it doesn’t exist (sometimes called “upsert”)
+PATCH- Update part of an existing resource (partial update).
+
+closure in php
+- a function without a name, can be assigned to a variable
+Setters & Getters?
+- Getter → A method used to read/access the value of a property.
+- Setter → A method used to set/change the value of a property
+super global arrays in php
+- $_GET/ $_POST/ $_REQUEST/ $_SESSION/ $_COOKIE
+
+how session and cookies are related in php
+- PHP Sessions Use Cookies
+When session_start() is called in PHP:
+PHP checks if a session ID exists in the request (usually via cookie PHPSESSID).
+If not, PHP creates a new session and generates a unique ID.
+PHP then sends a cookie to the browser:
+Set-Cookie: PHPSESSID=abc123; path=/
+Browser stores this cookie and sends it back with every request.
+PHP uses the session ID from the cookie to load the correct session data from the server.
+
+
+
+
+
+
+MYSQL
+rate yourself in database
+confortable with writing queries ?
+have u created schemas for projects ?
+how would u store decimal number ? float/ double
+how would u store negative number ?
+- By default, numeric columns in MySQL are signed, means they can store both positive and negative numbers.
+worked with DATE fields ?
+does mysql has DATE functions like PHP ?
+why do we use group by
+- summarizing or aggregating data by categories
+- after grouping, you can perform aggregate functions (like COUNT, SUM, AVG, MAX, MIN) on each group.
+** where vs having
+- WHERE: To filter individual rows based on a condition. [row-level filter before grouping]
+- HAVING: To filter aggregated results (like SUM, COUNT, AVG) after GROUP BY. [group-level filter after aggregation]
+cant use aggregation with where ?
+- NO
+can u have multiple group by in a query ?
+- YES, GROUP BY column1, column2;
+indexing in mysql
+- a data structure/ a pointer that MySQL uses to find rows faster
+- CREATE INDEX idx_name ON employees(last_name);
+Inner vs left join
+- Returns only rows that have matching values in both tables
+- Returns all rows from left, and matching rows from right
+
+
+
+
+
+QUERY
+1. table - employees, field - date_of_joining, query to find employees who joined last year but dont pass any date, only use mysql
+- SELECT * FROM employees WHERE YEAR(date_of_joining) = YEAR(CURDATE()) - 1
+
+2. SELECT * FROM table WHERE condition 1 OR condition 2
+get same result but dont use OR clause
+- IN - 		SELECT * FROM employees WHERE department IN ('Sales', 'Marketing');
+- UNION - 	SELECT * FROM employees WHERE department = 'Sales' UNION SELECT * FROM employees WHERE salary > 50000;
+
+3. fetch first 30 records from employees
+- SELECT * FROM employees LIMIT 30 OFFSET 0; (OR)
+- SELECT * FROM employees LIMIT 0,30; (Offset/ skips 0, limit 30)
+fetch next 20 records
+- LIMIT 20, 20; (skips 2 0, limit 20)
+
+
+
+
+
+
+
+
+
+GIT
+have u used GIT - CLI or GUI ?
+git fork vs clone
+- git clone is used to make a local copy of a repository
+- fork is to create your copy of someone else’s repository on your account
+create a new branch in local repo
+- git branch (Check Current Branch)
+- git checkout -b branch-name (Create new branch & Switch)
+delete branch from local repo
+- git branch -d branch_name (Safe delete)
+- git branch -D branch_name (Force delete)
+
+
+
+
+
+
+
+JAVASCRIPT
+form validation in JS
+check if a variable is number/ not
+- console.log(typeof x === 'number');  // true
+- console.log(isNaN(x)); // false → if its is a number
+
+check if object
+- console.log(typeof obj === 'object'); // true
+- console.log(typeof arr === 'object'); // true
+- console.log(Object.prototype.toString.call(obj)); // [object Object]
+- console.log(Object.prototype.toString.call(arr)); // [object Array]
+
+DOM
+- DOM → web page's content (HTML is parsed/ read as objects and nodes/ Tree-like structure by the browser, so that JS can access & manipulate it. This tree like structure is called DOM.)
+- BOM → the browser around the page (tabs, URL, back button, screen size)
+
+anonymous functions
+- function without a name
+- Usually stored in a variable, passed as an argument, or returned from another function.
+- Often used as callback or inline function
+
+undeclared vs undefined
+- A variable is undeclared if it has not been defined at all in your code.
+- console.log(a); // ReferenceError: a is not defined
+- A variable is declared but has not been assigned a value
+- let b;console.log(b); // undefined
+
+whats callback function
+- function passed as an argument to another function. It is “called back” (executed) inside the other function, usually after some operation is done. Commonly used for asynchronous operations
+- setTimeout(function() {
+    console.log("This runs after 2 seconds");
+}, 2000);
+
+
+
+AJAX
+XML in AJAX
+- Asynchronous JavaScript and XML
+- Initially, AJAX used XML to send/receive data from the server without reloading the page.
+- JSON (JavaScript Object Notation) has mostly replaced XML because:
+- 1. JSON is lightweight and easier for humans to read and write. XML requires opening and closing tags, making it more verbose
+- 2. JSON is based on JavaScript object syntax. You can directly use JSON.parse() and JSON.stringify() in JS. XML requires additional parsing using DOMParser, XPath, or XMLHttpRequest.
+
+
+
