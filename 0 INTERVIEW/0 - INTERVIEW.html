@@ -18,7 +18,11 @@ MVC - how it works
 
 FRONTEND
 PSD to HTML ?
+
 pseudo class in CSS
+- Pseudo-elements let you style specific parts of an element's content like before or after content - ::after, ::before, ::first-letter, ::selection, ::placeholder
+- Pseudo-classes define a special state of an element - :hover, :first-child, :focus, :active, :visited, :checked, :nth-child(), :last-of-type, :not(selector)
+
 SAAS experience ?
 anything new in CSS you learnt in last 1 year
 CDN ?
@@ -77,7 +81,7 @@ any other design pattern used in laravel ?
 
 * Facades in laravel
 basically a shortcut (static interface) to classes that are inside the service container.
-
+Auth::/ Cache::/ DB::/ Log::/ Storage::
 
 
 
@@ -123,12 +127,12 @@ any web token u used in Rest APIs
 - A JWT is a long string with 3 parts
 - Header → Info about the token (like type = JWT, algorithm = HS256).
 - Payload → Actual data (like user id, role, email).
-- Signature → A secret-based signature to prove it wasn’t tampered with.)
+- Signature → A secret-based signature to prove it wasn't tampered with.
 
 different methods in Rest APIs
 POST vs PUT method
 POST- Create a **new resource** on the server
-PUT- Update an **existing resource completely**/create it if it doesn’t exist (sometimes called “upsert”)
+PUT- Update an **existing resource completely**/create it if it doesn't exist (sometimes called “upsert”)
 PATCH- Update part of an existing resource (partial update).
 
 closure in php
@@ -211,7 +215,7 @@ GIT
 have u used GIT - CLI or GUI ?
 git fork vs clone
 - git clone is used to make a local copy of a repository
-- fork is to create your copy of someone else’s repository on your account
+- fork is to create your copy of someone else's repository on your account
 create a new branch in local repo
 - git branch (Check Current Branch)
 - git checkout -b branch-name (Create new branch & Switch)
