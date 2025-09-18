@@ -1,139 +1,24 @@
-🔧 Performance & Optimization
+ACID property
+    Atomicity
+        Either entire transaction succeeds, or none of it does.
+        EX - Debit from A ✅ Credit to B ✅ If one fails, both are rolled back.
+    Consistency
+        One valid state to another valid state
+        EX - You can't withdraw more money than you have. If a rule is violated, the transaction fails.
+    Isolation
+        Transactions happen independently of each other. Dont interfere with each other
+    Durability
+        Data is permanently saved
 
-1. How does indexing work in MySQL? What are the types of indexes?
-    Explain B-Tree, Hash, Full-text, and Spatial indexes.
-    Know differences between primary, unique, composite, covering indexes.
+Deadlock
+    when 2/ more database transactions are waiting for each other to release resources, but none of them can proceed. they are stuck forever
+    EX - two users are transferring money between each other at the same time.
 
-2. What is a covering index?
-    A covering index is one that contains all the columns needed by a query.
-    So the query can be satisfied entirely by the index, without touching the table (no "back to table" lookup).
+Data
+    data is raw facts/ information
+    It can be numbers, text, images, audio, etc. It has no meaning until it's organized or processed.
 
-3. How does the MySQL query optimizer work?
-    The optimizer decides the most efficient way to run a query.
-    Uses statistics, index cardinality, join order, index selectivity.
-
-4. What is the difference between EXISTS vs IN vs JOIN? Which is faster?
-    Use EXISTS for correlated subqueries.
-    IN loads a full result set.
-    JOIN can outperform both, but may return duplicate rows if not handled.
-
-5. How do you detect slow queries?
-    Enable and inspect the slow query log.
-    Use EXPLAIN, ANALYZE, or performance_schema for deep profiling.
-
-6. How would you optimize a slow query?
-    Use EXPLAIN to analyze execution plan.
-    Add proper indexes, rewrite joins, eliminate filesort, reduce temp tables.
-    Denormalize if necessary for heavy-read systems.
+DBMS (Database Management System)
+    DBMS is software used to store, organize, retrieve and manage data in structured way.
 
 
-
-
-
-📊 Data Modeling & Design
-
-7. How do you design a schema for multi-language support?
-    Option 1: Translation tables per entity.
-    Option 2: JSON columns.
-    Option 3: EAV (use cautiously).
-
-8. How would you handle large volumes of data (e.g., logs, events)?
-    Use partitioning, sharding, archival strategies.
-    Use InnoDB compression, or migrate to OLAP systems if needed.
-
-9. What is database normalization? When would you denormalize?
-    Normalize for data integrity.
-    Denormalize when performance and read speed matter more than write duplication.
-
-
-
-
-
-🔐 Transactions & Concurrency
-
-10. What is the difference between READ COMMITTED and REPEATABLE READ?
-    READ COMMITTED: No dirty reads, but non-repeatable reads can happen.
-    REPEATABLE READ: No dirty or non-repeatable reads; uses MVCC to provide consistent snapshots.
-
-11. Explain deadlocks. How can you prevent or detect them?
-    Deadlocks occur when two transactions wait on each other.
-    Prevent by consistent locking order, smaller transactions, or deadlock detection logs.
-
-12. What is MVCC in InnoDB?
-    Multi-Version Concurrency Control.
-    Lets readers work without blocking writers, by providing snapshots of data.
-
-
-
-
-
-📁 Indexing & Query Internals
-13. How does MySQL use composite indexes?
-    Order matters. Index on (a, b) can be used for queries with:
-    WHERE a = ?
-    WHERE a = ? AND b = ?
-    ❌ Not WHERE b = ? alone
-
-14. What are common index pitfalls?
-    Index on low-cardinality columns (like is_active)
-    Over-indexing (hurts write performance)
-    Not using prefix indexes for long VARCHAR
-
-
-
-
-
-🔐 Security & Access
-15. How would you secure MySQL in a production environment?
-    Use strong auth, least privilege access, SSL/TLS, disable remote root login, monitor logs.
-
-
-
-
-
-💥 Stored Procedures & Triggers
-16. Pros and cons of using stored procedures?
-    Pros:
-        Encapsulation
-        Faster for repetitive tasks
-        Less network latency
-    Cons:
-        Harder to version control
-        Debugging is painful
-        Less flexible than application logic
-
-17. What are BEFORE vs AFTER triggers?
-    BEFORE: Run before insert/update/delete — can modify data
-    AFTER: Run after — good for logging or chaining
-
-
-
-
-
-📦 Partitioning & Scaling
-18. What is partitioning? When do you use it?
-    Splits large tables into parts for better performance.
-    Useful for time-series data or very large datasets.
-    Types: RANGE, LIST, HASH, KEY
-
-19. How would you scale MySQL?
-    Vertical scaling (more CPU/RAM)
-    Read replicas for read scaling
-    Sharding for write scaling
-    Use a proxy layer like ProxySQL for routing
-
-
-
-
-
-🧪 Advanced Query Writing
-20. Write a query to get the second highest salary in a table.
-    SELECT MAX(salary)
-    FROM employees
-    WHERE salary < (SELECT MAX(salary) FROM employees);
-
-21. How do you calculate running totals using SQL?
-    (If MySQL 8+ supports window functions)
-    SELECT name, salary, 
-    SUM(salary) OVER (ORDER BY id) AS running_total
-    FROM employees;
