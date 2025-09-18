@@ -536,194 +536,156 @@ class ChildClass extends BaseClass {
     ...
 }
 
+
 DEPENDENCY INJECTION
-# 🟢 Step 1: Class & Object (Basic OOP in PHP)
-A **class** is like a blueprint. An **object** is created from that blueprint.
+Step 1: Class & Object (Basic OOP in PHP)
+    A **class** is like a blueprint. An **object** is created from that blueprint.
+    Example:
+        class Car {
+            public function drive() {
+                return "The car is moving!";
+            }
+        }
 
-Example:
+        // Create an object from the class
+        $myCar = new Car();
+        echo $myCar->drive(); // Output: The car is moving!
+    👉 Here:
+        * `Car` = class (blueprint)
+        * `$myCar` = object (actual car we can use)
 
-```php
-class Car {
-    public function drive() {
-        return "The car is moving!";
-    }
-}
+Step 2: Using Classes Together
+    Now let's say we have an **Engine** class and a **Car** class that needs an engine:
+    Example:
+        class Engine {
+            public function start() {
+                return "Engine started!";
+            }
+        }
 
-// Create an object from the class
-$myCar = new Car();
-echo $myCar->drive(); // Output: The car is moving!
-```
+        class Car {
+            protected $engine;
 
-👉 Here:
+            public function __construct() {
+                $this->engine = new Engine(); // Car creates Engine inside itself
+            }
 
-* `Car` = class (blueprint)
-* `$myCar` = object (actual car we can use)
+            public function drive() {
+                return $this->engine->start() . " Car is moving!";
+            }
+        }
 
----
+        $car = new Car();
+        echo $car->drive();
 
-# 🟢 Step 2: Using Classes Together
+    👉 Problem:
+    `Car` is **tightly coupled** to `Engine`. If we want to use another type of engine (say `ElectricEngine`), we must change the `Car` class itself.
 
-Now let’s say we have an **Engine** class and a **Car** class that needs an engine:
+Step 3: Dependency Injection (DI)
+    Instead of `Car` creating its own `Engine`, we **inject the dependency** from outside.
+    Example:
+        class Engine {
+            public function start() {
+                return "Petrol engine started!";
+            }
+        }
 
-```php
-class Engine {
-    public function start() {
-        return "Engine started!";
-    }
-}
+        class ElectricEngine {
+            public function start() {
+                return "Electric engine started silently!";
+            }
+        }
 
-class Car {
-    protected $engine;
+        class Car {
+            protected $engine;
 
-    public function __construct() {
-        $this->engine = new Engine(); // Car creates Engine inside itself
-    }
+            // Dependency Injection via constructor
+            public function __construct($engine) {
+                $this->engine = $engine;
+            }
 
-    public function drive() {
-        return $this->engine->start() . " Car is moving!";
-    }
-}
+            public function drive() {
+                return $this->engine->start() . " Car is moving!";
+            }
+        }
 
-$car = new Car();
-echo $car->drive();
-```
+        // Inject Petrol Engine
+        $petrolCar = new Car(new Engine());
+        echo $petrolCar->drive();
+        // Output: Petrol engine started! Car is moving!
 
-👉 Problem:
-`Car` is **tightly coupled** to `Engine`. If we want to use another type of engine (say `ElectricEngine`), we must change the `Car` class itself.
+        // Inject Electric Engine
+        $tesla = new Car(new ElectricEngine());
+        echo $tesla->drive();
+        // Output: Electric engine started silently! Car is moving!
 
----
+    👉 Now `Car` does not care what kind of engine it gets.
+    This is **Dependency Injection (DI)**: giving an object its required dependencies **from outside**, instead of creating them inside.
 
-# 🟢 Step 3: Dependency Injection (DI)
+Step 4: How Laravel Helps with DI
+    In Laravel, you don't even need to `new Engine()` manually.
+    Laravel has a **Service Container** that automatically gives the right object when needed.
+    Example in Laravel Controller:
+        namespace App\Http\Controllers;
 
-Instead of `Car` creating its own `Engine`, we **inject the dependency** from outside.
+        use Illuminate\Http\Request;
 
-```php
-class Engine {
-    public function start() {
-        return "Petrol engine started!";
-    }
-}
+        class UserController extends Controller
+        {
+            public function store(Request $request)
+            {
+                // Laravel automatically "injects" the Request object here
+                $data = $request->all();
+                return response()->json($data);
+            }
+        }
+    👉 You didn't create `new Request()`.
+    Laravel's **Service Container** saw you asked for a `Request` object and injected it for you.
 
-class ElectricEngine {
-    public function start() {
-        return "Electric engine started silently!";
-    }
-}
+Step 5: Binding Custom Services in Laravel
+    Let's say you make a `PaymentGateway` service:
+        interface PaymentGateway {
+            public function pay($amount);
+        }
 
-class Car {
-    protected $engine;
+        class PaypalGateway implements PaymentGateway {
+            public function pay($amount) {
+                return "Paid $amount using PayPal!";
+            }
+        }
+    Register it in a Service Provider (e.g., `AppServiceProvider`):
+        public function register(): void
+        {
+            $this->app->bind(PaymentGateway::class, PaypalGateway::class);
+        }
 
-    // Dependency Injection via constructor
-    public function __construct($engine) {
-        $this->engine = $engine;
-    }
+    Now in your controller:
+        use App\Services\PaymentGateway;
 
-    public function drive() {
-        return $this->engine->start() . " Car is moving!";
-    }
-}
+        class OrderController extends Controller
+        {
+            protected $gateway;
 
-// Inject Petrol Engine
-$petrolCar = new Car(new Engine());
-echo $petrolCar->drive();
-// Output: Petrol engine started! Car is moving!
+            // Laravel automatically injects PaypalGateway here
+            public function __construct(PaymentGateway $gateway)
+            {
+                $this->gateway = $gateway;
+            }
 
-// Inject Electric Engine
-$tesla = new Car(new ElectricEngine());
-echo $tesla->drive();
-// Output: Electric engine started silently! Car is moving!
-```
+            public function checkout()
+            {
+                return $this->gateway->pay(100);
+            }
+        }
 
-👉 Now `Car` does not care what kind of engine it gets.
-This is **Dependency Injection (DI)**: giving an object its required dependencies **from outside**, instead of creating them inside.
-
----
-
-# 🟢 Step 4: How Laravel Helps with DI
-
-In Laravel, you don’t even need to `new Engine()` manually.
-Laravel has a **Service Container** that automatically gives the right object when needed.
-
-Example in Laravel Controller:
-
-```php
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class UserController extends Controller
-{
-    public function store(Request $request)
-    {
-        // Laravel automatically "injects" the Request object here
-        $data = $request->all();
-        return response()->json($data);
-    }
-}
-```
-
-👉 You didn’t create `new Request()`.
-Laravel’s **Service Container** saw you asked for a `Request` object and injected it for you.
-
----
-
-# 🟢 Step 5: Binding Custom Services in Laravel
-
-Let’s say you make a `PaymentGateway` service:
-
-```php
-interface PaymentGateway {
-    public function pay($amount);
-}
-
-class PaypalGateway implements PaymentGateway {
-    public function pay($amount) {
-        return "Paid $amount using PayPal!";
-    }
-}
-```
-
-Register it in a Service Provider (e.g., `AppServiceProvider`):
-
-```php
-public function register(): void
-{
-    $this->app->bind(PaymentGateway::class, PaypalGateway::class);
-}
-```
-
-Now in your controller:
-
-```php
-use App\Services\PaymentGateway;
-
-class OrderController extends Controller
-{
-    protected $gateway;
-
-    // Laravel automatically injects PaypalGateway here
-    public function __construct(PaymentGateway $gateway)
-    {
-        $this->gateway = $gateway;
-    }
-
-    public function checkout()
-    {
-        return $this->gateway->pay(100);
-    }
-}
-```
-
-👉 Laravel sees `PaymentGateway $gateway` and says:
-“Oh, in the container, PaymentGateway is bound to PaypalGateway. Let me inject that!”
-
----
+    👉 Laravel sees `PaymentGateway $gateway` and says:
+    “Oh, in the container, PaymentGateway is bound to PaypalGateway. Let me inject that!”
 
 # ⚡ In Short
-
 * **Class & Object** = blueprint and instance.
 * **Dependency Injection** = giving a class its required objects from outside, instead of creating them inside.
 * **Laravel** automates DI with the **Service Container**, so you just type-hint what you need, and Laravel provides it.
+
 
 
 
