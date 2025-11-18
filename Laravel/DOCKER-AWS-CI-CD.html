@@ -1,0 +1,133 @@
+YOUTUBE VIDEO
+https://www.youtube.com/watch?v=8Wci1gGsuNk&list=PLSe91q1rf5vV-gTi0zJTz1BNvnb0x426p&index=1
+
+
+
+
+STEPS
+create Laravel app > Dockerise it > install composer packages > run tests inside docker container > install Jenkins > Jenkins CI/CD pipeline > pipeline will spin up the docker containers, run tests > create ARtifact, Zip the app, populate .env, then copy the artifact over AWS EC2 instance > unzip there & app will be available
+
+
+
+
+BASICS
+Docker
+What: A containerization platform that packages an application and its dependencies into lightweight, portable containers.
+Why: Ensures consistent environments, easy deployment, faster setup, and scalability.
+
+Jenkins
+What: An open-source automation server used to build, test, and deploy applications.
+Why: Automates repetitive DevOps tasks and acts as the backbone for CI/CD pipelines.
+
+CI/CD
+CI (Continuous Integration): Developers frequently merge code; automated builds/tests run to catch issues early.
+CD (Continuous Delivery/Deployment): Automates releasing code to staging/production after CI passes.
+Why: Improves code quality, reduces manual errors, speeds up releases, and ensures reliable deployments.
+
+
+
+
+PROBLEM
+Deployment takes time. once the app is live, doing changes after that is hectic. like pulling repo, install packages, dependencies, testing etc in live is scary
+OR, use a machine into a Build Machine
+
+
+
+
+INSTALL PACKAGES
+use Manjaro distro for linux, IF POSSIBLE
+
+update packages - 
+sudo pacman -Su (pacman is the package manager -su means sync & upgrade installed packages) (OR sudo pacman -Syu)
+
+install snap repository
+sudo pacman -S snapd (installs snapd from the official Arch/Manjaro software repository.)
+
+enable snap repo
+sudo systemctl enable --now snapd.socket (enable → makes the service start automatically on boot | --now → start immediately | snapd.socket → the socket unit that triggers the Snap daemon when needed)
+
+create a symlink (symlink is a pointer or shortcut to another file or folder.)
+sudo ln -s /var/lib/snapd/snap /snap (creates a shortcut from /var/lib/snapd/snap to /snap so Snap apps can run normally on system)
+
+install VScode, google vscode snap
+sudo snap install code --classic
+
+installing Docker through pacman
+sudo pacman -S docker
+enable & start the docker service
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+
+now docker has created a group, add current logged-in user needs to be in the group 
+sudo usermod -aG docker $USER
+
+install docker compose, which is a separate application here
+sudo pacman -S docker-compose
+
+sudo reboot
+
+
+
+PROJECT BOILERPLATE
+get dockerfiles & docker-compose.yml from here
+https://github.com/thecaringdeveloper/laravel-cicd-tutorial
+
+mkdir workspace > cd workspace > git clone... > cd demo-project
+docker compose up - now the containers are running
+install laravel app now
+docker-compose run composer create-project laravel/laravel some-project-name "8.0.*" --prefer-dist
+
+NOW, 
+demo-project
+    |---dockerfiles
+    |---docker-compose.yml
+    |---some-project-name (laravel app)
+move everything from "some-project-name" to "demo-project" folder
+mv ./some-project-name/* ./ (move all files)
+mv ./some-project-name/.* ./ (move hidden files)
+rm -rf some-project-name
+
+test if everything is working
+docker-compose run artisan test
+
+
+
+
+INSTALL JAVA & JENKINS & SETUP ADMIN ACCOUNT
+JAVA
+sudo pacman -S jre8-openjdk-headless jre8-openjdk jdk8-openjdk openjdk8-doc openjdk8-src
+JENKINS
+sudo pacman -S jenkins, if doesnt work, update packages first, sudo pacman -Sy (OR sudo pacman -Syu)
+start jenkins
+sudo systemctl start jenkins
+
+to check goto, the page will ask for initialAdminPassword
+http://localhost:8090
+
+to get the initialAdminPassword
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword (u can get this path from jenkins page)
+copy & use the password > install suggested plugins > create admin user > 'admin' & 'admin', test email & name, keep the URL same http://localhost:8090 > Jenkins dashboard
+
+Jenkins is a tool to create pipelines, deploy, run tests etc.
+
+
+
+
+GIHUB REPO SETUP
+create new repo > private
+set new repo in local
+git remote set-url origin git@github.com:bardhansuvajit/laravel-ci-cd-project.git
+git config --global user.email bardhansuvajit@gmail.com
+git config --global user.name suvajit
+git add *
+git commit -m 'laravel project'
+git push
+
+
+
+
+ADD JENKINS USER TO DOCKER GROUP
+that will ensure the jenkins user can control the docker containers
+sudo usermod -aG docker jenkins
+
+create jenkins file & create ci/cd pipeline in jenkins. these pipeline will find the jenkins file inside github repo and will be used to drive the ci/cd pipeline
