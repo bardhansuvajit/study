@@ -131,3 +131,64 @@ that will ensure the jenkins user can control the docker containers
 sudo usermod -aG docker jenkins
 
 create jenkins file & create ci/cd pipeline in jenkins. these pipeline will find the jenkins file inside github repo and will be used to drive the ci/cd pipeline
+
+
+
+
+PIPELEINE INITIAL SETUP
+create jenkins file, makefile, credentials for github in jenkins (so jenkins can pull our project), create & populate .env file in workspace, install some file operations, some plugins
+then restart jenkins
+
+open the project in vscode
+create "Jenkinsfile" in root & paste content from the Github Repo
+
+goto Jenkins link, http://localhost:8090
+Manage Jenkins > Manage Credentials > Domains > (global) > Add Credentials
+
+New credentials >
+SSH username with Private Key > ID - github > Username - some-project
+Praviet key - Enter directly - use private SSH key
+create
+
+
+** If u dont have SSH key setup in system 
+- ssh-keygen -t ed25519 -C "your_email@example.com"         (generate the key - 2keys will be generated, public & private)
+- type C:\Users\user\.ssh\id_ed25519.pub                    (get/ copy the public key)
+- copy & use the whole code in Github account SSH key
+
+
+Create Pipeline
+Enter name, desc > Definition - Pipeline script from SCM > SCM - git > Repository URL - use SSH url from github repo
+select credentails > Branch - main > Script Path - Jenkinsfile - SAVE
+
+Now, try 'Build now' from Jenkins & try to 'Commit'
+as needed try, 
+sudo systemctl restart jenkins
+sudo systemctl restart docker.service
+
+
+
+MAKEFILE
+create Makefile in root - copy contents from github repo
+now try 'make up' command, install make if needed
+
+
+
+
+Create the .env file in jenkins directory
+if the build error says something like, MissingAppKeyException
+in the Jenkins Console Output, check where the Jenkins is running, 
+most likely its on /var/lib/jenkins/workspace/LaravelTest
+so create a folder here, /var/lib/jenkins/workspace/envs
+
+
+
+
+
+
+
+
+
+
+
+
