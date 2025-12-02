@@ -290,9 +290,27 @@ php -v
 
 update document root in httpd.conf file
 cd /etc/httpd/conf > ls (u should see httpd.conf)
-sudo nano httpd.conf (save & exit)
+sudo nano httpd.conf (save & exit. nothing to do here ?)
 
 verify unzip command is avilable (> unzip)
+check Jenkinsfile for "sshagent" code > fix it as needed & build it
+cd /var/ww/html/ > ls (all project files should be there)
+cd /etc/httpd/conf > ls (u should see httpd.conf)
+sudo nano httpd.conf (set document root & the directory to the public folder - agaian did nothing here)
+
+restart apache server
+sudo service https restart
+sudo amazon-linux-extras enable php8.0 (enable php 8)
+AND ALL SET. TRY to change something simple & push it. should be directly uploaded
+
+
+
+
+
+
+
+
+
 
 
 
