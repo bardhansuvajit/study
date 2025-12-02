@@ -2,8 +2,34 @@ YOUTUBE VIDEO
 https://www.youtube.com/watch?v=8Wci1gGsuNk&list=PLSe91q1rf5vV-gTi0zJTz1BNvnb0x426p&index=1
 
 
+PREREQUISITES
+SSH/ Secure Shell/ Secure remote login - a network protocol that lets you securely connect to another computer/server over a network.
+
+Understand command
+sudo yum -y install httpd, means
+sudo > Runs command as administrator/root.
+yum > The package manager for RHEL-based systems (like: Amazon Linux, CentOS, Red Hat (RHEL), Rocky Linux, AlmaLinux).
+-y > Automatically answers "yes" to all prompts (so it installs without asking you).
+install httpd > Installs Apache Web Server (package name: httpd).
+
+CI-CD
+DevOps practice to automate the software development, testing and deployment process.
+Developer pushes code → GitHub > CI runs tests → Jenkins/GitHub Actions > If tests pass → CD deploys to AWS server automatically
+
+CI - Continuous Integration/ Automated Testing > Devs push codes, code gets automatically built,tested,checekd for errors,merged safely > Tools used Github action, Jenkins, Gitlab CI, Bitbucket Pipelines
+CD - Continuous Delivery / Deployment / AUtomated Deployment > After CI passes, CD automates deploying the code. 2 types
+Continuous Delivery > code is automatically tested & ready for deployment, but you still hit a button to deploy > Manual approval required.
+Continuous Deployment > Fully automated deployment to production > No human involvement - code goes live automatically after tests pass.
 
 
+
+
+
+
+
+================****************================
+TUTORIAL START HERE
+================****************================
 STEPS
 create Laravel app > Dockerise it > install composer packages > run tests inside docker container > install Jenkins > Jenkins CI/CD pipeline > pipeline will spin up the docker containers, run tests > create ARtifact, Zip the app, populate .env, then copy the artifact over AWS EC2 instance > unzip there & app will be available
 
@@ -147,15 +173,13 @@ Manage Jenkins > Manage Credentials > Domains > (global) > Add Credentials
 
 New credentials >
 SSH username with Private Key > ID - github > Username - some-project
-Praviet key - Enter directly - use private SSH key
+Private key - Enter directly - use private SSH key
 create
-
 
 ** If u dont have SSH key setup in system 
 - ssh-keygen -t ed25519 -C "your_email@example.com"         (generate the key - 2keys will be generated, public & private)
 - type C:\Users\user\.ssh\id_ed25519.pub                    (get/ copy the public key)
 - copy & use the whole code in Github account SSH key
-
 
 Create Pipeline
 Enter name, desc > Definition - Pipeline script from SCM > SCM - git > Repository URL - use SSH url from github repo
@@ -168,18 +192,107 @@ sudo systemctl restart docker.service
 
 
 
+
 MAKEFILE
 create Makefile in root - copy contents from github repo
 now try 'make up' command, install make if needed
-
-
-
 
 Create the .env file in jenkins directory
 if the build error says something like, MissingAppKeyException
 in the Jenkins Console Output, check where the Jenkins is running, 
 most likely its on /var/lib/jenkins/workspace/LaravelTest
-so create a folder here, /var/lib/jenkins/workspace/envs
+so create a folder here, sudo mkdir /var/lib/jenkins/workspace/envs && sudo mkdir /var/lib/jenkins/workspace/envs/demo-project-1
+edit .env - sudo nano /var/lib/jenkins/workspace/envs/demo-project-1/.env (copy from project directory .env & paste here)
+in demo-project/Jenkinsfile, check the "Populate .env file" directory
+Push & Build, this should succeed
+
+
+
+
+AWS EC2 INSTANCE
+New/ Launch instance > "Laravel cicd-test", name > Create key pair > "key-for-ec2-laravel-cicd-test", name > RSA, .pem > Create
+Load the key in Jenkins
+terminal > cat ~/.ssh/key-for-ec2-laravel-cicd-test.pem > get key content OR use GUI
+Manage Jenkins > Manage Credentials > Domains > (global) > Add Credentials
+
+New credentials >
+SSH username with Private Key > ID - aws-ec2 > Username - some-project
+Private key - Enter directly - use private SSH key
+create
+
+Change Access Level of the file (else while checking connection, it might throw error)
+Terminal > chmod 400 ~/.ssh/key-for-ec2-laravel-cicd-test.pem
+
+**********
+Check SSH Connection
+AWS EC2 Instance - just created instance, copy the example like, ssh -i "key-for-ec2-laravel-cicd-test.pem" ec2-user@ec2-13-40-116-143.eu-west-2.compute.amazonaws.com
+Terminal > 
+ssh -i "~/.ssh/key-for-ec2-laravel-cicd-test.pem" ec2-user@ec2-13-40-116-143.eu-west-2.compute.amazonaws.com
+
+if all ok, then we are successfully connected SSH to EC2 Instace 
+now, we want Jenkins to do the same. Then verufy SSH connection. If the connection fails, the pipeline wont continue, else do
+
+Jenkins
+Manage Jenkins > Manage Plugins > search "SSH agent" > Download Install & Restart > check "Restart Jenkins when installation is complete and no jobs are running"
+
+**********
+in demo-project/Jenkinsfile, check the "Verify SSH connection to server"
+ssh -o StrictHostKeyChecking=no ec2-user@13.41.191.171 whoami (Change the IP "13.41.191.171" with EC2 instance public IPV4 address)
+
+
+
+
+ARTIFACT (ZIP)
+in our project folder zip everything, except node_modules (dont do anything, already written in Jenkinsfile)
+if, zip command not found, install zip (Terminal > zip)
+Build with Jenkins, artiface.zip should be created
+
+
+
+
+DEPLOY
+connect to EC2 using SSH
+ssh -i "~/.ssh/key-for-ec2-laravel-cicd-test.pem" ec2-user@ec2-13-40-116-143.eu-west-2.compute.amazonaws.com (>>>>>>now should be inside ec2)
+> mkdir artifact > cd artifact
+> pwd (print current directory) > /home/ec2-user/artifact
+> exit
+
+copy the artifact file in EC2 
+> check this section 'withCredentials' is added in Jenkinsfile
+> after this section is added/ fixed as per project need, artifact.zip should be in ec2 instance > check
+
+
+
+DEPLOY 2 + FINISH
+unzip file, install web server (php/ apache), and a few packages in EC2 instance, as there is nothiung to serve the application
+
+install Apache
+connect to EC2 using SSH
+ssh -i "~/.ssh/key-for-ec2-laravel-cicd-test.pem" ec2-user@ec2-13-40-116-143.eu-west-2.compute.amazonaws.com (>>>>>>now should be inside ec2)
+> sudo yum -y install httpd (install apache)
+> sudo service httpd start (legacy)/ sudo systemctl start httpd (modern) (start apache)
+> sudo chown ec2-user:ec2-user /var/www/html/ (update owner of the folder apache is serving from, so that our EC2 user can copy things, not apache)
+Now, to verify it open the IP, e.g. 13.40.116.143 (can be found in EC2 instance summary)
+
+**********
+If, opening the IP, doesn't load/ do anything, update inbound rules
+Goto Security > Security group > select the one > Edit "Inbound Rules"
+SSH - Custom - 0.0.0.0/00
+All TCP - Anywhere-IPv4 - 0.0.0.0/00
+Save
+Now, the instance IP (e.g. 13.40.116.143) should show, "Unable to connect", this is better than not showing anything/ keep loading, as we have no running application
+
+install PHP
+sudo amazon-linux-extras list | grep php (list available php versions)
+sudo yum clean metadata (Clears YUM's repository metadata cache)
+sudo yum install -y php-{pear,cgi,pdo,common,curl,mbstring,gd,mysqlnd,gettext,bcmath,json,xml,fpm,intl,zip} (install PHP)
+php -v
+
+update document root in httpd.conf file
+cd /etc/httpd/conf > ls (u should see httpd.conf)
+sudo nano httpd.conf (save & exit)
+
+verify unzip command is avilable (> unzip)
 
 
 
@@ -192,3 +305,89 @@ so create a folder here, /var/lib/jenkins/workspace/envs
 
 
 
+
+
+================****************================
+Jenkinsfile
+================****************================
+pipeline {
+    agent any
+    stages {
+        stage("Verify tooling") {
+            steps {
+                sh '''
+                    docker info
+                    docker version
+                    docker compose version
+                '''
+            }
+        }
+        stage("Verify SSH connection to server") {
+            steps {
+                sshagent(credentials: ['aws-ec2']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ec2-user@13.40.116.143 whoami
+                    '''
+                }
+            }
+        }        
+        stage("Clear all running docker containers") {
+            steps {
+                script {
+                    try {
+                        sh 'docker rm -f $(docker ps -a -q)'
+                    } catch (Exception e) {
+                        echo 'No running container to clear up...'
+                    }
+                }
+            }
+        }
+        stage("Start Docker") {
+            steps {
+                sh 'make up'
+                sh 'docker compose ps'
+            }
+        }
+        stage("Run Composer Install") {
+            steps {
+                sh 'docker compose run --rm composer install'
+            }
+        }
+        stage("Populate .env file") {
+            steps {
+                dir("/var/lib/jenkins/workspace/envs/laravel-test") {
+                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: '.env', targetLocation: "${WORKSPACE}")])
+                }
+            }
+        }              
+        stage("Run Tests") {
+            steps {
+                sh 'docker compose run --rm artisan test'
+            }
+        }
+    }
+    post {
+        success {
+            sh 'cd "/var/lib/jenkins/workspace/LaravelTest"'
+            sh 'rm -rf artifact.zip'
+            sh 'zip -r artifact.zip . -x "*node_modules**"'
+            withCredentials([sshUserPrivateKey(credentialsId: "aws-ec2", keyFileVariable: 'keyfile')]) {
+                sh 'scp -v -o StrictHostKeyChecking=no -i ${keyfile} /var/lib/jenkins/workspace/LaravelTest/artifact.zip ec2-user@13.40.116.143:/home/ec2-user/artifact'
+            }
+            sshagent(credentials: ['aws-ec2']) {
+                sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.40.116.143 unzip -o /home/ec2-user/artifact/artifact.zip -d /var/www/html'
+                script {
+                    try {
+                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.40.116.143 sudo chmod 777 /var/www/html/storage -R'
+                    } catch (Exception e) {
+                        echo 'Some file permissions could not be updated.'
+                    }
+                }
+            }                                  
+        }
+        always {
+            sh 'docker compose down --remove-orphans -v'
+            sh 'docker compose ps'
+        }
+    }
+}
