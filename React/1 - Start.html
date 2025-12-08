@@ -6,6 +6,9 @@ React
     is a Javascript library (A JavaScript library is a collection of pre-written JS code that provides ready-to-use functions so developers don't have to write everything from scratch.)
     Developer by Facebook in 2011
 
+***** WHY REACT
+    React is fast because it maintains a virtual DOM and updates only the necessary parts of the real DOM. It also uses component-based architecture, making code reusable and scalable.
+
 DOM (Document Object Model)
     HTML is parsed/ read as objects and nodes (Tree-like structure) by the browser, so that JS can access & manipulate it. 
     This tree like structure is called DOM.
@@ -44,9 +47,41 @@ VITE
         Converts JSX / TypeScript / SCSS etc. to browser-ready JS & CSS
         Splits and compresses code for fast loading
         Merges and minifies final JS/CSS for deployment
+    ******
+    WHY
+        A browser cannot read JSX, imports, modules or unprocessed React code directly. SO we need a server that can convert JSX to Javascript, combine & serve module, reload page instantly when code changes
+    WHY Vite create a server
+        Watches code for changes (so no need to refresh manually), Converts JSX / TypeScript / SCSS on the fly
 
 CREATE REACT APP
+npm create vite@latest (project name > react-app-1, cd react-app-1)
+******
+npm install
+    "npm install" reads the dependency list from "package.json" and installs all required packages into the "node_modules" directory. It ensures the project has the exact versions of libraries needed to run and build the application.
 
+    when a new react/ laravel project is created, this file is created, "package.json", which has a list of required tools/ packages but not downloaded yet
+    when "npm install" runs, NPM looks at "package.json" and downloads everything into "node_modules" folder
+    Without "npm install", the project cannot run because the necessary tools are missing.
+    package-lock.json is created/ updated when "npm install" is run. package-lock.json records what exactly was installed with exact version
+******
+npm run dev
+    starts the local development server/ start React in development mode
+    launches Vite, compiles React code, opens the app in the browser (e.g., http://localhost:5173), refreshes the UI automatically when you make changes (Hot Reload)
+
+
+FOLDERS
+    node_modules > dependencies
+    public > static files
+    src > main react code
+        components > reusable parts
+        assets > images, fonts, other static files
+        styles > css
+    package.json > project info, name, version, dependencies
+    vite.config.js > vite configs
+
+
+FILE EXTENSION
+    React files are save in .JSX (Javascript XML)
 
 
 
