@@ -3,14 +3,15 @@ https://www.youtube.com/watch?v=eILUmCJhl64
 
 
 React
-    is a Javascript library (A JavaScript library is a collection of pre-written JS code that provides ready-to-use functions so developers don't have to write everything from scratch.)
+    is a Javascript library (A JavaScript library is a collection of pre-written JS code that provides ready-to-use functions so developers don't have to write everything from scratch.) to build dynamic & interactive web pages
     Developer by Facebook in 2011
 
 ***** WHY REACT
     React is fast because it maintains a virtual DOM and updates only the necessary parts of the real DOM. It also uses component-based architecture, making code reusable and scalable.
 
+*****
 DOM (Document Object Model)
-    HTML is parsed/ read as objects and nodes (Tree-like structure) by the browser, so that JS can access & manipulate it. 
+    when web page is loaded, HTML is parsed/ read as objects and nodes (Tree-like structure) by the browser, so that JS can access & manipulate it. 
     This tree like structure is called DOM.
 SHADOW DOM
     a separate hidden DOM. used in reusable component. 
@@ -53,6 +54,7 @@ VITE
     WHY Vite create a server
         Watches code for changes (so no need to refresh manually), Converts JSX / TypeScript / SCSS on the fly
 
+
 CREATE REACT APP
 npm create vite@latest (project name > react-app-1, cd react-app-1)
 *****
@@ -70,32 +72,59 @@ npm run dev
 
 
 FOLDERS
-    node_modules > dependencies
-    public > static files
+    node_modules > libraries & dependencies
+    public > public/ static assets
     src > main react code
         components > reusable parts
         assets > images, fonts, other static files
         styles > css
     package.json > project info, name, version, dependencies
+    tsconfig.json > tell typescript compiler how to compile our code to JS
     vite.config.js > vite configs
 
 
 ***** FILE EXTENSION
     React files are save in .JSX (Javascript XML) - write HTML tags inside JavaScript.
     JSX is not native JavaScript. Browser does NOT understand JSX. Babel compiles JSX to normal JavaScript before the browser runs it.
-
+    .ts || .tsx > simple typescript file || react components
 
 COMPONENT
     Functional component
-    Class component
+    Class component (older, not used now)
 
-    e.g. in App.jsx
-        function App() {
-            return <h1>Lorem ipsum</h1>
+    create new file Message.tsx (use PascalCasing here)
+        function Message() {
+            return <h1>Lorem ipsum</h1>;
+            OR
+            const name = 'Test';
+            return <h1>Hello {name}</h1>        // inside {}, braces we can write any js expression
+            OR
+            const name = 'Some name';
+            if (name)
+                return <h1>Hello {name}</h1>;
+            return <h1>Hello world</h1>;
         }
-        export default App;
-    JSX -> <h1>Lorem ipsum</h1> -> this part is JSX
+        export default Message;
+    ***** JSX -> <h1>Lorem ipsum</h1> -> this part is JSX
+
+    Now, in App.tsx, remove all & import Message
+    import Message from './Message';
+
+    function App() {
+        return <div><Message></Message></div> // always close React component
+        OR
+        return <div><Message /></div>
+    }
+    export default App;
+
     create new component > export > import it too
+
+HOW REACT WORKS
+    When React application starts, based on components, React creates a component tree/ JS Data Structure called "Virtual DOM". 
+    Different from the actual DOM its lightweight and in memeory representation of our component tree where each node represents each component & its properties.
+    When the state/ data of a component changes, React updates the node in vDOM to reflect new state
+    Then it compares the current version with previous version of vDOM to identify the nodes that should be updated. It will then update those nodes in the actual DOM
+    Technically React doesnt update the DOM itself, its done by companion library called React-DOM
 
 REACT || REACT-DOM
     in package.json there are these 2 dependencies
