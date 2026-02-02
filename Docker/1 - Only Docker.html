@@ -1,3 +1,39 @@
+YouTUBE LINK: https://www.youtube.com/watch?v=RqTEHSBrYFw
+
+
+
+
+Docker makes sure that applications run the same way in production environment as they did in local/ development environment.
+    - Like taking the app & ship it directly to production
+
+Docker Image is a class / template
+Docker Container is an instance / object created from that image.
+    Example - If a project requires PHP and MySQL, we can create Docker images with specific versions of PHP and MySQL installed.
+    These images can then be run as containers on any system, and the application will behave the same regardless of the host system's software versions
+
+
+OCI - Open Container Initiative
+    So a bunch of companies (Docker, Google, VMware, Microsoft etc.) came together to create a industry standard for container images & runtimes
+    Specifications are like Runtime Specification, Image Specification, Distribution Specification etc.
+
+Bare metal (Hardware + OS = Application)
+    old process
+    Bare Metal means running software directly on physical hardware, with no virtualization layer in between.
+    first we worked with computers, called bare metal computing. we had physial hardware, then any OS installed on top of it, then applications run on OS
+    PROBLEMS - 
+        > multiple apps need different OS/ software/ dependency versions
+        > OS updates might break apps
+        > low utilization of hardware resources
+        > large blast radius if something goes wrong
+    SOLUTION - Virtualization
+        > now each applications have own isolated environment/ virtual machine, no dependency conflicts
+        > Hypervisor based virtualization - like VMWare, VirtualBox (Hypervisor is a software that creates & runs virtual machines)
+            > Type 1 - runs directly on hardware (example - AWS Nitro, ESXi, Hyper-V, Xen, KVM)
+            > Type 2 - runs on top of host OS (example - VirtualBox, VMware Workstation, Parallels Desktop)
+        > OS level virtualization - like Docker
+
+
+
 > download & install docker from official website, create account
 > to check for docker version, goto CMD/ Terminal, type, `docker version`/ `docker info`, for docker engine information
 > `docker images`, to check local images
