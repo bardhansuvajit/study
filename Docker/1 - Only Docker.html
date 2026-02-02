@@ -1,8 +1,6 @@
 YouTUBE LINK: https://www.youtube.com/watch?v=RqTEHSBrYFw
 
 
-
-
 Docker makes sure that applications run the same way in production environment as they did in local/ development environment.
     - Like taking the app & ship it directly to production
 
@@ -10,7 +8,6 @@ Docker Image is a class / template
 Docker Container is an instance / object created from that image.
     Example - If a project requires PHP and MySQL, we can create Docker images with specific versions of PHP and MySQL installed.
     These images can then be run as containers on any system, and the application will behave the same regardless of the host system's software versions
-
 
 OCI - Open Container Initiative
     So a bunch of companies (Docker, Google, VMware, Microsoft etc.) came together to create a industry standard for container images & runtimes
@@ -31,9 +28,37 @@ Bare metal (Hardware + OS = Application)
             > Type 1 - runs directly on hardware (example - AWS Nitro, ESXi, Hyper-V, Xen, KVM)
             > Type 2 - runs on top of host OS (example - VirtualBox, VMware Workstation, Parallels Desktop)
         > OS level virtualization - like Docker
+    Evolution of Virtualization - Containerization
+        > Containers share host OS kernel, more lightweight than VMs
+        > Faster startup times, better resource efficiency
+        > Easier to deploy & manage applications
+
+    ** Virtualization vs Containerization
+        > each VM has own OS || share host OS kernel
+        > Heavy, slower startup, more RAM/CPU use || Lightweight, fast startup, less resource use
+        > strong isolation || moderate isolation (isolation - how well apps are separated from each other & host system)
+        > use cases - running multiple OS types, strong security needs || microservices, rapid deployment
 
 
+> Desktop container platforms - Docker Desktop, Podman Desktop, Rancher Desktop
+> Container runtime - Docker Engine, containerd, CRI-O (Container runtime is software that runs & manages containers on a host system, other than Desktop container platform which provides GUI)
 
+* Orchestrators/ Orchestration tools
+a tool/ system automatically manages, deploys, scales, and monitors virtual machines or containers.
+Kubernetes, Docker Swarm, Apache Mesos
+
+** IMAGE & CONTAINER
+> a IMAGE is a package of software that includes everything needed to run an application (code, runtime, system tools, libraries, settings)
+> a CONTAINER is a running instance of an image (like an isolated environment where application runs). 
+an isolated environment used to run the app in OS. feels like a separate machine but its not
+a container think im the only system running in the OS but there are other containers running too. cant see each other
+
+the isolation of Containers come from Namespace, Control groups/cgroups, Union File system
+> Namespaces isolate what a container can see. they give containers their view of OS, processes, network, users, file system
+> cgroups limit & measure resource usage (CPU usage, memory usage, disk I/O, network usage) of containers. prevent one container from eating all resources.
+> Union File System lets filesystems be layered. docker images are built in layers. like base image - Ubuntu, Next layer = PHP, Next layer = Your app
+
+DOCKER DESKTOP
 > download & install docker from official website, create account
 > to check for docker version, goto CMD/ Terminal, type, `docker version`/ `docker info`, for docker engine information
 > `docker images`, to check local images
