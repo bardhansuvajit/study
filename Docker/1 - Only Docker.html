@@ -62,6 +62,7 @@ DOCKER DESKTOP
 > download & install docker from official website, create account
 > to check for docker version, goto CMD/ Terminal, type, `docker version`/ `docker info`, for docker engine information
 > `docker images`, to check local images
+> system software to manage everything locally
 
 TRY AN EXAMPLE IMAGE/ CONTAINER
 > goto dockerhub, https://hub.docker.com/
@@ -98,10 +99,8 @@ helps to run examples/ runnable instance of image, like an object
 > Like, if system has node 20/ no node, but app needs node 16, it would work properly/ independently
 
 DOCKER HUB
-when we need parent images for a project, we get them from hub. like node image is needed for a node based project
-
-DOCKER DESKTOP
-system software to manage everything locally
+when we need parent images for a project, we get them from hub. 
+like node image is needed for a node based project
 
 Base Image/ Parent image
 main template of a project. like a node/ php based project requires a base image of node js/ php
@@ -118,11 +117,35 @@ Pull/ Download Image
     > created 3 days ago > means it was last updated 3 days ago
     > run it from command line > 'docker run -it php /bin/bash' > Php image will be added in container
     > Container > Terminal > php -v > 8.2...
-    
-    
+> USING CLI **
+    > to check local images, terminal > 'docker images' 
+    > to check running containers > 'docker ps'
+    > to check all containers (running + stopped) > 'docker ps -a'
+    > to stop a running container > 'docker stop container-id/container-name'
+    > to remove a container > 'docker rm container-id/container-name'
+    > to remove an image > 'docker rmi image-id/image-name'
+    > to add a new image > 'docker pull image-name'
+    > to run an image > 'docker run image-name'
+    > to go inside a running container > 'docker exec -it container-id/container-name /bin/bash'
 
+Data inside Container
+> any data created inside a container will be lost when container is removed
+> to persist data, use Docker Volumes/ Bind mounts
 
+Create a Ubuntu Container
+docker run --interactive --tty --rm ubuntu:22.04        OR       docker run -it --rm ubuntu:22.04 
+this means, create a container (docker run) from ubuntu image version 22.04, with interactive terminal (--interactive), with a proper shell experience (--tty), remove container after exit(--rm)
 
+> remove --rm
+remember, if u do anything inside the container, like installing any other packages, it will be lost after exit, as containers are ephemeral.
+to make them stay, we ca do something like, docker run --interactive --tty --name my-ubuntu-container ubuntu:22.04, this will create a container with name 'my-ubuntu-container' and it will not be removed after exit, so we can start it again later with 'docker start my-ubuntu-container' and go inside it with 'docker exec -it my-ubuntu-container /bin/bash'
+to check, docker ps -a, you will see the container with name 'my-ubuntu-container' and its status (exited/ running)
+
+> docker start
+to start it again, 'docker start my-ubuntu-container' and to go inside it, 'docker exec -it my-ubuntu-container /bin/bash'
+
+> docker attach
+or use, docker attach my-ubuntu-container, this will attach your terminal to the running container, so you can interact with it directly. to detach from the container without stopping it, press Ctrl + P followed by Ctrl + Q. this will keep the container running in the background while you exit the terminal session. to reattach later, use 'docker attach my-ubuntu-container' again.
 
 
 
