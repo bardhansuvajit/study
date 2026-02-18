@@ -1,4 +1,5 @@
 YouTUBE LINK: https://www.youtube.com/watch?v=RqTEHSBrYFw
+Repo Link: https://github.com/sidpalas/devops-directive-docker-course/tree/main
 
 
 Docker makes sure that applications run the same way in production environment as they did in local/ development environment.
@@ -8,6 +9,8 @@ Docker Image is a class / template
 Docker Container is an instance / object created from that image.
     Example - If a project requires PHP and MySQL, we can create Docker images with specific versions of PHP and MySQL installed.
     These images can then be run as containers on any system, and the application will behave the same regardless of the host system's software versions
+    Using Dokcer u can run apps in different environmanets (like alpine, ubuntu, debian etc.)
+    Using Docker u can also run AWS/ GCP CLI tools in your local system, without installing them directly on your system. Just pull the official AWS/ GCP CLI images and run them as containers.
 
 OCI - Open Container Initiative
     So a bunch of companies (Docker, Google, VMware, Microsoft etc.) came together to create a industry standard for container images & runtimes
@@ -145,10 +148,105 @@ to check, docker ps -a, you will see the container with name 'my-ubuntu-containe
 to start it again, 'docker start my-ubuntu-container' and to go inside it, 'docker exec -it my-ubuntu-container /bin/bash'
 
 > docker attach
-or use, docker attach my-ubuntu-container, this will attach your terminal to the running container, so you can interact with it directly. to detach from the container without stopping it, press Ctrl + P followed by Ctrl + Q. this will keep the container running in the background while you exit the terminal session. to reattach later, use 'docker attach my-ubuntu-container' again.
+or use, docker attach my-ubuntu-container, this will restart the container & attach to running shell
+
+> Build a Container image with Ubuntu as base image & Ping installed
+docker build --tag my-ubuntu-image -<<EOF
+FROM UBUNTU:22.04
+RUN apt update && apt install iputils-ping --yes
+EOF
+
+> DOCKER run
+docker run -it --rm ubuntu:22.04
+- inside shell, mkdir my-data
+- echo "Hello from Container" > /my-data/hello.txt
+- cat my-data/hello.txt
+Hello from Container
+
+Now, if existed form the ocntainer, the data doesnt exist. here we can use DOCKER VOLUMES/ BIND MOUNTS to persist data
+> Docker Volumes
+- docker volume create my-volume
+> create container and mount the volume into the container filesystem
+docker run -it --rm --mount source=my-volume,destination=/my-data ubuntu:22.04
+OR
+docker run -it --rm -v my-volume:/my-data ubuntu:22.04
+- echo "Hello from Container" > /my-data/hello.txt
+- cat my-data/hello.txt
+Hello from Container
+
+Now, exit & re-create a new container with same volume, the hello.txt exists
+so, the biggest question is, EHER DOES THIS FILE ACTUALLY EXIST
+in Linux/ Mac, its in   /var/lib/docker/volumes/my-volume/_data/hello.txt
+in windows, its in      C:\ProgramData\Docker\volumes\my-volume\_data\hello.txt
+
+this files/ texts can also be updated from host system, and changes will be reflected in container, as they are linked
+
+Bind Mount
+> connect a specific folder on your computer to a folder in the container.
+Volume Mount (Docker Volume)
+> Docker creates and manages a special storage area.
 
 
 
+** Databases can be hard to install/ set up, the steps can change depending on system. 
+Running a database in a docker container makes this easier, especially for development and testing.
+
+REMEBER,
+Use volumes for data
+Databases store data on disk. Mount a volume so data isn't lost when the container stops or is deleted.
+
+Use bind mounts for config files
+If you have custom config files, you can keep them on your computer and mount them into the container.
+
+Set environment variables
+Many databases use environment variables for things like usernames and passwords.
+
+EXAMPLE, for MySQL
+https://hub.docker.com/_/mysql
+
+docker run -d --rm \
+  -v mysqldata:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=foobarbaz \
+  -p 3306:3306 \
+  mysql:8.0.32
+
+# With custom conf.d
+docker run -d --rm \
+  -v mysqldata:/var/lib/mysql \
+  -v ${PWD}/conf.d:/etc/mysql/conf.d \
+  -e MYSQL_ROOT_PASSWORD=foobarbaz \
+  -p 3306:3306 \
+  mysql:8.0.32
+
+** EXPLANATION,
+docker run (Start a new container)
+-d (Run in detached mode/ in background, so terminal stays free)
+--rm (Automatically remove the container when it stops)
+-v mysqldata:/var/lib/mysql
+    👉 Creates a volume named mysqldata.
+    👉 This is where MySQL stores its data.
+    👉 Keeps your database safe even if the container is removed.
+    👉 Without this data is lost.
+-e MYSQL_ROOT_PASSWORD=foobarbaz
+    👉 Sets the root password for MySQL.
+    👉 MySQL requires this on first startup.
+-p 3306:3306
+    👉 Maps port 3306 on your computer to port 3306 in the container.
+    👉 This allows you to connect to MySQL from computer using localhost:3306.
+mysql:8.0.32
+    👉 Specifies the image to use (MySQL version 8.0.32).
+    👉 Docker will download this image if don't have locally.
+-v ${PWD}/conf.d:/etc/mysql/conf.d
+    👉 this is a bind mount
+    👉 Lets you add custom MySQL config files (change max connections, buffer sizes, logging settings etc.)
+    👉 MySQL reads them on startup
+
+
+
+DEMO APPLICATION
+Frontend - React
+API layer - node js (interpreted)/ golang (compiled)
+Database - Postgres
 
 
 
