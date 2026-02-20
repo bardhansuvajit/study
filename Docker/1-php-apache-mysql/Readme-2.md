@@ -3,7 +3,7 @@
 1️⃣ Multi-Container Architecture
     Upgrade your setup:
         PHP-FPM container
-        Nginx container
+        Nginx container, add Opcache
         MySQL container
         Redis container
 
@@ -185,6 +185,49 @@ OPcache:
 
 
 
+🔥 what is Redis
+Redis is an in-memory key–value database used for speed-critical operations.
+Used for caching, sessions, queues, rate limiting, real-time features
 
+Common uses in PHP/Laravel apps
+    Page caching
+    Session storage
+    Queue system (jobs)
+    API rate limiting
+    Real-time counters (likes, views)
+Like, Instead of querying MySQL for “top products” every time, you store it in Redis for 5 minutes.
 
+OPCache = remembers how to run PHP faster
+Redis = remembers app data so you don’t hit DB repeatedly
+
+🔥 What to practice
+Store sessions in Redis
+Cache API response in Redis
+Connect Redis container with PHP container
+
+🔥 Creating Laravel app
+Your setup should include:
+    - PHP-FPM (with PHP extensions: PDO, Mbstring, etc.)
+    - Nginx
+    - MySQL/PostgreSQL (Laravel needs a database!)
+    - Redis (optional but recommended)
+    - Node.js (for frontend assets)
+
+🔥 Docker compose structure
+services:
+  nginx:
+    # nginx config
+  php-fpm:
+    # php with extensions, composer
+  mysql:
+    # database
+  redis:
+    # redis server
+  node:
+    # for npm/yarn (optional)
+
+🔥 Learning Path:
+First: Create a simple Laravel app with just MySQL
+Then: Add Redis for caching
+Finally: Add Redis for queues (with Laravel Horizon)
 
