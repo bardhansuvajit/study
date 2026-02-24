@@ -1,0 +1,111 @@
+services:
+  # PHP-FPM Service
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        - USER_ID=${HOST_USER_ID:-1000}
+        - GROUP_ID=${HOST_GROUP_ID:-1000}
+    container_name: ${PROJECT_NAME:-laravel}-php
+    restart: unless-stopped
+    working_dir: /var/www/html
+    # env_file:
+    #   - path: ./docker/.env
+    volumes:
+      - ./backend:/var/www/html
+      - ./docker/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+    environment:
+      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: ${PROJECT_NAME:-laravel}-nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+    # env_file:
+    #   - path: ./docker/.env
+    volumes:
+      - ./backend:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  # MySQL Service
+  db:
+    image: mysql:8.0
+    container_name: ${PROJECT_NAME:-laravel}-mysql
+    restart: unless-stopped
+    # env_file:
+    #   - path: ./docker/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-laravel12_react}
+      MYSQL_USER: ${MYSQL_USER:-laravel}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  # Redis Service
+  redis:
+    image: redis:7-alpine
+    container_name: ${PROJECT_NAME:-laravel}-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    # env_file:
+    #   - path: ./docker/.env
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 10
+
+  node:
+    image: node:20-alpine
+    container_name: ${PROJECT_NAME:-laravel}-node
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html
+    # command: sh -c "npm install && npm run dev"
+    command: sh -c "sleep infinity"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+# Networks
+networks:
+  app-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  mysql_data:
+  redis_data:
