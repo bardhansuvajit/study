@@ -1,4 +1,5 @@
 FROM php:8.4-fpm
+# FROM php:8.3-fpm-bookworm
 
 # Arguments for user ID mapping
 ARG USER_ID=1000
@@ -15,8 +16,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
+    # nodejs \
+    # npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
     pdo \
