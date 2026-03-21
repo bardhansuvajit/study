@@ -1,0 +1,94 @@
+YouTube videos
+https://www.youtube.com/watch?v=Ez8F0nW6S-w (watch time - 1.20 hrs) Channel - https://www.youtube.com/@ApnaCollegeOfficial
+https://www.youtube.com/watch?v=pJYOG6klqj8 (watch time - 0.50 hrs) Channel - https://www.youtube.com/@Corbin_Brown
+https://www.youtube.com/watch?v=q8EevlEpQ2A (watch time - 3.00 hrs) Channel - https://www.youtube.com/@chaiaurcode
+https://www.youtube.com/watch?v=DyqAdz96mok (watch time - 3.30 hrs) Channel - https://www.youtube.com/@TrainWithShubham
+
+
+
+GIT - version control system, 
+Used to track changes & history, collaborate with team
+
+Github - a website to store/ manage code using GIT
+Repository/ Repo - projects in GIT
+Commit - Final changes with a message, before commit we need to add the changes
+
+Readme.md - markdown file, supports HTML, hold info about the project
+
+Git setup & Install - 
+>>git --version
+install gitbash for windows system
+
+Git Configure - 
+>>git config --global user.name "my name"
+>>git config --global user.email "someone@email.com"
+>>git config --list
+
+System/ Machine - Remote & Local
+
+>>git clone ... - clone repo in local system
+>>*git status - code state
+
+working in a git repo, file is M/modified, U/untracked/new file GIT doesnt track, unmodified/unchanged, A/Staged/ready to be committed (when M/U file is added not committed)
+
+>>git add index.html/git add . (now files are staged, ready to be committed)
+>>git commit -m "message about the change" (record of change, now local code/ branch is ahead of remote by 1 commit)
+>>git push origin branch-name (push local commits to remote repo)
+
+>>git init (start empty git repo) > git add ., git commit -m 'initial commit'
+>>git remote add origin created-repo-link
+>>*git remote -v (shows all remote repositories connected to the project + shows where the code is coming from and going to)
+shows something like,
+origin  https://github.com/user/project.git (fetch) -- used when we pull/download code
+origin  https://github.com/user/project.git (push) -- used when we upload code
+>> git branch (shows all branches, * marks current branch) / git branch -a / git branch -r
+be default default branch used to be master, can be checked before running git branch -M main/ before renaming master to main
+now we can push the local repo to remote branch by, git push origin main
+>>*git branch -M main (rename current branch)
+>>*git checkout another-branch (move to another existing branch)
+>> git checkout -b feature/login (create & move to new branch) - new git versions suggest --- git switch -c new-branch
+>> git branch -d feature1 (delete feature1, cannot stay in the branch, checout from it & delete)
+
+*GIT workflow & MERGE (combine changes from one branch to another)
+2 ways to merge code - Merge code via CLI & Pull Request
+
+normally all devs stay in "main" branch (stable production code), 
+then to develop a feature, the move to "isolate branches - feature/login, feature/payment, db/seed etc." and after feature development, they merge code with "main" branch
+now a dev is in "feature1" branch and ahead of "main" branch, to check difference,
+>>**git diff main (check difference between current & main branch)
+>>**git merge main
+
+ANOTHER WAY by - PULL REQUEST through Pull request
+Pull Request - when multiple devs want to merge to "main", they can do it through PR
+
+
+
+
+
+
+
+
+
+
+
+-------------------------
+****----IMPORTANT----****
+-------------------------
+
+**origin - just a nickname/ alias for remote repo
+When a project is cloned (git clone https://github.com/user/project.git), Git creates origin = https://github.com/user/project.git
+now when we run, git push origin main. It means, Push my code to that GitHub repo (origin) on branch main
+
+*change origin? ----- git remote rename origin myrepo ----- and push like: git push myrepo main. 
+BUT Changing it just creates confusion unless you're managing multiple remotes
+
+*Upstream/-u = the default remote branch your local branch is connected to
+git push -u origin main
+After this we can only write ---- git push/ git pull and git knows where to push (origin) & which branch (main)
+Sometimes, upstream mean company repo, thats totally different
+
+
+
+
+
+
