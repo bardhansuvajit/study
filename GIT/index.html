@@ -49,7 +49,10 @@ now we can push the local repo to remote branch by, git push origin main
 >> git checkout -b feature/login (create & move to new branch) - new git versions suggest --- git switch -c new-branch
 >> git branch -d feature1 (delete feature1, cannot stay in the branch, checout from it & delete)
 
-*GIT workflow & MERGE (combine changes from one branch to another)
+
+
+GIT workflow
+**MERGE (combine changes from one branch to another)
 2 ways to merge code - Merge code via CLI & Pull Request
 
 normally all devs stay in "main" branch (stable production code), 
@@ -58,8 +61,36 @@ now a dev is in "feature1" branch and ahead of "main" branch, to check differenc
 >>**git diff main (check difference between current & main branch)
 >>**git merge main
 
-ANOTHER WAY by - PULL REQUEST through Pull request
-Pull Request - when multiple devs want to merge to "main", they can do it through PR
+ANOTHER WAY to Merge through PULL REQUEST
+PR - when multiple devs want to merge to "main", they can do it through PR
+Normally "main" branch is checked by TL/PM. when PR is sent they can review the code and merge/reject the PR with comments
+so, after "feature1" branch is committed ahead of "main", do "Compare & Pull Request" -> Create Pull Request with comment -> Github checks if auto merge can be done -> Merge Pull Request -> Confirm Merge. now remote is merged. now pull code from remote to local by "git pull"
+
+MERGE CONFLICT
+while merging there can be conflicts, diff codes in same position in diff branch, when git cannot automatically resolve differences
+we can manually fix them. watch the terminal messages
+
+
+
+** UNDOING CHANGES
+1. staged changes (git add done, but not committed yet, we found out we made mistake in code)
+>>git reset (removes files from staging area, code is unchanged)
+
+2. committed changes (git add done, git commit done, we found out we made mistake in code)
+>>git reset HEAD~1 (undo last commit, keeps code, last commit is called HEAD, ~1 means go back 1 step)
+>>git log (check commit logs, shows commit hash)
+>>git reset commit-hash (git reset 4564i76i736g2i74oi283h7432748, moves branch to that commit)
+>>git reset --hard commit-hash (delete commits, deletes all code changes, shows in IDE)
+
+3. pushed changes
+>>git revert
+
+
+
+**FORK
+rough copy of project. 
+when we work on company's/ other person's project, we can fork it & the original/ upstream project will be created in our repo
+
 
 
 
@@ -86,6 +117,21 @@ BUT Changing it just creates confusion unless you're managing multiple remotes
 git push -u origin main
 After this we can only write ---- git push/ git pull and git knows where to push (origin) & which branch (main)
 Sometimes, upstream mean company repo, thats totally different
+
+
+
+
+
+-------------------------
+****----SITUATION----****
+-------------------------
+
+1. Merge Conflict
+remote & local repo were created sepparately and has different codes in same file/ same branch
+in my local branch, it wont let me push. GIT says - fatal: refusing to merge unrelated histories
+>>git pull origin main --allow-unrelated-histories
+>>git add ., git commit, git push...
+
 
 
 
