@@ -35,6 +35,20 @@ working in a git repo, file is M/modified, U/untracked/new file GIT doesnt track
 >>git commit -m "message about the change" (record of change, now local code/ branch is ahead of remote by 1 commit)
 >>git push origin branch-name (push local commits to remote repo)
 
+
+**origin - just a nickname/ alias for remote repo
+When a project is cloned (git clone https://github.com/user/project.git), Git creates origin = https://github.com/user/project.git
+now when we run, git push origin main. It means, Push my code to that GitHub repo (origin) on branch main
+
+*change origin? ----- git remote rename origin myrepo ----- and push like: git push myrepo main. 
+BUT Changing it just creates confusion unless you're managing multiple remotes
+
+*Upstream/-u = the default remote branch your local branch is connected to
+git push -u origin main
+After this we can only write ---- git push/ git pull and git knows where to push (origin) & which branch (main)
+Sometimes, upstream mean company repo, thats totally different
+
+
 >>git init (start empty git repo) > git add ., git commit -m 'initial commit'
 >>git remote add origin created-repo-link
 >>*git remote -v (shows all remote repositories connected to the project + shows where the code is coming from and going to)
@@ -87,12 +101,81 @@ we can manually fix them. watch the terminal messages
 
 
 
-**FORK
+FORK
 rough copy of project. 
 when we work on company's/ other person's project, we can fork it & the original/ upstream project will be created in our repo
 
+STAR
+bookmark a repo
 
 
+
+
+
+
+
+-------------------------
+****----EXTRA----****
+-------------------------
+Monorepo = One repository for many projects (in 1 GIT repo > mobile-app, web-app, backend-api, admin-panel)
+Polyrepo = Multiple repositories for each project (these are shared in multiple repos)
+
+
+
+
+
+
+
+
+-------------------------
+****----SITUATION----****
+-------------------------
+
+1. fatal: refusing to merge unrelated histories
+Unrelated Histories - Local repo and remote repo were created separately and have no common starting point
+>>git pull origin main --allow-unrelated-histories (after running, merge conflict might be created, solve manually)
+>>git add ., git commit, git push...
+
+2. ! [rejected] main -> main (non-fast-forward)
+Remote has new commits, your local is behind.
+>>git pull --rebase origin main
+>>git pull origin main
+
+3. Merge Conflict (same file edited)
+You + teammate edited same line.
+>>Open file > remove <<<<<<</ =======/ >>>>>>> > keep correct code > then commit & push
+
+4. Committed to main instead of a feature branch.
+>>git branch new-feature                        (creates new branch)
+>>git reset HEAD~1/ git revert <commit-hash>    (reset to undo last commit/ revert to undo last push)
+>>git checkout new-feature                      (move to new branch)
+>>git add .                                     (stage the files)
+>>git commit -m "moved to correct branch"       (commit the files)
+
+5. Accidentally staged everything by git add .
+>>git reset
+
+6. Delete changes completely (Dangerous 🔥)
+You messed up badly and want clean state
+>>git reset --hard HEAD
+
+7. error: src refspec new-branch does not match any
+Branch not found/ push error/ Branch not created/ no commit yet
+>>git checkout -b new-branch
+>>git add . ...
+
+8. STASH
+You have unfinished work but need to switch branch
+>>git stash
+>>git checkout other-branch
+>>git stash pop (later to go back)
+
+9. FETCH
+Pull but dont want auto merge
+>>git fetch
+
+10. Force push
+>> git push -f
 
 
 
@@ -106,31 +189,8 @@ when we work on company's/ other person's project, we can fork it & the original
 ****----IMPORTANT----****
 -------------------------
 
-**origin - just a nickname/ alias for remote repo
-When a project is cloned (git clone https://github.com/user/project.git), Git creates origin = https://github.com/user/project.git
-now when we run, git push origin main. It means, Push my code to that GitHub repo (origin) on branch main
-
-*change origin? ----- git remote rename origin myrepo ----- and push like: git push myrepo main. 
-BUT Changing it just creates confusion unless you're managing multiple remotes
-
-*Upstream/-u = the default remote branch your local branch is connected to
-git push -u origin main
-After this we can only write ---- git push/ git pull and git knows where to push (origin) & which branch (main)
-Sometimes, upstream mean company repo, thats totally different
-
-
-
-
-
--------------------------
-****----SITUATION----****
--------------------------
-
-1. Merge Conflict
-remote & local repo were created sepparately and has different codes in same file/ same branch
-in my local branch, it wont let me push. GIT says - fatal: refusing to merge unrelated histories
->>git pull origin main --allow-unrelated-histories
->>git add ., git commit, git push...
+git pull vs fetch
+>> git pull = fetch + merge
 
 
 
