@@ -1,27 +1,28 @@
 YouTube videos
 https://www.youtube.com/watch?v=Ez8F0nW6S-w (watch time - 1.20 hrs) Channel - https://www.youtube.com/@ApnaCollegeOfficial
-https://www.youtube.com/watch?v=pJYOG6klqj8 (watch time - 0.50 hrs) Channel - https://www.youtube.com/@Corbin_Brown
 https://www.youtube.com/watch?v=q8EevlEpQ2A (watch time - 3.00 hrs) Channel - https://www.youtube.com/@chaiaurcode
 https://www.youtube.com/watch?v=DyqAdz96mok (watch time - 3.30 hrs) Channel - https://www.youtube.com/@TrainWithShubham
 
 
 
-GIT - version control system, 
+GIT - version control system/ software, 
 Used to track changes & history, collaborate with team
 
-Github - a website to store/ manage code using GIT
-Repository/ Repo - projects in GIT
+Github - a service/ website to store/ manage code using GIT
+Other services - Gitlab, Bitbucket...
+Repository/ Repo - folder/ directory in GIT
 Commit - Final changes with a message, before commit we need to add the changes
 
 Readme.md - markdown file, supports HTML, hold info about the project
 
 Git setup & Install - 
+download GIT from git-scm.com + create Account on Github
 >>git --version
 install gitbash for windows system
 
 Git Configure - 
->>git config --global user.name "my name"
->>git config --global user.email "someone@email.com"
+>>*git config --global user.name "my name"
+>>*git config --global user.email "someone@email.com"
 >>git config --list
 
 System/ Machine - Remote & Local
@@ -93,6 +94,7 @@ we can manually fix them. watch the terminal messages
 2. committed changes (git add done, git commit done, we found out we made mistake in code)
 >>git reset HEAD~1 (undo last commit, keeps code, last commit is called HEAD, ~1 means go back 1 step)
 >>git log (check commit logs, shows commit hash)
+>>git log --oneline (shows logs in short)
 >>git reset commit-hash (git reset 4564i76i736g2i74oi283h7432748, moves branch to that commit)
 >>git reset --hard commit-hash (delete commits, deletes all code changes, shows in IDE)
 
@@ -192,7 +194,21 @@ Pull but dont want auto merge
 git pull vs fetch
 >> git pull = fetch + merge
 
+git add .   > send files to STAGING AREA
+git commit  > send files to Repo
 
+ATOMIC COMMITS
+> to commit one unit/ module of work. like login module, forgot passw module
+
+COMMIT MESSAGE STANDARD
+> present tense, imperative (instruct to code what to do)
+> add footer to page (NOT added footer...)
+> Example, feat(auth): add login API with JWT, refactor(user): optimize user query performance, chore: update dependencies
+
+VIM EDITOR
+> default code editor in git. change it to VS code
+WHY ? if forgot to add commit message, VS code opens, else VIM
+HOW ? install VS code in CLI (Command + Shift + P --> Shell command, install code command in path)
 
 
 
