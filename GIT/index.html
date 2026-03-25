@@ -116,15 +116,6 @@ bookmark a repo
 
 
 
--------------------------
-****----EXTRA----****
--------------------------
-Monorepo = One repository for many projects (in 1 GIT repo > mobile-app, web-app, backend-api, admin-panel)
-Polyrepo = Multiple repositories for each project (these are shared in multiple repos)
-
-
-
-
 
 
 
@@ -209,6 +200,41 @@ VIM EDITOR
 > default code editor in git. change it to VS code
 WHY ? if forgot to add commit message, VS code opens, else VIM
 HOW ? install VS code in CLI (Command + Shift + P --> Shell command, install code command in path)
+
+
+
+
+
+
+
+
+-------------------------
+****----EXTRA----****
+-------------------------
+Monorepo = One repository for many projects (in 1 GIT repo > mobile-app, web-app, backend-api, admin-panel)
+Polyrepo = Multiple repositories for each project (these are shared in multiple repos)
+
+GIT Behind the Scene
+GIt maintains sort of a database (like a hash table in key-value pairs) inside the .git folder.
+Inside .git folder -> hooks, info, logs, objects, refs etc.
+objects folder holds all the commits. open it & see reference of the commits (SHA value)
+everything in git is stored in objects
+
+SNAPSHOT
+a point in time in the code history. like at 10am the project looks one way, at 2pm it looks different
+now ehn run, git commit, git saves a snapshot of how the project looks at that exact time and that snapshot becomes a commit
+snapshot = saved project state at specific time, Git remembers the state of the project at this moment, only the staged & committed files are in snapshot
+commmit = snapshot + message + author + time + history link
+
+GIT in INTERNAL STORAGE
+Commit Object - all our actual commits & some internal git commits. all folders & files in objects folder in .git. 
+                holds reference to tree object, parent commit object, author, committer, commit message
+Tree Object - when revert, obj reference is stored here. everything stored in key-value pair. holds blob object info
+                holds file mode, file name, file hash, parent tree object
+Blob Object - actual code
+
+
+
 
 
 
