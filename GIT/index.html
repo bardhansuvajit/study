@@ -64,6 +64,10 @@ now we can push the local repo to remote branch by, git push origin main
 >> git checkout -b feature/login (create & move to new branch) - new git versions suggest --- git switch -c new-branch
 >> git branch -d feature1 (delete feature1, cannot stay in the branch, checout from it & delete)
 
+.gitignore
+we can stop files/ folders from tracking in GIT. like .env files
+.gitkeep
+**keep this file to track empty folder. git doesnt track empty folders.
 
 
 GIT workflow
@@ -198,9 +202,9 @@ COMMIT MESSAGE STANDARD
 
 VIM EDITOR
 > default code editor in git. change it to VS code
-WHY ? if forgot to add commit message, VS code opens, else VIM
+WHY ? if forgot to add commit message, VS code opens to enter commit message, else VIM (after typing msg, close the file)
 HOW ? install VS code in CLI (Command + Shift + P --> Shell command, install code command in path)
-
+>>git config --global core.editor "code --wait"
 
 
 
@@ -233,10 +237,23 @@ Tree Object - when revert, obj reference is stored here. everything stored in ke
                 holds file mode, file name, file hash, parent tree object
 Blob Object - actual code
 
+METADATA of a COMMIT
+>>git log --online                          (shows all commits, take latest commit hash & use in below command)
+>>git show -s --pretty=raw <commit-hash>    (shows tree, blod id etc)
+>>git ls-tree <tree-id>                     (shows blod id)
+>>git show <blob-id>
 
+PORCELAIN COMMANDS
+user friendly, high level commands that devs use daily. like git init, git clone, git add, git commit etc.
 
-
-
+GARDENING COMMANDS
+git gc              garbage collect, removed unnecessary files
+git gc --aggressive
+git prune           removes old commits/ unreachable objects
+git fsck            file system check, check repo health
+git clean -f        deletes untracked files
+git clean -fd               deletes untracked files + folders
+git maintenance start
 
 
 
