@@ -50,6 +50,10 @@ After this we can only write ---- git push/ git pull and git knows where to push
 Sometimes, upstream mean company repo, thats totally different
 
 
+BRANCHES
+Separate line of development
+Head >> Head is a pointer to the current branch (check .git>HEAD + .git/refs/heads/master). after git switch... it will point to the other branch
+
 >>git init (start empty git repo) > git add ., git commit -m 'initial commit'
 >>git remote add origin created-repo-link
 >>*git remote -v (shows all remote repositories connected to the project + shows where the code is coming from and going to)
@@ -59,10 +63,14 @@ origin  https://github.com/user/project.git (push) -- used when we upload code
 >> git branch (shows all branches, * marks current branch) / git branch -a / git branch -r
 be default default branch used to be master, can be checked before running git branch -M main/ before renaming master to main
 now we can push the local repo to remote branch by, git push origin main
+>>git branch new-branch (create new-branch)
+>> git switch new-branch (branch switch, HEAD will point to it)
 >>*git branch -M main (rename current branch)
+>>git branch -m <old-branch-name> <new-branch-name>
 >>*git checkout another-branch (move to another existing branch)
 >> git checkout -b feature/login (create & move to new branch) - new git versions suggest --- git switch -c new-branch
->> git branch -d feature1 (delete feature1, cannot stay in the branch, checout from it & delete)
+>>git switch -c <new-branch> (newer to checkout -b)
+>> git branch -d <branch-name> (delete branch, cannot stay in the branch, checout from it & delete)
 
 .gitignore
 we can stop files/ folders from tracking in GIT. like .env files
@@ -74,16 +82,24 @@ GIT workflow
 **MERGE (combine changes from one branch to another)
 2 ways to merge code - Merge code via CLI & Pull Request
 
-normally all devs stay in "main" branch (stable production code), 
-then to develop a feature, the move to "isolate branches - feature/login, feature/payment, db/seed etc." and after feature development, they merge code with "main" branch
-now a dev is in "feature1" branch and ahead of "main" branch, to check difference,
+FAST-FORWARD MERGE
+at start of project all devs normally stay in "main" branch (stable production code), 
+then to develop a feature, they move to "isolate branches - feature/login, feature/payment, db/seed etc." and after feature development, they merge feature branch into "main" branch
+now a dev is in "<new-branch>" branch and ahead of "main" branch, to check difference,
 >>**git diff main (check difference between current & main branch)
->>**git merge main
+>>**git merge <new-branch> (be in main branch, merge new-branch into main)
+
+
+NOT FAST-FORWARD MERGE
+multiple devs have been working in both "main" & "<new-branch>" branch 
+>>git merge <new-branch> (it asks for commit message, an extra merge commit)
+IF, same file modified in both branches, it will create a CONFLICT, which has to be resolved manually
+
 
 ANOTHER WAY to Merge through PULL REQUEST
 PR - when multiple devs want to merge to "main", they can do it through PR
 Normally "main" branch is checked by TL/PM. when PR is sent they can review the code and merge/reject the PR with comments
-so, after "feature1" branch is committed ahead of "main", do "Compare & Pull Request" -> Create Pull Request with comment -> Github checks if auto merge can be done -> Merge Pull Request -> Confirm Merge. now remote is merged. now pull code from remote to local by "git pull"
+so, after "<new-branch>" branch is committed ahead of "main", do "Compare & Pull Request" -> Create Pull Request with comment -> Github checks if auto merge can be done -> Merge Pull Request -> Confirm Merge. now remote is merged. now pull code from remote to local by "git pull"
 
 MERGE CONFLICT
 while merging there can be conflicts, diff codes in same position in diff branch, when git cannot automatically resolve differences
@@ -113,6 +129,14 @@ when we work on company's/ other person's project, we can fork it & the original
 
 STAR
 bookmark a repo
+
+TAG
+like a sticky note. mark a specific point in repo.
+>>git tag <tag-name>
+Devs dont use tags normally. Product release managers/ PMs usually use tags while releasing a version with a commit, like its a beta version/ a public version/ open source version etc.
+
+
+
 
 
 
@@ -162,10 +186,14 @@ Branch not found/ push error/ Branch not created/ no commit yet
 >>git add . ...
 
 8. STASH
-You have unfinished work but need to switch branch
+You have unfinished work but need to switch branch, stash your work in a temporary location
 >>git stash
 >>git checkout other-branch
->>git stash pop (later to go back)
+>>git stash save "work in progress on X feature" (naming the stash)
+>>git stash list
+>>git stash apply (apply most recent stash)
+>>git stash apply stash@{0} (apply specific stash)
+>>git stash pop (applying and drop a stash)
 
 9. FETCH
 Pull but dont want auto merge
@@ -174,9 +202,13 @@ Pull but dont want auto merge
 10. Force push
 >> git push -f
 
-
-
-
+11. Automatic merge failed/ Merge Error
+>>git status (always check)
+>>git merge -abort (Abort first to stop the coflict first)
+Then, Manual conflict fix
+>>git merge <branch-name> (Merge again)
+fix manually - "Accept Current/Incoming/Both change/s etc." OR remove <<<<<<<<HEAD ======= >>>>>>>BRANCH etc/. manually
+>> check git status, for next step. it will show to add & commit
 
 
 
@@ -239,7 +271,7 @@ Blob Object - actual code
 
 METADATA of a COMMIT
 >>git log --online                          (shows all commits, take latest commit hash & use in below command)
->>git show -s --pretty=raw <commit-hash>    (shows tree, blod id etc)
+>>git show -s --pretty=raw <commit-hash>    (shows tree id, trackdown information etc.)
 >>git ls-tree <tree-id>                     (shows blod id)
 >>git show <blob-id>
 
@@ -247,13 +279,17 @@ PORCELAIN COMMANDS
 user friendly, high level commands that devs use daily. like git init, git clone, git add, git commit etc.
 
 GARDENING COMMANDS
-git gc              garbage collect, removed unnecessary files
+git gc                      garbage collect, removed unnecessary files
 git gc --aggressive
-git prune           removes old commits/ unreachable objects
-git fsck            file system check, check repo health
-git clean -f        deletes untracked files
+git prune                   removes old commits/ unreachable objects
+git fsck                    file system check, check repo health
+git clean -f                deletes untracked files
 git clean -fd               deletes untracked files + folders
-git maintenance start
+git maintenance start       cleans repo, optimizes performance, runs maintenance in background
 
 
-
+GIT DIFF
+shows difference between changes in files/ branches/ commits
+>>git diff (compares 2 versions of same file by denoting a/GIT/index.html b/GIT/index.html)
+>>git diff <branch-name-one> <branch-name-two>
+>>git diff <commit-hash-one> <commit-hash-two>
