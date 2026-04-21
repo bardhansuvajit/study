@@ -8,12 +8,12 @@ https://www.youtube.com/watch?v=DyqAdz96mok (watch time - 3.30 hrs) Channel - ht
 GIT - version control system/ software, 
 Used to track changes & history, collaborate with team
 
-Github - a service/ website to store/ manage code using GIT
-Other services - Gitlab, Bitbucket...
+Github - a web based service to store/ manage code using GIT
+Other services - Gitlab, Bitbucket, Azure Repos, Gitea...
 Repository/ Repo - folder/ directory in GIT
 Commit - Final changes with a message, before commit we need to add the changes
 
-Readme.md - markdown file, supports HTML, hold info about the project
+Readme.md - markdown file, supports HTML, hold info about the project. GIT expects this file to be in root folder
 
 Git setup & Install - 
 download GIT from git-scm.com + create Account on Github
@@ -116,7 +116,7 @@ we can manually fix them. watch the terminal messages
 >>git log (check commit logs, shows commit hash)
 >>git log --oneline (shows logs in short)
 >>git reset commit-hash (git reset 4564i76i736g2i74oi283h7432748, moves branch to that commit)
->>git reset --hard commit-hash (delete commits, deletes all code changes, shows in IDE)
+>>git reset --hard <commit-hash> (delete commits, deletes all code changes, shows in IDE)
 
 3. pushed changes
 >>git revert
@@ -137,10 +137,17 @@ Devs dont use tags normally. Product release managers/ PMs usually use tags whil
 
 
 HISTORY - REBASE & REFLOG
- 
+Rebase is used to change base of a branch. like, move a branch to a new starting point.
+*Situation - we have 2 branches, "main" & "other-one". devs worked in both branches and "main" is ahead of "other-one" now.
+Now, we can simply MERGE IT. checkout to "other-one" & merge, git merge main
+*Problem - NOT SERIOUS but when checked log, git log --oneline, one extra commit shows, the merge of branch "main" to "other-one"
+for some, this extra commit pollutes the other commits. as there was no work, only merge.
+here comes REBASE
+DONT rebase in MAIN branch, be in SUB-BRANCH
+>>git rebase main               (merge code & it doesnt appear in logs)
 
-
-
+Reflog shows detailed log unlike got log
+>>git reflog
 
 
 
@@ -287,9 +294,15 @@ git clean -f                deletes untracked files
 git clean -fd               deletes untracked files + folders
 git maintenance start       cleans repo, optimizes performance, runs maintenance in background
 
-
 GIT DIFF
 shows difference between changes in files/ branches/ commits
 >>git diff (compares 2 versions of same file by denoting a/GIT/index.html b/GIT/index.html)
 >>git diff <branch-name-one> <branch-name-two>
 >>git diff <commit-hash-one> <commit-hash-two>
+
+SSH KEY (Secure Shell)
+ssh-keygen -t ed25519 -C "<your-mail>"          (generate ssh key, u use in github)
+
+OPEN SOURCE CONTRIBUTE
+contributing in repo. Add value/ feature.
+HOW ? - fork the repo >>> Clone in local >>> Add new feature >>> PUSH >>> in Github, open PR, create PR with proper message & detail >>> owner will merge code/ reject
