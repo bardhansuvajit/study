@@ -1,0 +1,24 @@
+https://www.youtube.com/watch?v=zQM2HgNTBCs
+
+open account in n8n.io
+
+
+#A. SIMPLE AI BASED APP
+    1. Add trigger -> "On Chat Message" -> Try sedning "Hi" -> you should see "Workflow executed successfully"
+    2. Add "AI Agent" -> Keep default settings -> Back to canvas -> you should see "Chat Model", "Memory", "Tool"
+    3. Add a Model/ "Chat Model" -> Add "Google Gemini Chat Model" (FREE API KEY available)
+        3.1 Try sending "Hi" -> you should see "Node does not have any credentials set" (we need Gemini API key)
+        3.2 Generate Gemini API key (from aistudio.google.com OR google - Gemini api key) -> paste the api key in n8n "Google Gemini Chat Model"
+    4. Memory, to remeber simple things about customer/ orders
+        4.1 add "Simple memory" -> if needed, change "Context Window Length"/ how many last messages AI should remember
+        4.2 to test this, maybe tell it your name & check if it remembers
+    5. Tool, to save in sheet
+        5.1 create a google sheet, sample sheet to download, https://docs.google.com/spreadsheets/d/1MHMuKlyJRBa6zZG0BXR7BV8pg65mIW4m/edit?gid=224745555#gid=224745555
+        5.2 add in "Tools" section, "Google Sheet", for credentials, sign in with google account, select the document & sheet
+        5.3 test it, send "what dishes do u have in stock ?" to bot
+        5.4 Add "FAQ" sheet
+        5.5 Add "Orders" sheet. operation -> Append Row
+            5.5.1 "Values to Send" -> Let AI detect automatically
+            5.5.2 for "Order Date" -> {{ $now.format('yyyy-LLL-dd hh:mm:ss a') }} -> 2026-May-06 05:28:19 PM
+    6. Agent instructions, so that random chat/ orders can be banned
+        6.1 add "System message" in "AI Agent"
