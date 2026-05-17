@@ -2,6 +2,173 @@ UDEMY COURSE
 Complete Guide to Building, Deploying, and Optimizing Generative AI with Langchain and Huggingface
 https://www.udemy.com/course/complete-generative-ai-course-with-langchain-and-huggingface/learn/lecture/44151284#overview
 
+GITHUB Resources
+https://github.com/krishnaik06/Complete-Python-Bootcamp/tree/main
+
+
+
+
+
+
+
+
+
+INTRODUCTION
+1. Python programming language - Basic to Advanced
+2. NLP in Deep learning
+    Basic Building Block - RNN, LSTM RNN, GRU RNN, Bidirectional RNN, Encoder Decoder*, Attention Mechanism, Transformer, BERT => LLM Models, Generative AI
+3. Langchain ecosystem (Gen AI framework)
+    Paid LLM, Multi-models, open source LLM Models
+    Agensts, Chat with SQL, Vector Database, Retrievers, Chains, Text summarization, Chatbots with message history
+    Libraries - Langchain Core, Langchain Community, Langchain Tools
+    Streamlit
+4. Deployment Techniques
+    Using Free resources
+5. Fine Tuning Technique
+    Free resources - Google Colab, Quantization, LORA & CORA
+    Fine tune with open source LLM
+6. Gen AI in AWS
+    AWS Bedrock, Lambda fn, API Gateway, End to End project
+    AWS Sagemaker
+7. Nvidia NIM
+    End to End project using Langchain
+8. Crew AI
+    Multi AI Agent, Gen AI Apps
+
+
+
+
+
+########################################
+1. PYTHON BASICS
+install python & check version 
+---->>>> python -V                (OP - Python 3.14.5)
+
+Conda - a package + environment manager, especially popular for ML/data science because it handles non-Python dependencies too (like CUDA, MKL, etc.), which pip can't do.
+
+PIP/ Pip Installs Packages - Python's default package manager
+PyPI/ Python Package Index - like an App-Store for Python Libraries
+e.g. - pip install numpy > Someone writes a library → uploads it to pypi.org. We run pip install <name> → pip fetches it from there
+
+pip vs. conda
+> pip installs python packages only
+conda installs python packages + system level stuffs (C libraries, CUDA etc.)
+> gets packages from PyPI
+gets packages from Conda repos
+
+
+How to install conda ? - Use Miniconda instead of full Anaconda, Follow this link
+https://www.anaconda.com/download/success?utm_source=chatgpt.com
+
+TRY IN ANACONDA CMD, (base) C:\Users\user>
+---->>>> conda --version            (OP - conda 26.3.2)
+
+Open Anaconda Prompt, 
+(base) C:\Users\user>E:
+(base) E:\>cd Projects\Python
+(base) E:\Projects\Python>ls
+project-1
+(base) E:\Projects\Python>
+
+Now inside E:\Projects\Python>
+---->>>> conda create --name ai-env python=3.12
+This means, conda create → using CONDA tool create a new isolated environment (separate from main system)
+--name ai-env → name it "ai-env"
+python=3.12 → install Python 3.12 inside it (many AI libraries may not support 3.14 yet)
+
+OR
+
+---->>>> conda create -p venv python==3.12
+This is BETTER, means, CREATE a folder named venv in current directory & create the environment inside the project folder as a subfolder called venv/. **** This is common in professional/team projects so the environment stays with the code.
+
+---->>>> conda activate venv/
+This means, From now on, use Python and libraries inside THIS environment. Without activation: terminal uses Base environment/ Conda's default Python 3.14, now check, python --version. NOW, the CMD becomes, (E:\Projects\Python\project-1\venv) E:\Projects\Python\project-1>
+
+JUST a SIMPLE TEST, create app.py in root, print(1+1)
+---->>>> (E:\Projects\Python\project-1\venv) E:\Projects\Python\project-1>python app.py
+(OP 2)
+
+Jupyter Notebook
+writing code in small chunks called "cells" & run them one at a time. In normal Python, we write code in .py file & run the whole file at once 
+
+.ipynb
+Interactive Python Notebook. It's the file format Jupyter uses
+
+WHY ?
+This is huge in data science/ML because we do things step by step.If Cell 3 has a bug, we fix ONLY Cell 3 and re-run it. No need to reload the dataset again. Saves massive time.
+
+JUST a SIMPLE TEST, create Some Folder/test.ipynb in root, select Kernel/ Environment > venv
+Now, create a Code Cell & Srite comment, ## Something Cool
+To Run, Shift + Enter (might need to install ipykernel - pip install ipykernel - this package connects conda environment's Python to Jupyter)
+Try in another cell, 1+1, Run it, shows 2
+
+KERNEL
+it means CORE/ HEART of something. Like in our OS, which has a Kernel too, when we click a button on screen -> OS Kernel translate that into hardware actions -> something happens on screen.
+
+IN PYTHON
+We write code in Jupyter -> Kernel is the engine that RUNS the code -> Result appears on screen
+
+ipykernel
+when we created conda environment/ "venv". it has its own Python 3.12 in it. But Jupyter doesnt know this. ipykernel introduces them - Jupyter & venv
+
+Why does .ipynb need KERNEL but .py doesn't?
+when we run .py file, Python runs it directly.
+But .ipynb is different. We're not running it directly. Jupyter is sitting in between
+US ──► Jupyter ──► ??? ──► Python (??? == kernel)
+
+
+
+########################################
+2. DIFFERENT PYTHON ENVIRONMENTS
+Other than conda, ther are ways to install Python projects.
+ALways create ISOLATED box for projects. So libraries don't mix with each other
+
+#Method 1. Built-in Python
+python -m venv myenv        # CREATE isolated environment, name it "myenv"
+myenv\Scripts\Activate      # ENTER the environment (Windows)
+pip install numpy           # INSTALL libraries inside it
+deactivate                  # EXIT the environment
+-m means → "run this as a module". Python comes with a built-in module called venv, just telling Python to use it.
+
+#Method 2. VIRTUALENV (Third Party Tool)
+pip install virtualenv              # INSTALL virtualenv tool first (doesn't come with Python)
+virtualenv -p python3 virtual_env   # CREATE environment, specifically using python3
+virtual_env\Scripts\activate        # ENTER the environment
+deactivate                          # EXIT the environment
+
+#Method 3. CONDA
+conda create -p venv python==3.12 -y    
+# CREATE environment in current folder with Python 3.12
+# -y means "yes to everything, don't ask me to confirm"
+
+
+
+########################################
+2. SYNTAX AND SEMANTICS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
