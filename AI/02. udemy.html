@@ -12,6 +12,33 @@ https://github.com/krishnaik06/Complete-Python-Bootcamp/tree/main
 
 
 
+PREREQUISITES
+PHP vs Python
+Type        PHP                         Python
+Made for    Web development only        Everything — web, AI, ML, data, automation
+Syntax      $variable, ; everywhere     Clean, no $, no ;
+Runs        On web server only          Anywhere
+Popularity  Declining slowly            Growing massively
+AI/ML       ❌ Almost nothing          ✅ Industry standard
+Framework   Laravel                     Django (Both Full featured web apps, comes with everything built in)
+Framework   Slim / Lumen                Flask (Lightweight, minimalist, you control everything)
+Framework   No real equivalent          FastAPI (Building APIs, super fast, modern)
+
+PYTHON AI/ML Frameworks
+Framework       What it does
+TensorFlow      Google's ML framework, production level
+PyTorch         Facebook's ML framework, most popular in research
+Scikit-learn    Beginner friendly ML, classic algorithms
+Keras           Simplified layer on top of TensorFlow
+
+PYTHON Data Frameworks
+Framewor        kWhat it does
+Pandas          Excel but in Python, data manipulation
+NumPy           Math and numbers at high speed
+Matplotlib      Drawing graphs and charts
+
+
+
 
 INTRODUCTION
 1. Python programming language - Basic to Advanced
@@ -40,6 +67,7 @@ INTRODUCTION
 
 
 ########################################
+BASICS
 1. PYTHON BASICS
 install python & check version 
 ---->>>> python -V                (OP - Python 3.14.5)
@@ -80,6 +108,8 @@ OR
 
 ---->>>> conda create -p venv python==3.12
 This is BETTER, means, CREATE a folder named venv in current directory & create the environment inside the project folder as a subfolder called venv/. **** This is common in professional/team projects so the environment stays with the code.
+-p means Prefix. Prefix means Location/ Path.
+without -p/ using --name, conda creates the "venv" folder somewhere else (C:\Users\<user>\anaconda3\envs\ai-env\) and conda manages the environment inside. with -p the environment is stored inside project folder.
 
 ---->>>> conda activate venv/
 This means, From now on, use Python and libraries inside THIS environment. Without activation: terminal uses Base environment/ Conda's default Python 3.14, now check, python --version. NOW, the CMD becomes, (E:\Projects\Python\project-1\venv) E:\Projects\Python\project-1>
@@ -119,6 +149,7 @@ US ──► Jupyter ──► ??? ──► Python (??? == kernel)
 
 
 ########################################
+BASICS
 2. DIFFERENT PYTHON ENVIRONMENTS
 Other than conda, ther are ways to install Python projects.
 ALways create ISOLATED box for projects. So libraries don't mix with each other
@@ -144,7 +175,862 @@ conda create -p venv python==3.12 -y
 
 
 ########################################
-2. SYNTAX AND SEMANTICS
+BASICS
+3. SYNTAX AND SEMANTICS
+Syntax - the RULES of writing. How we MUST write the code. OR we face Syntax Error
+Semantics - The MEANING of what we wrote. what it actually does / means (we have to find errors by ourselves)
+
+Human Language Example -
+# SYNTAX ERROR (grammatically wrong)
+"He go to store the"   ← broken grammar, makes no sense
+# SEMANTIC ERROR (grammatically correct, wrong meaning)
+"The ice is hot"       ← perfect grammar, but meaning is wrong
+
+Syntax  = DID YOU WRITE IT CORRECTLY ?
+Semantics = DID YOU MEAN WHAT YOU WROTE ?
+
+COMMENTING
+Single line Comment - #/ ## (Single/ Double hash)
+Multi line Comment - '''   ''' (Triple quotes - doesnt work in .ipynb)
+
+VARIABLES
+* Case sensitive
+* INVALID variables > starts with number, has a hyphen/ space in it
+name="Suvajit"
+Name="Bardhan"
+print(name) print(Name)
+
+INDENTATION
+consistent use of spaces (commonly 4) or a tab is required. python uses it to determine grouping of statements.
+If not written correctly, it will cause error
+
+SAMPLE (run in Jupyter Notebook file, .ipynb)
+age=32
+if age > 30:
+    print(age)
+print(age)
+
+OP > 32 32
+
+# Indentation applies to loops too
+for i in range(3):
+    print(i)      ← inside loop
+print("done")     ← outside loop, runs once
+
+LINE CONTINUATION
+total=1+2+3+4+5\
++6+7
+print(total)
+OP > 28
+
+MULTIPLE STATEMENTS ON SINGLE LINE
+x=5;y=10;z=x+y;print(z)
+OP > 15
+
+SEMANTICS
+VARIABLE ASSIGNMENT
+python automatically understands the variable type
+
+age=32
+name="Suvajit"
+type(age)       > OP > int
+type(name)      > OP > str
+
+TYPE INFERENCE
+var=10
+prin(type(var))     > OP > <class 'int'>
+var="Suvajit"
+prin(type(var))     > OP > <class 'str'>
+CLASS means, type/ category/ family. Means, This value belongs to the INT family. Like JavaScript, everything in Python is an Object. 
+10          →  <class 'int'>      # whole numbers
+10 is not just a number.
+It's an OBJECT that belongs to the INT class
+
+MORE BREAKING
+Python Memory
+├── int            ← class
+│   ├── 10         ← object
+│   ├── 25         ← object
+│
+├── str            ← class
+│   ├── "Suvajit"  ← object
+│   ├── "Bardhan"  ← object
+
+
+
+########################################
+BASICS
+4. VARIABLES
+when a variable is defined, its automatically assigned to memory.
+name = "Suvajit"
+Python does 3 things automatically —
+1. Creates the value "Suvajit" in memory
+2. Gives it a memory address (a location)
+3. Makes "name" point to that address
+print(id(name))    # id() shows the memory address
+# Output: something like 140234567891234
+
+EXAMPLE 2
+name = "Suvajit"
+name = "Bardhan"
+[ "Suvajit" ] still in memory but nothing points to it anymore
+Python automatically DELETES it (Garbage Collection)
+
+Garbage Collection
+Python automatically cleans up memory that nothing is pointing to anymore.
+When & How ?
+Python uses a system called Reference Counting to decide when to clean up. when Variable is Reassigned, Variable Deleted Manually, Variable goes Out of Scope
+
+NAMING CONVENTIONS
+Variable names should be descriptive, 
+Must start with letter/ '_', contain letters, numbers & underscores
+names are case sensitive
+INVALID variables > starts with number, has a hyphen/ space/ special character in it
+
+Example
+first_name="Suvajit"
+last_name="Bardhan"
+age=32
+height=5.9
+is_student=True
+
+PYTHON IS DYNAMICALLY TYPED
+means type of a variable is determined at runtime. In the opposite Java/C/C++ are Statically Typed languages.
+int age = 25 // MUST say "this is an int"
+
+e.g. in Python
+var=10
+print(var, type(var))
+
+var="Hello"
+print(var, type(var))
+This means, the type of the same variable can be changed as the program executes
+
+TYPE CASTING & CONVERSION
+Type Casting — WE do it manually
+age=25;
+age_str=str(age)
+print(type(age_str))        > OP > <class 'str'>
+age_int=int(age)
+print(type(age_int))        > OP > <class 'int'>
+
+Type Conversion — Python does it automatically
+Another example -
+num_int = 10
+num_float = 3.14
+
+result = num_int + num_float
+print(result)        # 13.14
+print(type(result))  # <class 'float'>
+We never asked Python to convert anything. Python thought int + float together...I'll automatically convert int to float
+
+int("Suvajit")    # ❌ CRASH - how do you convert a name to number?
+int("3.14")       # ❌ CRASH - cant cast float string directly to int
+int(3.14)         # ✅ works - but 3.14 becomes 3 (decimal lost!)
+
+INPUT
+lets us enter data
+age=input("Enter your age")
+print(age)
+age=int(input("Enter your age"))
+print(age, type(age))
+
+CONCATINATION & SEPARATOR
++   True Concatenation
+,   Not Concatenation, it's a Separator
+name = "Suvajit"
+age = 25
+print("Hello", name, age)       # Hello Suvajit 25
+print("Hello " + name)          # ✅ str + str
+print("Age: " + 25)             # ❌ CRASH - str + int not allowed
+print("Age: " + str(25))        # ✅ works. Must convert manually
++ joins into ONE string, no automatic space
+, keeps them SEPARATE, adds space automatically
+
+
+
+########################################
+BASICS
+5. DATA TYPES
+Classification of data that tells the compiler/ interpreter how the programmer intends to use the data. data type helps in memory management for differnt types of data
+WHY ?
+Different data needs different memory space —
+"Suvajit"  →  needs memory for text characters
+25         →  needs memory for a number
+3.14       →  needs memory for decimal number
+Python needs to know WHAT the data is so it knows how much memory to give it and what it can do with it.
+
+1. TEXT - str
+name = "Suvajit";city = 'Kolkata';message = "I love Python"
+# single or double quotes both fine
+print(type(name))      # <class 'str'>
+
+2. NUMBERS
+int — whole numbers
+age = 25;year = 2026;negative = -10
+print(type(age))       # <class 'int'>
+
+float — decimal numbers
+price = 99.99;height = 5.11;pi = 3.14159
+print(type(price))     # <class 'float'>
+
+complex — rarely used
+# has real + imaginary part
+# used in advanced mathematics
+c = 3 + 5j
+print(type(c))         # <class 'complex'>
+
+3. BOOLEAN — bool
+is_adult = True
+is_student = False
+print(type(is_adult))  # <class 'bool'>
+
+4. SEQUENCE TYPES
+list — ordered, changeable
+# like an array in PHP
+fruits = ["apple", "banana", "mango"]
+fruits[0]              # apple
+fruits.append("grape") # can add items ✅
+fruits[0] = "orange"   # can change items ✅
+print(type(fruits))    # <class 'list'>
+
+tuple — ordered, NOT changeable
+# like a list but LOCKED
+coordinates = (10.5, 25.3)
+coordinates[0]         # 10.5
+coordinates[0] = 99    # ❌ CRASH - cannot change
+print(type(coordinates)) # <class 'tuple'>
+
+range — sequence of numbers
+# commonly used in loops
+numbers = range(5)     # 0,1,2,3,4
+numbers = range(1,6)   # 1,2,3,4,5
+print(type(numbers))   # <class 'range'>
+
+5. MAPPING — dict (Dictionary)
+// PHP associative array
+$person = ["name" => "Suvajit", "age" => 25];
+# Python dictionary - same concept!
+person = {"name": "Suvajit", "age": 25}
+print(person["name"])  # Suvajit
+print(person["age"])   # 25
+
+print(type(person))    # <class 'dict'>
+
+6. SET
+Unordered collection, no duplicates allowed —
+numbers = {1, 2, 3, 3, 3, 2}
+print(numbers)         # {1, 2, 3} - duplicates removed automatically!
+
+print(type(numbers))   # <class 'set'>
+
+CONCATENATE
+result="Hello" + 5      # TypeError: can only concatenate str to str
+result="Hello" + str(5) # Works now
+print(result)           # Hello5
+
+
+
+########################################
+BASICS
+6. OPERATORS
+1. Arithmetic Operators
+Basic math --
+a = 10
+b = 3
+
+a + b           # 13  → Addition
+a - b           # 7   → Subtraction
+a * b           # 30  → Multiplication
+a / b           # 3.3333 → Division (always gives float)
+a // b          # 3   → Floor Division (removes decimal)
+a % b           # 1   → Modulus (remainder after division)
+a ** b          # 1000 → Exponent (10 to the power of 3)
+
+2. Assignment Operators
+Storing values into variables --
+x = 10      # basic assignment
+
+# Shorthand operators (these are from PHP!)
+x += 5      # same as x = x + 5  → 15
+x -= 5      # same as x = x - 5  → 10
+x *= 2      # same as x = x * 2  → 20
+x /= 2      # same as x = x / 2  → 10.0
+x //= 3     # same as x = x // 3 → 3
+x %= 3      # same as x = x % 3  → 0
+x **= 2     # same as x = x ** 2 → 0
+
+3. Comparison Operators
+Comparing two values — always returns True or False —
+a = 10
+b = 3
+
+a == b    # False → Equal to ("Suva" == "suva" → False)
+a != b    # True  → Not equal to
+a > b     # True  → Greater than
+a < b     # False → Less than
+a >= b    # True  → Greater than or equal to
+a <= b    # False → Less than or equal to
+e.g.
+age = 25
+if age >= 18:
+    print("Adult")    # this runs
+
+4. Logical Operators
+Combining multiple conditions —
+age = 25
+salary = 50000
+
+# AND → both must be True
+if age >= 18 and salary >= 30000:
+    print("Eligible")     # ✅ runs, both are True
+
+# OR → at least one must be True
+if age >= 18 or salary >= 100000:
+    print("Eligible")     # ✅ runs, age condition is True
+
+# NOT → flips True to False, False to True
+is_student = False
+if not is_student:
+    print("Not a student")  # ✅ runs
+
+5. Identity Operators
+Checks if two variables point to same memory location —
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+
+a == b     # True  → same VALUE
+a is b     # False → different memory location
+a is c     # True  → SAME memory location, c points to a
+
+a is not b # True  → they are NOT the same object
+
+a ──► [1,2,3] address: 0x1A2B
+b ──► [1,2,3] address: 0x9F3C   ← different address, so "is" = False
+c ──► [1,2,3] address: 0x1A2B   ← same address as a, so "is" = True
+
+6. Membership Operators
+Checks if a value exists inside a collection —
+fruits = ["apple", "banana", "mango"]
+
+"apple" in fruits       # True  → apple exists in list
+"grape" in fruits       # False → grape doesn't exist
+"grape" not in fruits   # True  → correct, grape is not there
+
+# works on strings too
+"Suva" in "Suvajit"     # True
+"xyz" in "Suvajit"      # False
+
+7. Bitwise Operators
+Works on binary level — used in advanced/low level programming, rarely in beginners ML work —
+a = 10   # binary: 1010
+b = 3    # binary: 0011
+
+a & b    # 2  → AND
+a | b    # 11 → OR
+a ^ b    # 9  → XOR
+~a       # -11 → NOT
+a << 1   # 20 → left shift
+a >> 1   # 5  → right shift
+
+
+########################################
+CONTROL FLOW
+7. CONDITIONAL STATEMENTS
+1. if Statement
+age = 20
+if age >= 18:
+    print("You are an adult")
+# Output: You are an adult
+
+2. if else Statement
+age = 15
+if age >= 18:
+    print("You are an adult")
+else:
+    print("You are a minor")
+# Output: You are a minor
+
+3. if elif else Statement
+same as else-if. checks multiple conditions
+marks = 75
+if marks >= 90:
+    print("Grade A")
+elif marks >= 75:
+    print("Grade B")
+elif marks >= 60:
+    print("Grade C")
+else:
+    print("Grade F")
+# Output: Grade B
+
+4. Nested if — if inside if
+age = 25
+salary = 50000
+if age >= 18:
+    print("Age ok")
+    if salary >= 30000:
+        print("Salary ok")
+        print("Loan Approved!")
+    else:
+        print("Salary too low")
+else:
+    print("Too young")
+# Output:
+# Age ok
+# Salary ok
+# Loan Approved!
+
+5. Shorthand if — One liner
+# Normal way
+if age >= 18:
+    print("Adult")
+
+# Shorthand way
+print("Adult") if age >= 18 else print("Minor")
+
+# PHP ternary
+echo $age >= 18 ? "Adult" : "Minor";
+# Python ternary
+print("Adult" if age >= 18 else "Minor")
+
+6. match Statement — Python 3.10+ (Like switch in PHP)
+day = "Monday"
+match day:
+    case "Monday":
+        print("Start of week")
+    case "Friday":
+        print("End of week")
+    case _:              # _ means default
+        print("Midweek")
+
+TRUTHY AND FALSY
+In Python every value is either truthy or falsy —
+# FALSY values → treated as False in conditions
+if 0:        print("runs")   # ❌ doesn't run
+if "":       print("runs")   # ❌ doesn't run
+if []:       print("runs")   # ❌ doesn't run
+if None:     print("runs")   # ❌ doesn't run
+
+# TRUTHY values → treated as True in conditions
+if 1:        print("runs")   # ✅ runs
+if "hello":  print("runs")   # ✅ runs
+if [1,2,3]:  print("runs")   # ✅ runs
+
+IN SHORT,
+Falsy  → 0, "", [], {}, None, False
+Truthy → everything else
+Always comes up in interviews
+
+== vs. is
+== → checks same VALUE
+is → checks same MEMORY LOCATION
+
+[1,2] == [1,2]   # True  → same value
+[1,2] is [1,2]   # False → different memory location
+
+EXAMPLE
+# Check if the entered year is LEAP YEAR or not
+RULES
+RULE 1 → divisible by 4        → MIGHT be leap year
+RULE 2 → divisible by 100      → NOT a leap year (exception to rule 1)
+RULE 3 → divisible by 400      → IS a leap year (exception to rule 2)
+
+## BASIC CODE
+year=int(input("Enter Year"))
+if year % 400 == 0:
+    print(str(year) + ": ✅ LEAP YEAR")
+elif year % 100 == 0:
+    print(str(year) + ": ❌ NOT LEAP YEAR")
+elif year % 4 == 0:
+    print(str(year) + ": ✅ LEAP YEAR")
+else:
+    print(str(year) + ": ❌ NOT LEAP YEAR")
+
+## PROD CODE
+try:
+    year = int(input("Enter Year: "))
+
+    if year <= 0:
+        print("❌ Year must be greater than 0")
+    elif year % 400 == 0:
+        print(f"{year}: ✅ LEAP YEAR")
+    elif year % 100 == 0:
+        print(f"{year}: ❌ NOT LEAP YEAR")
+    elif year % 4 == 0:
+        print(f"{year}: ✅ LEAP YEAR")
+    else:
+        print(f"{year}: ❌ NOT LEAP YEAR")
+
+except ValueError:
+    print("❌ Please enter a valid number!")
+
+ONE LINER (INTERVIEW)
+is_leap = (year % 400 == 0) or (year % 100 != 0 and year % 4 == 0)
+print("LEAP" if is_leap else "NOT LEAP")
+
+EXPLANATION
+Part 1      year % 400 == 0         → Always a LEAP YEAR
+Part 2      (year % 100 != 0 and year % 4 == 0)
+→ Is it NOT divisible by 100   AND   divisible by 4? This cleverly handles BOTH conditions in one shot. BOTH must be true together
+
+f-string/ formatted string
+EXAMPLE
+name = "Suvajit"
+age = 32
+city = "Kolkata"
+
+# old way 😩
+print("My name is " + name + ", I am " + str(age) + " from " + city)
+# f-string way 😊
+print(f"My name is {name}, I am {age} from {city}")
+
+# Output: My name is Suvajit, I am 32 from Kolkata
+
+EXAMPLE
+a = 10
+b = 5
+print(f"Sum is {a + b}")      # Sum is 15
+print(f"Is adult: {age >= 18}")  # Is adult: True
+
+TRY-EXCEPT BLOCK
+Python calls it try except, not try catch like PHP.
+PROBLEM
+if user enter other values than numbers
+
+# PHP
+try {
+} catch (Exception $e) {
+}
+
+# Python
+try:
+except:
+
+try:
+    year = int(input("Enter Year: "))
+except ValueError:
+    print("❌ Please enter a valid number!")
+
+int("hello")          # ValueError    → wrong value type
+10 / 0                # ZeroDivisionError → cant divide by zero
+name = undefined_var  # NameError     → variable doesnt exist
+my_list[99]           # IndexError    → position doesnt exist
+
+Catch other errors
+try:
+    year = int(input("Enter Year: "))
+    result = 100 / year
+except ValueError:
+    print("❌ Not a valid number!")
+except ZeroDivisionError:
+    print("❌ Year cannot be zero!")
+
+Or catch ALL errors at once —
+try:
+    year = int(input("Enter Year: "))
+except Exception as e:
+    print(f"❌ Something went wrong: {e}")
+
+Q. What is the difference between try except and if else?
+if else   → handles expected conditions we can predict
+try except → handles unexpected RUNTIME errors we cant predict
+
+Q. What is the difference between ValueError and TypeError?
+int("hello")    # ValueError  → right type (str), wrong value
+int(["hello"])  # TypeError   → completely wrong type (list)
+
+Q. What does finally do?
+Runs NO MATTER WHAT.
+Even if error happens, finally runs.
+Used for cleanup like closing files or database connections.
+finally:
+    print("Program finished")
+
+Q. What is Exception as e?
+Exception → catches ALL types of errors
+as e      → stores the error message in variable e
+except Exception as e:
+    print(e)    # prints the actual error message
+
+Q. PHP says catch, Python says except — why?
+Just different language design choices.
+Same concept, different keyword.
+Both catch and handle runtime errors.
+
+
+
+########################################
+CONTROL FLOW
+7. LOOPS
+│
+├── for loop   → repeat a KNOWN number of times
+└── while loop → repeat UNTIL a condition becomes false
+
+1. for Loop
+for i in range(5):
+    print(i)
+# Output: 0 1 2 3 4
+
+>> range() variations
+range(5)        # 0,1,2,3,4         → start=0 default
+range(1, 6)     # 1,2,3,4,5         → start=1, stop=6
+range(0, 10, 2) # 0,2,4,6,8         → start=0, stop=10, step=2
+range(10, 0, -1)# 10,9,8,7,6,5,4,3,2,1 → countdown
+
+>> Looping through List/ Collection
+fruits = ["apple", "banana", "mango"];
+for fruit in fruits:
+    print(fruit)
+# Output: apple banana mango
+
+>> enumerate() — get index AND value together
+for index, fruit in enumerate(fruits):
+    print(index, fruit)
+
+# Output:
+# 0 apple
+# 1 banana
+# 2 mango
+
+>> looping through a string
+name = "Suvajit"
+for letter in name:
+    print(letter)
+# Output: S u v a j i t
+
+>> looping through a dictionary
+person = {"name": "Suvajit", "age": 25, "city": "Kolkata"}
+for key in person:
+    print(key, "→", person[key])
+# Output:
+# name → Suvajit
+# age → 25
+# city → Kolkata
+
+2. while Loop
+count = 1
+while count <= 5:
+    print(count)
+    count += 1
+# Output: 1 2 3 4 5
+
+>> Infinite Loop — dangerous ⚠️
+# NEVER do this accidentally
+while True:
+    print("Hello")    # runs forever, crashes program
+
+Always make sure the while loop has a way to become False.
+
+3. Loop Control Statements
+>> break — exit loop immediately
+for i in range(10):
+    if i == 5:
+        break         # stop everything when i hits 5
+    print(i)
+
+# Output: 0 1 2 3 4
+running fine... 0,1,2,3,4
+hits 5 → BREAK → exits loop completely
+6,7,8,9 never run
+
+>> continue — skip current iteration, keep going
+# Output: 0 1 2 3 4 6 7 8 9
+running fine... 0,1,2,3,4
+hits 5 → CONTINUE → skips 5
+keeps going... 6,7,8,9
+
+>> pass — do nothing, placeholder
+for i in range(5):
+    if i == 3:
+        pass          # does nothing, just moves on
+    print(i)
+# Output: 0 1 2 3 4
+
+4. Nested Loops — loop inside loop
+>> Real use case — printing patterns —
+for i in range(5):
+    print("* " * i)
+
+# Output:
+# 
+# * 
+# * * 
+# * * * 
+# * * * *
+
+5. else with loops — unique to Python
+for i in range(5):
+    print(i)
+else:
+    print("Loop finished!")    # runs when loop completes normally
+# Output: 0 1 2 3 4 Loop finished!
+
+But if break is used — else does NOT run —
+for i in range(5):
+    if i == 3:
+        break
+    print(i)
+else:
+    print("Loop finished!")    # ❌ does NOT run because break was used
+# Output: 0 1 2
+
+>> for vs while — when to use which
+for loop                            while loop
+Use when we know how many times     we don't know how many times
+Driven byCollection or range        Condition
+Risk Safe, always ends              Can become infinite ⚠️
+
+
+Q. break vs. continue?
+break    → exits the loop completely
+continue → skips current iteration, loop keeps going
+
+Q. What is an infinite loop and how do we prevent it?
+while True without a break → infinite loop
+Prevention:
+1. Always update the condition variable
+2. Use break when condition is met
+
+Q. Does Python have a do-while loop?
+NO. Python doesn't have do-while.
+But we can simulate it —
+while True:
+    # code runs at least once
+    if condition:
+        break
+
+Q. What does else in a loop do?
+Runs when loop completes WITHOUT hitting break.
+Unique to Python, doesn't exist in PHP/Java.
+
+Q. What is the difference between for loop and while loop?
+for   → known iterations, collection based
+while → unknown iterations, condition based
+
+Q. How does enumerate work?
+# gives index AND value together
+for index, value in enumerate(list):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
