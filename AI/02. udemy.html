@@ -32,7 +32,7 @@ Scikit-learn    Beginner friendly ML, classic algorithms
 Keras           Simplified layer on top of TensorFlow
 
 PYTHON Data Frameworks
-Framewor        kWhat it does
+Framework       What it does
 Pandas          Excel but in Python, data manipulation
 NumPy           Math and numbers at high speed
 Matplotlib      Drawing graphs and charts
@@ -388,11 +388,17 @@ print(type(is_adult))  # <class 'bool'>
 4. SEQUENCE TYPES
 list — ordered, changeable
 # like an array in PHP
-fruits = ["apple", "banana", "mango"]
-fruits[0]              # apple
-fruits.append("grape") # can add items ✅
-fruits[0] = "orange"   # can change items ✅
-print(type(fruits))    # <class 'list'>
+fruits = ["apple", "banana", "mango", "kiwi", "star fruit", "grapes"]
+fruits[0]               # apple
+fruits[-1]              # grapes, shows last element
+fruits.append("grape")  # can add items ✅
+fruits.insert(2, "Test")    # Insert at 2nd index
+fruits.remove("grape")  # can remove items 🗑️
+fruits[0] = "orange"    # can change items ✅
+print(type(fruits))     # <class 'list'>
+print(fruits[1:])       # ['banana', 'mango', 'kiwi', 'star fruit', 'grapes'], shows all from key 1
+print(fruits[1:3])      # ['banana', 'mango'], shows all from key 1 to before key 3
+print(fruits.count('banana'))       # shows how many 'banana' are there
 
 tuple — ordered, NOT changeable
 # like a list but LOCKED
@@ -913,22 +919,84 @@ Q. How does enumerate work?
 # gives index AND value together
 for index, value in enumerate(list):
 
+EXAMPLE
+## Code to show all prime numbers from 1 to 100
+1. Simple example
+numbers="Prime numbers: "
+for i in range(2, 101):
+    for j in range(2, i):
+        if (i % j == 0):
+            break
+    else:
+        numbers += str(i) + ", "
+        # print(f"{i}")
+print(numbers)
+    
+2. Sieve of Eratosthenes (most famous algorithm)
+Idea - Imageine you have a list of numbers from 0 to 100. You go through it & cross out all multiples of each number, whatever is never crossed out is PRIME
+Step 1 - Create a list of True for every number (True means a candidate for prime)
+is_prime = [True] * 101
+# [True, True, True, True, True, ...]
+#    0     1     2     3     4   ...
 
+Step 2 - 0 and 1 are not prime, mark them False
+is_prime[0] = False
+is_prime[1] = False
+# [False, False, True, True, True, ...]
+#    0      1      2     3     4   ...
 
+Step 3 — Start from 2, cross out all its multiples
+# multiples of 2 → 4, 6, 8, 10 ...
+is_prime[4] = False
+is_prime[6] = False
+is_prime[8] = False
+# and so on...
 
+Step 4 — Move to 3, cross out all its multiples
+# multiples of 3 → 6, 9, 12, 15 ...
+is_prime[6] = False   # already False, no problem
+is_prime[9] = False
+is_prime[12] = False
+# and so on...
 
+Step 5 — Whatever is still True is prime!
+# is_prime after all crossing out:
+# index 2  → True  ✅ prime
+# index 3  → True  ✅ prime
+# index 4  → False ❌ crossed out (multiple of 2)
+# index 5  → True  ✅ prime
+# index 6  → False ❌ crossed out
 
+FULL CODE
+# Step 1 - assume every number is prime
+is_prime = [True] * 101
 
+# Step 2 - 0 and 1 are not prime
+is_prime[0] = False
+is_prime[1] = False
 
+# Step 3 - cross out multiples
+for i in range(2, 101):
+    if is_prime[i]:              # if i is still prime
+        for j in range(i*i, 101, i):   # go through its multiples
+            is_prime[j] = False  # cross them out
 
+# Step 4 - collect whatever is still True
+primes = []
+for i in range(101):
+    if is_prime[i]:
+        primes.append(i)
 
-
+print(primes)
 
 
 
 ########################################
 DATA STRUCTURE
 8. LISTS & LIST COMPREHENSION
+Lists, Tuples, Sets & Dictionaries
+LISTS - are ordered mutable collection of items
+Already explained in Data types
 
 
 
