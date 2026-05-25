@@ -504,10 +504,32 @@ print(type(numbers))   # <class 'range'>
 // Like PHP associative array -> $person = ["name" => "Suvajit", "age" => 25];
 # Python dictionaries - collection of items in key-value pair. Keys are unique & immutable, Values can be of any type
 person = {"name": "Suvajit", "age": 25}
-print(person["name"])  # Suvajit
-print(person["age"])   # 25
-
+print(person["name"])       # Suvajit
+print(person.get('name'))   # Suvajit
+AND
+print(person["age"])        # 25
+print(person.get('age'))    # 25
+print(person.get('something'))          # None
+print(person.get('something', 'NA'))    # NA
 print(type(person))    # <class 'dict'>
+student = {"name": "Suvajit", "age": 25, "name": "Bardhan"}         # {"age": 25, "name": "Bardhan"}, when same key found multiple times
+
+UPDATING
+student["age"] = 35
+print(student)          # {"name": "Suvajit", "age": 35, "grade": "A"}
+student["address"] = "India"
+print(student)          # {"name": "Suvajit", "age": 35, "grade": "A", "address": "India"}
+del student['grade']
+print(student)          # {"name": "Suvajit", "age": 35, "address": "India"}
+
+METHODS
+print(student.keys())
+# dict_keys(['name', 'age', 'address'])
+print(student.values())
+# dict_keys(['Suvajit', 35, 'India'])
+print(student.items())
+# dict_keys([('name', 'Suvajit'), ('age', 35), ('address', 'India')])
+
 
 6. SET
 Unordered collection, no duplicates allowed —
@@ -1164,27 +1186,123 @@ print(tuple) >> [1, 2, 3, 4, 5]
 list() function can be used to convert tuples to list. opposite is tuple()
 
 
+DICTIONARIES
+** SHALLOW COPY
+Shallow copy creates a new object but does not create copies of nested objects within it.
+In other words, changes made to the nested objects in the copied object will affect the original object as well.
 
+** DEEP COPY
+A deep copy creates a completely new object, including new copies of all objects nested within it. 
+Therefore, changes to the deep-copied object do not affect the original object, and vice versa, even in nested objects.
 
+* Shallow and deep copy work on lists, sets, custom objects too — anything that can contain other objects.
+* If data has no nesting/ if it's flat → shallow and deep behave the same/ Fully independent. 
+* If data has nesting → they behave differently
 
+* FLAT DATA EXAMPLE
+import copy
+original = {"name": "Alice", "age": 32}
+shallow = copy.copy(original)       # Shallow copy tool
+deep    = copy.deepcopy(original)   # Deep copy tool
 
+# NOW CHANGE
+shallow["name"] = "Bob"
+deep["name"]    = "Charlie"
 
+# RESULT TIME
+print(original["name"])  # "Alice"  ✅
+print(shallow["name"])   # "Bob"    ✅
+print(deep["name"])      # "Charlie" ✅
 
+All three are independent. Because with flat data, there's nothing nested to share, so shallow and deep end up doing the exact same thing.
 
+* NESTED DATA EXAMPLE
+import copy
+original = {
+    "name": "Alice",
+    "scores": [10, 20, 30]
+}
+shallow = copy.copy(original)
+deep    = copy.deepcopy(original)
 
+# NOW CHANGE
+shallow["scores"].append(99)
 
+# RESULT TIME
+print(original["scores"])  # [10, 20, 30, 99]  😱 changed!
+print(shallow["scores"])   # [10, 20, 30, 99]  😱 changed!
+print(deep["scores"])      # [10, 20, 30]       ✅ safe!
 
+* USE CASES
+Shallow copy
+1. Making modified version of a config
+e.g. 
+base_config = {
+    "theme": "dark",
+    "language": "english",
+    "plugins": ["plugin1", "plugin2"]  # shared is fine here
+}
+user_config = copy.copy(base_config)
+user_config["theme"] = "light"   # only change the theme
+2. Faster, simple, saves memory
 
+Deep copy
+1. Game state - saving a checkpoint
+game_state = {
+    "level": 3,
+    "player": {"health": 100, "inventory": ["sword", "shield"]}
+}
 
+checkpoint = copy.deepcopy(game_state)  # save the state
 
+# player picks up a potion later
+game_state["player"]["inventory"].append("potion")
+print(checkpoint["player"]["inventory"])  
+# ["sword", "shield"] ✅ checkpoint safe!
 
+2. Running experiments without affecting original data
+3. Undo Feature
+document = {
+    "title": "My Essay",
+    "content": ["para1", "para2"]
+}
 
+# save before making changes
+undo_state = copy.deepcopy(document)
 
+# user makes changes
+document["content"].append("para3")
+document["title"] = "My Final Essay"
 
+# user hits undo — restore!
+document = undo_state
+print(document["content"])  # ["para1", "para2"]  ✅
 
+ITERATE WITH key, value
+student = {
+    'name': 'Suvajit',
+    'age': 30,
+    'isStudent': False
+}
+for key in student.keys():
+    print(key)
+for value in student.values():
+    print(value)
+for key, value in student.items():
+    print(f"{key}: {value}")
 
+# Output
+name
+age
+isStudent
 
+Suvajit
+30
+False
 
+name: Suvajit
+age: 30
+isStudent: False
 
 
 
