@@ -1304,13 +1304,600 @@ name: Suvajit
 age: 30
 isStudent: False
 
+NESTED DICTIONARIES
+students = {
+    "student1": {"name": "Suvajit", "age": 32},
+    "student2": {"name": "Jay", "age": 22}
+}
+print(students)
+OP >>
+{'student1': {'name': 'Suvajit', 'age': 32}, 'student2': {'name': 'Jay', 'age': 22}}
+
+Access Nested Dictionaries Elements
+print(students["student2"]["age"]) >> 22
+
+Iterating over nested dictionaries
+sudents.items()
+>> dict_items([
+    ('student1', {'name': 'Suvajit', 'age': 32}),
+    ('student2', {'name': 'Jay', 'age': 22})
+])
+
+for stident_id, student_info in students.items():
+    print(f"{student_id}: {student_info}")
+    for key, value in student_info.items():
+        print(f"{key}: {value}")
+OP >>
+student1: {'name': 'Suvajit', 'age': 32}
+name: Suvajit
+age: 32
+student2: {'name': 'Jay', 'age': 22}
+name: Jay
+age: 22
+
+Dictionary comprehension
+squares = {i: i**2 for i in range(1, 6)}
+print(squares)    # {1:1, 2:4, 3:9, 4:16, 5:25}
+
+evens = {x:x**2 for x in range(10) if x % 2 == 0}
+print(evens)
+OP >> {0:0, 2:4, 4:16, 6:36, 8:64}
+
+## Use dictionary to count the frequency of elements in list
+numbers = [1,2,2,3,3,3,4,4,4,4]
+frequency = {}
+for number in numbers:
+    if number in frequency:
+        frequency[number] += 1
+    else
+        frequency[number] = 1
+print(frequency)
+OP >>
+{1: 1, 2:2, 3: 3, 4: 4}
+
+Merge Dictionaries
+1. ** Unpacking
+Think of ** as "spread everything out" from the dictionary.
+d1 = {"name": "Alice", "age": 25}
+d2 = {"city": "NYC", "job": "Engineer"}
+merged = {**d1, **d2}
+
+print(merged)  
+OP >> {"name": "Alice", "age": 25, "city": "NYC", "job": "Engineer"}
+
+2. | Operator (Python 3.9+)
+Cleanest and most readable way. but only works on Python 3.9 and above.
+merged = d1 | d2
+
+print(merged)
+OP >> {"name": "Alice", "age": 25, "city": "NYC", "job": "Engineer"}
+
+3. .update()
+⚠️ This doesn't create a new dictionary — it changes d1 itself.
+d1.update(d2)  # d1 is modified directly!
+
+print(d1)
+OP >> {"name": "Alice", "age": 25, "city": "NYC", "job": "Engineer"}
+
+KEYS CLASH
+d1 = {"name": "Alice", "age": 25}
+d2 = {"name": "Bob",   "city": "NYC"}
+# "name" exists in both!
+
+print({**d1, **d2})  
+# {"name": "Bob", "age": 25, "city": "NYC"}
+print(d1 | d2)       
+# {"name": "Bob", "age": 25, "city": "NYC"}
+
+** if you want the first dictionary to win -> Just swap the order
+
+
+########################################
+DATA STRUCTURE
+9. REAL WORLD USE CASES
+
+## Todo list
+to_do_list = ["Buy groceries", "Do chores", "Pay bills"];
+
+# Adding new tasks
+to_do_list.append("Schedule new meeting");
+to_do_list.append("Go for a run");
+
+# Removing completed task
+to_do_list.remove("Do chores")
+
+# Checking if a task is in the list
+if "Pay bills" in to_do_list:
+    print("Dont forget to pay the bills")
+print("Todo list remaining: ")
+for task in to_do_list:
+    print(f"- {task}")
+
+OP >>
+Dont forget to pay the bills
+Todo list remaining: 
+- Buy groceries
+- Pay bills
+- Schedule new meeting
+- Go for a run
+
+## Student Grades
+grades = [85, 92, 78, 90, 88]
+grades.append(95)
+
+# average
+average_grade = sum(grades) / len(grades)
+print(f"Average: {average:.2f}")   # Average: 87.67
+print(f"Average: {average:.1f}")   # Average: 87.7
+print(f"Average: {average:.0f}")   # Average: 88
+print(f"Average: {average:.4f}")   # Average: 87.6667
+
+# Highest & Lowest grades
+highest_grade   = max(grades)
+lowest_grade    = min(grades)
+
+Some more real world use cases for LISTS, TUPLES & DICTIONARIES:
+## 📋 Lists — Ordered, changeable collection
+
+### 1. Shopping Cart
+cart = ["apple", "milk", "bread"]
+cart.append("eggs")    # add item
+cart.remove("milk")    # remove item
+
+### 2. Chat Messages
+messages = ["Hello!", "How are you?", "I'm good!"]
+messages.append("Bye!")   # new message keeps getting added
+
+### 3. Music Playlist
+playlist = ["song1", "song2", "song3"]
+playlist.insert(0, "song4")   # add to top of queue
+
+### 4. Todo List
+todos = ["buy groceries", "call mom", "pay bills"]
+todos.remove("call mom")   # mark as done = remove
+
+
+## 🔒 Tuples — Ordered, unchangeable collection
+
+### 1. GPS Coordinates
+location = (22.5726, 88.3639)   # latitude, longitude — never changes!
+
+### 2. RGB Colors
+red   = (255, 0, 0)
+green = (0, 255, 0)
+blue  = (0, 0, 255)
+Colors are fixed values — no need to change them.
+
+### 3. Date of Birth
+dob = (15, 8, 1995)   # day, month, year — never changes!
+
+### 4. Card in a Card Game
+card = ("Ace", "Spades")   # value, suit — a card doesn't change once dealt
+
+
+## 📖 Dictionaries — Key-value pairs
+
+### 1. User Profile
+user = {
+    "name": "Alice",
+    "email": "alice@gmail.com",
+    "age": 25,
+    "is_premium": True
+}
+
+### 2. Product in a Store
+product = {
+    "name": "iPhone 15",
+    "price": 999,
+    "stock": 50,
+    "category": "electronics"
+}
+
+### 3. Student Report Card
+report = {
+    "name": "Alice",
+    "grades": {
+        "math": 95,
+        "science": 88,
+        "english": 76
+    }
+}
+print(report["grades"]["math"])   # 95
+
+### 4. API Response (very common in real jobs!)
+response = {
+    "status": 200,
+    "message": "success",
+    "data": {
+        "user_id": 101,
+        "username": "alice123"
+    }
+}
+
+## When to pick which?
+Data that keeps changing (cart, messages)                   List
+Data that should never change (coordinates, colors)         Tuple
+Data with labels / named fields (user, product)             Dictionary
+Order matters, duplicates allowed                           List
+Fixed structure, small group of values                      Tuple
+Fast lookup by name/key                                     Dictionary
+
+> **Simple rule** — 
+if you need labels for your data, use a **dictionary**. 
+If order matters and data changes, use a **list**. 
+If data should never change, use a **tuple**.
+
+
+########################################
+FUNCTION
+9. GETTING STARTED
+
+# Introduction
+Function - a block of code that performs a specific task. Functions help in organizing code, reusing code and improving readability (Maintaining Docstring)
+Why Use Functions?
+# ❌ Without functions — repeating code
+# ✅ With functions — clean and reusable code
+
+# Syntax
+def function_name(parameters)   # parameters are optional
+    """Docstring"""             # Docstring is optional
+    # Function body
+    return expression           # return expression is optional
+
+# Example
+1. Simple function to check number is even/ odd
+def even_or_odd(num):
+    """This function finds whether num is even or odd"""
+    if num % 2 == 0:
+        print("Even number")
+    else:
+        print("Odd number")
+
+Call this function
+even_or_odd(24)     >> Even number
+
+2. Simple function to add numbers
+def add(a + b):
+    return a + b (OR return a + b, a)
+
+result = add(5, 3)
+print(result)   # 8 (8, 5)
+
+3. Optional Parameter
+def greet(name, message="Good morning"):
+    print(f"{message}, {name}!")
+
+greet("Alice")                    # Good morning, Alice!
+greet("Alice", "Good evening")    # Good evening, Alice!
+
+4. Login check
+def check_login(username, password):
+    if username == "alice" and password == "1234":
+        return "Login successful!"
+    else:
+        return "Wrong credentials!"
+
+print(check_login("alice", "1234"))   # Login successful!
+print(check_login("alice", "wrong"))  # Wrong credentials!
+
+5. Types of Arguments
+# 1. Positional Argument — order matters
+def user(name, age):
+    print(f"{name} is {age}")
+
+user("Alice", 25)       # Alice is 25
+
+OR
+
+def print_numbers(*args):
+    for number in args
+        print(number)
+print_numbers(1,2,3,4,5,"Suvajit")
+
+1 2 3 4 5 Suvajit
+
+# 2. Keyword Argument — order doesn't matter
+** key-value pairs are passes here.
+user(age=25, name="Alice")   # Alice is 25
+
+OR
+
+def print_details(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+print_details(name="Suvajit", age=32, country="India")
+
+OP >>
+name; Suvajit
+age: 32
+country: India
+
+# 3. Default Argument — fallback value
+def greet(name, msg="Hello"):
+    print(f"{msg} {name}")
+
+greet("Alice")           # Hello Alice
+greet("Alice", "Hi")     # Hi Alice
+
+Parameter vs. Argument
+Parameter = the variable in the function definition
+Argument = the actual value you pass when calling it
+def greet(name):      # "name" is a PARAMETER
+    print(f"Hello {name}!")
+greet("Alice")        # "Alice" is an ARGUMENT
+
+6. Positional & Keyword Argument ***
+def print_details(*args, **kwargs)
+    for val in args:
+        print(f"Positional argument: {val}")
+
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_details(1,2,3,4,"Suvajit",name="Suvajit",age=32,country="India")
+# Python will automaticall detect Position & Keyword arguments in print_details function parameters
+# OP >>
+Positional argument: 1
+Positional argument: 2
+Positional argument: 3
+Positional argument: 4
+Positional argument: Suvajit
+name: Suvajit
+age: 32
+country: India
+
+7. Temperature conversion
+def convert_temperature(temp, unit):
+    """This function converts Temperature from C to F and F to C"""
+    if unit == "C":
+        result = (temp * 9/5) + 32
+        return f"{temp}°C = {result}°F"
+    elif unit == "F":
+        result = (temp - 32) * 5/9
+        return f"{temp}°F = {result:.2f}°C"
+    else:
+        return "Invalid unit! Use C or F"
+
+print(convert_temperature(100, "C"))   # 100°C = 212.0°F
+print(convert_temperature(98, "F"))    # 98°F = 36.67°C
+
+8. Password strength checker
+def check_password_strength(password):
+    """This function checks the strength of password"""
+    has_upper   = any(c.isupper() for c in password)
+    has_lower   = any(c.islower() for c in password)
+    has_digit   = any(c.isdigit() for c in password)
+    has_special = any(c in "!@#$%^&*" for c in password)
+    is_long     = len(password) >= 8
+
+    score = sum([has_upper, has_lower, has_digit, has_special, is_long])
+
+    if score == 5:
+        return "Strong 💪"
+    elif score >= 3:
+        return "Medium ⚠️"
+    else:
+        return "Weak ❌"
+
+print(check_password_strength("hello"))           # Weak ❌
+print(check_password_strength("Hello123"))        # Medium ⚠️
+print(check_password_strength("Hello@123"))       # Strong 💪
+
+9. Total cost of items in shopping Cart
+def total_cost(cart):
+    """This function returns total cost of items in Shopping Cart"""
+    total = 0
+    for item, price in cart.items():
+        total += price
+    return f"Total: ₹{total}"
+
+cart = {
+    "apple":  30,
+    "milk":   50,
+    "bread":  40,
+    "eggs":   80
+}
+
+print(total_cost(cart))   # Total: ₹200
+
+10. check if string is palindrome
+def is_palindrome(text):
+    """This function checks if the string is Palindrome"""
+    cleaned = text.lower().replace(" ", "")   # ignore case and spaces
+    if cleaned == cleaned[::-1]:
+        return f"{text} is a Palindrome ✅"
+    else:
+        return f"{text} is not a Palindrome ❌"
+
+print(is_palindrome("racecar"))       # racecar is a Palindrome ✅
+print(is_palindrome("hello"))         # hello is not a Palindrome ❌
+print(is_palindrome("Never odd or even"))  # Never odd or even is a Palindrome ✅
+
+11. calculate factorials of a number using recursion
+def factorial(n):
+    """This function calculates factorials of a number using recursion"""
+    if n == 0 or n == 1:    # base case — stop here!
+        return 1
+    return n * factorial(n - 1)   # function calls itself!
+
+print(factorial(5))    # 120
+print(factorial(6))    # 720
+print(factorial(0))    # 1
+
+12. Read a file and count frequency of each word
+# creating a sample file
+with open("sample.txt", "w") as f:
+    f.write("apple banana apple orange banana apple mango orange")
+
+def count_word_frequency(filename):
+    word_count = {}
+
+    with open(filename, "r") as f:
+        content = f.read()
+        words   = content.lower().split()   # split into list of words
+
+        for word in words:
+            if word in word_count:
+                word_count[word] += 1       # word seen before, add 1
+            else:
+                word_count[word] = 1        # word seen first time, set to 1
+
+    return word_count
+
+result = count_word_frequency("sample.txt")
+print(result)
+# {'apple': 3, 'banana': 2, 'orange': 2, 'mango': 1}
+
+content = "apple banana apple orange"
+words   = ["apple", "banana", "apple", "orange"]
+
+loop:
+  "apple"  → not in dict → word_count = {"apple": 1}
+  "banana" → not in dict → word_count = {"apple": 1, "banana": 1}
+  "apple"  → already in  → word_count = {"apple": 2, "banana": 1}
+  "orange" → not in dict → word_count = {"apple": 2, "banana": 1, "orange": 1}
+
+13. Validate email address
+def validate_email(email):
+    has_at      = "@" in email
+    has_dot     = "." in email
+    no_spaces   = " " not in email
+
+    parts       = email.split("@")
+    valid_parts = len(parts) == 2           # exactly one @
+
+    if valid_parts:
+        username   = parts[0]              # alice
+        domain     = parts[1]              # gmail.com
+        has_domain = "." in domain         # gmail.com has a dot
+        user_valid = len(username) > 0     # username not empty
+        dom_valid  = len(domain) > 3       # domain long enough
+    else:
+        return f"{email} is Invalid ❌"
+
+    if all([has_at, has_dot, no_spaces, valid_parts, has_domain, user_valid, dom_valid]):
+        return f"{email} is Valid ✅"
+    else:
+        return f"{email} is Invalid ❌"
+
+print(validate_email("alice@gmail.com"))    # Valid ✅
+print(validate_email("alicegmail.com"))     # Invalid ❌ (no @)
+print(validate_email("alice@gmailcom"))     # Invalid ❌ (no dot in domain)
+print(validate_email("alice @gmail.com"))   # Invalid ❌ (space)
+print(validate_email("@gmail.com"))         # Invalid ❌ (no username)
+
+How it checks step by step:
+"alice@gmail.com"
+
+has_at      → "@" in email         ✅
+has_dot     → "." in email         ✅
+no_spaces   → " " not in email     ✅
+valid_parts → only one "@"         ✅
+has_domain  → "." in "gmail.com"   ✅
+user_valid  → "alice" not empty    ✅
+dom_valid   → "gmail.com" > 3 chars ✅
+
+all checks pass → Valid ✅
+
+
+########################################
+FUNCTION
+10. LAMBDA FUNCTION
+
+# Introduction
+Lambda functions are small, one-line anonymous (without name) functions. They can have any number of arguments but only one expression/ one logic. COmmonly used for short operation/ as arguments to higher-order functions
+
+# Normal function
+def add(a, b):
+    return a + b
+
+# Same thing as lambda
+add = lambda a, b: a + b
+
+print(add(5, 3))   # 8
+
+# Structure
+lambda parameters : expression
+        ↑                ↑
+    inputs          what to return
+
+# Simple Examples
+square  = lambda x: x * x
+double  = lambda x: x * 2
+greet   = lambda name: f"Hello {name}!"
+isEven  = lambda number : number % 2 == 0
+
+print(square(5))        # 25
+print(double(4))        # 8
+print(greet("Alice"))   # Hello Alice!
+isEven(23)              # False
+
+# Use cases
+1. Sorting a list of dictionaries
+students = [
+    {"name": "Alice", "grade": 88},
+    {"name": "Bob",   "grade": 95},
+    {"name": "Carol", "grade": 72}
+]
+
+# sort by grade
+sorted_students = sorted(students, key=lambda s: s["grade"])
+
+for s in sorted_students:
+    print(s["name"], s["grade"])
+
+# Carol 72
+# Alice 88
+# Bob   95
+
+Note:
+sorted() - built in python function
+Takes a list and returns a new sorted list:
+sorted([3, 1, 2])   # [1, 2, 3]
+sorted(students)    # ❌ Error - should I sort by name? grade?
+So we use key to tell Python "sort by this field".
+
+lambda s: s["grade"]
+       ↑       ↑
+  each item   grab the grade from it
+
+2. map() — apply something to every item *************
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x ** 2, numbers))
+
+print(squared)   # [1, 4, 9, 16, 25]
+
+3. filter() — keep items that match condition *************
+numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+
+evens = list(filter(lambda x: x % 2 == 0, numbers))
+
+print(evens)   # [2, 4, 6, 8]
+
+4. max() / min() with custom logic
+products = [
+    {"name": "Phone",  "price": 999},
+    {"name": "Laptop", "price": 1499},
+    {"name": "Watch",  "price": 299}
+]
+
+cheapest = min(products, key=lambda p: p["price"])
+print(cheapest["name"])   # Watch
+
+expensive = max(products, key=lambda p: p["price"])
+print(expensive["name"])  # Laptop
+
+
+########################################
+FUNCTION
+11. MAP FUNCTION
 
 
 
 
-
-
-
+########################################
+FUNCTION
+12. FILTER FUNCTION
 
 
 
