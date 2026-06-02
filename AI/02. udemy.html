@@ -1988,6 +1988,9 @@ import pandas as pd
 arr = np.array([1, 2, 3])
 df  = pd.DataFrame({'a': [1, 2, 3]})
 
+⚠️ if error says numpy ModuleNotFoundError, install it.
+---->>>> pip install numpy
+
 4. from module import * — import everything ⚠️
 ⚠️ Avoid this — it pollutes your namespace and makes it unclear where things come from.
 from math import *
@@ -1997,7 +2000,7 @@ print(sqrt(9)) # works
 
 5. Importing from a package
 # package/
-#   __init__.py
+#   __init__.py (this file is used to define packages and initialize their namespaces)
 #   math_utils.py  ← contains add()
 
 from mypackage import math_utils
