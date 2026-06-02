@@ -1962,7 +1962,7 @@ print(result)
 
 
 ########################################
-IMPORTING, CREATE MODULE & PACKAGES
+IMPORTING, CREATE MODULE, PACKAGES & LIBRARIES
 12. IMPORT MODULE & PACKAGES
 Module - A module is simply a .py file containing Python code (functions, classes, variables).
 Package - A package is a folder containing multiple modules (with an __init__.py file inside).
@@ -2001,19 +2001,21 @@ print(sqrt(9)) # works
 5. Importing from a package
 # package/
 #   __init__.py (this file is used to define packages and initialize their namespaces)
-#   math_utils.py  ← contains add()
-
-from mypackage import math_utils
+#   math_utils.py  ← contains addition()
+#   in SHORT, in package/ folder, math_utils.py becomes the module, we write custom code inside AND we need to use __init.py AND we can IMPORT MODULES from math_utils.py
+from package import math_utils
 math_utils.add(2, 3)
 
 # OR directly
-from mypackage.math_utils import add
-add(2, 3)
+
+from package.math_utils import addition
+addition(5,3)       # works
 
 Real Example -
 import random
 from datetime import datetime
 import math
+import package.folder1.folder2 import *         # . are used for folders inside folders
 
 # random number between 1 and 10
 print(random.randint(1, 10))
@@ -2023,6 +2025,10 @@ print(datetime.now())
 
 # square root
 print(math.sqrt(144))  # 12.0
+
+# show results in TERMINAL for .py files
+in terminal goto project folder, write, 
+---->>>> python test.py         # works 
 
 
 NumPy (Numerical Python) & Pandas (Panel Data)
@@ -2087,38 +2093,10 @@ What Pandas is used for:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+########################################
+IMPORTING, CREATE MODULE, PACKAGES & LIBRARIES
+13. STANDARD LIBRARIES
+#1. 
 
 
 
