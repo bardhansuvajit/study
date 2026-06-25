@@ -5,6 +5,14 @@
 PHP
     Personal Home Page: Hypertext Preprocessor
     A preprocessor is Server-side engine that processes PHP code before output
+    MORE - 
+        When PHP was created in 1994 by Rasmus Lerdrof, it was called Personal Home Page tools (PHP tools). It was mainly a personal web tool, not a full programming language. As PHP evolved into a powerful server-side scripting language, the old name no longer made sense. Today, PHP officially stands for: PHP = Hypertext Preprocessor.
+        This is actually a recursive acronym, because the acronym contains itself: examples:
+            GNU = GNU's Not Unix
+            PHP = Hypertext Preprocessor
+        Why "Hypertext Preprocessor"?
+            Hypertext refers to web pages (HTML).
+            Preprocessor means PHP processes code on the server before the HTML is sent to the browser.
 
 PHP parser
     part of PHP inetrpreter, that reads PHP codes, breaks it (into Tokens), understand sturcture, then sends to interpreter/ compiler to execute
@@ -22,13 +30,14 @@ Variable scoping
     Static: Retains value between function calls with static keyword.
 
 inlcude || require
-    error handling - gives warning if file not found (script execution continues) || gives fatal error (script execution stops)
     use case - file optional || file required
+    error handling - gives warning if file not found (script execution continues) || gives fatal error (script execution stops)
+    Example - imagine webiste has a promotional banner/ ad script that is optional. If the file goes missing, the website should still load. In this case, use include(). But if the file is critical for the website to function (like a config file), use require().
 
 unset || unlink
     destroys variable || deletes file from filesystem
 
-Call by Value || Call by Reference
+** Call by Value || Call by Reference
     passes copy of the variable, keeping the original unchanged || passes the actual variable, allowing modification
     e.g. $a = 1; $b = $a; $b = 2; echo $a; > 1
     e.g. $a = 1; $b = &$a; $b = 2; echo $a; > 2
@@ -143,7 +152,7 @@ session management
 
 Explain the lifecycle of a PHP request.
     🌐 1. User Sends a Request
-        User opens a page > The browser sends an HTTP request to your server > Your web server (Apache or Nginx) receives the request.
+        User opens a page > The browser sends an HTTP request to server > Web server (Apache or Nginx) receives the request.
     🧰 2. Web Server Handles the Request
         If it's a static file (like index.html, an image, or CSS), the server sends it directly.
         If it's a PHP file, the server forwards it to the PHP engine for processing.
@@ -226,9 +235,9 @@ pillars of OOP. with Examples
         class class2 extends class1 {...}
         * if there are constructor in both classes (parent & child), child class has higher priority. Same thing goes for when both have same method name.
         * parent::__construct() - When we use parent::__construct() inside a child class constructor, it calls the parent class's constructor. So both parent and child constructors run
-        * parent::anotherMethod() - when parent & child classes have same name, only child class's method runs (Method Overriding) but if you want to run parent class's method, use this inside child class's method
+        * parent::anotherMethod() - when parent & child classes have same name method, only child class's method runs (Method Overriding) but if you want to run parent class's method, use this inside child class's method
         * :: -> Scope Resolution Operator - used to access class constants, static properties, and static methods, or refer to a parent class.
-        * Method Overriding (Run-time Polymorphism) - When parent & child classes have same name & the method is called, the child version runs (Not the parent's)
+        * Method Overriding (Run-time Polymorphism) - When parent & child classes have same name method & the method is called, the child version runs (Not the parent's)
         * Method Overloading (Compile-time Polymorphism) - same method name with different number of arguments — but PHP doesn't support this directly.
         * final keyword - Cannot Be Extended. used to prevent inheritance/ prevent method overriding. final class A {...} && final public function someFunction() {...}
     ENCAPSULATION (ACCESS MODIFIER, Getters & Setters)
