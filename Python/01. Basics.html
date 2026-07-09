@@ -1968,7 +1968,7 @@ Module - A module is simply a .py file containing Python code (functions, classe
 Package - A package is a folder containing multiple modules (with an __init__.py file inside).
 
 Example -
-1. import module — import the whole module
+1. import <module-name> >> this is how to import the whole module
 
 import math
 print(math.pi)        # 3.141592653589793
@@ -1982,8 +1982,8 @@ print(sqrt(16)) # 4.0  ← no prefix needed
 
 3. import module as alias — give it a shorter name
 
-import numpy as np
-import pandas as pd
+import numpy as np      (np is an alias here)
+import pandas as pd     (pd is an alias here)
 
 arr = np.array([1, 2, 3])
 df  = pd.DataFrame({'a': [1, 2, 3]})
@@ -2001,7 +2001,7 @@ print(sqrt(9)) # works
 5. Importing from a package
 # package/
 #   __init__.py (this file is used to define packages and initialize their namespaces)
-#   math_utils.py  ← contains addition()
+#   math_utils.py  ← contains addition() or just any cutom function we want
 #   in SHORT, in package/ folder, math_utils.py becomes the module, we write custom code inside AND we need to use __init.py AND we can IMPORT MODULES from math_utils.py
 from package import math_utils
 math_utils.add(2, 3)
@@ -2096,7 +2096,77 @@ What Pandas is used for:
 ########################################
 IMPORTING, CREATE MODULE, PACKAGES & LIBRARIES
 13. STANDARD LIBRARIES
-#1. 
+#1. Python's Standard Library is a vast collection of modules and packages that come pre-installed with Python. It provides a wide range of functionalities, from file I/O to web services, without needing to install any third-party packages.
+
+#2. Some commonly used standard libraries include:
+import math
+print(math.sqrt(16))  # 4.0
+
+import random
+print(random.randint(1, 10))  # Random integer between 1 and 10
+print(random.choice(['apple', 'banana', 'cherry']))  # Random choice from a list
+
+import os
+print(os.getcwd())  # e:\Python\Exerceise, Get current working directory
+os.mkdir('new_folder')  # Create a new directory named 'new_folder' in current working directory
+
+# High level operations on files and collections of files
+import shutil
+shutil.copy('source.txt', 'destination.txt')  # Copy a file
+
+# Data serialization and deserialization
+import json
+data = {'name': 'Alice', 'age': 25}
+json_str = json.dumps(data)  # Convert Python dict to JSON string
+print(json_str)  # {"name": "Alice", "age": 25}
+data_back = json.loads(json_str)  # Convert JSON string back to Python dict
+print(data_back)  # {'name': 'Alice', 'age': 25}
+
+import csv
+with open('data.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Name', 'Age'])
+    writer.writerow(['Alice', 25])
+    writer.writerow(['Bob', 30])
+with open('data.csv', mode='r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)
+# Output:
+# ['Name', 'Age']
+# ['Alice', '25']
+# ['Bob', '30']
+
+from datetime import datetime, timedelta
+now = datetime.now()
+print(now)  # Current date and time
+one_week_later = now + timedelta(weeks=1)
+print(one_week_later)  # Date and time one week from now
+one_day_back = now - timedelta(days=1)
+print(one_day_back)  # Date and time one day ago
+
+import time
+print(time.time())  # Current time in seconds since the epoch
+time.sleep(2)  # Pause execution for 2 seconds
+print("2 seconds later")
+print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))  # Current local time in readable format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

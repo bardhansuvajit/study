@@ -1,0 +1,162 @@
+##########################################################
+FILE OPERATIONS
+##########################################################
+
+Python provides built-in functions/ methods to read/ write files - text & binary both.
+
+**** OPENING FILES ****
+>>>> with open('example.txt', 'r') as file_object:
+        content = file_object.read()  # read the entire content of the file
+        print(content)  # print the content to the console
+
+Output:
+Hello, this is an example file.
+Some other line in the file.
+
+**** READ LINE BY LINE ****
+>>>> with open('example.txt', 'r') as file_object:
+        for line in file_object:
+            print(line.strip())  # read file line by line and strip() is used to remove leading and trailing whitespace characters.
+
+Output:
+Hello, this is an example file.
+Some other line in the file.
+
+**** WRITE/ OVERWRITE FILES ****
+>>>> with open('example.txt', 'w') as file_object:
+        file_object.write("This is a new line of text.")  # write a new line to the file. This will overwrite the existing content of the file.
+
+**** WRITE/ APPEND ****
+>>>> with open('example.txt', 'a') as file_object:
+        file_object.write("\nThis line will be appended to the file.")  # append a new line to the file
+
+**** WRITE LIST OF LINE ****
+>>>> lines = ['Line 1\n', 'Line 2\n', 'Line 3\n']
+     with open('example.txt', 'w') as file_object:
+        file_object.writelines(lines)
+
+**** BINARY FILES **** (A binary file is, that stores data in its raw byte format, not as human-readable text.)
+>>>> with open('example.bin', 'wb') as file_object:
+        file_object.write(b'This is a binary file.')  # write binary data to the file
+
+'w+' mode in python is used to open a file for both reading and writing. If the file does not exist, it will be created. If the file already exists, the existing content will be truncated/ overwritten.
+>>>> with open('example.txt', 'w+') as file_object:
+        file_object.write("This is an entire new line of text.")  # write a new line to the file
+        file_object.seek(0)  # move the cursor to the beginning of the file where w+ can start reading from
+        content = file_object.read()  # read the entire content of the file
+        print(content)  # print the content to the console
+
+Output:
+This is an entire new line of text.
+
+
+
+##########################################################
+FILE PATHS
+##########################################################
+
+os.mkdir("new_folder")  # create a new folder in the current working directory
+os.makedirs("new_folder/sub_folder")  # create a new folder and sub-folder in the current working directory
+os.chdir("new_folder")  # change the current working directory to the new folder
+os.getcwd()  # get the current working directory
+os.listdir('.')  # list all files and folders in the current working directory
+os.path.exists('example.txt')  # check if a file exists in the current working directory
+os.path.isfile('example.txt')  # check if a file exists and is a file (not a directory)
+os.path.isdir('new_folder')  # check if a folder exists and is a directory
+os.path.join('new_folder', 'example.txt')  # join folder and file name to create a file path
+os.path.abspath('example.txt')  # get the absolute path of a file, Output: /path/to/current/working/directory/example.txt
+
+>>>> import os
+     file_path = os.path.join(os.getcwd(), 'example.txt')  # create a file path by joining the current working directory and the file
+     print(file_path)  # print the file path to the console, Output: /path/to/current/working/directory/example.txt
+
+
+
+
+##########################################################
+EXCEPTION HANDLING
+##########################################################
+
+* Exceptions - events that disrupt the normal flow of a program's execution. They occur during a program execution.
+Common exceptions include: ZeroDivisionError, FileNotFoundError, ValueError, TypeError, IndexError, KeyError, etc.
+
+* Exception handling - Handle errors gracefully and take appropriate action when an error occurs. Use try-except blocks to catch exceptions and handle them.
+
+>>>> Example without exception handling:
+    a=b
+    NameError: name 'b' is not defined
+
+>>>> Example with exception handling:
+    try:
+        # code that may raise an exception
+        a=b
+    except:
+        # code to handle the exception
+        print("An error occurred.")
+    finally:
+        # code that will always execute, regardless of whether an exception occurred or not
+        print("Execution completed.")
+
+>>>> Example with Named Exception:
+    try:
+        a=b
+    except NameError as e:
+        print(f"An error occurred: {e}")
+
+>>>> Example with Multiple Exceptions:
+    try:
+        a=b
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+>>>> Another Example
+    try:
+        num1 = int(input("Enter a number: "))
+        num2 = int(input("Enter another number: "))
+        result = num1 / num2
+        print(f"The result is: {result}")
+    except ZeroDivisionError:
+        print("Error: Cannot divide by zero.")
+    except ValueError:
+        print("Error: Invalid input. Please enter a valid number.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    finally:
+        print("Execution completed.")
+
+>>>> Example with else block
+    try:
+        num1 = int(input("Enter a number: "))
+        num2 = int(input("Enter another number: "))
+        result = num1 / num2
+    except ZeroDivisionError:
+        print("Error: Cannot divide by zero.")
+    except ValueError:
+        print("Error: Invalid input. Please enter a valid number.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    else:
+        print(f"The result is: {result}")
+    finally:
+        print("Execution completed.")
+
+>>>> Example with File Handling and Exception Handling
+    try:
+        file = open('example.txt', 'r')
+        content = file.read()
+        print(content)
+    except FileNotFoundError:
+        print("Error: The file does not exist.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    finally:
+        if 'file' in locals() or not file.closed():
+            file.close()
+            print("File closed.")
+
+
+
+
+
+
+
